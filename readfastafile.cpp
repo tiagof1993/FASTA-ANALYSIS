@@ -3,7 +3,7 @@
 #include <string>
 
 //This programs reads a fasta file, received as an argument of the main function, and counts the number of A,C,G and T present in the DNA sequence
-//Execute this file using: g++ readfastafile.cpp -o s
+//Execute this file using: g++ readfastafile.cpp -o s && ./s filename.fasta
 
 int main (int argc, char** argv)
 {
