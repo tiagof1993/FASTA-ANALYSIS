@@ -162,7 +162,6 @@ for(long int i=0; i< aux_seq.size();i++){
 
 std::pair< std::vector<item>,std::vector<item> > readFilePositions(std::string file_name){
   //items contain label+sequence positions
-  //cout << file_name << endl;
    std::vector<item> items={{1,1,0,0,0}};
    //std::ofstream reads_file("reads.txt");
    //assert(reads_file.is_open()); 
@@ -510,10 +509,10 @@ int main(int argc,char** argv){
  stringstream s;
  std::string nucleotide="";
 
-     assert(CheckFileisFasta(argv[argc-1])); 
-      infile= argv[argc-1];
+     assert(CheckFileisFasta(argv[argc-3])); 
      outfile = argv[argc-2];
-     seed = (unsigned)atoi(argv[argc-3]);
+     infile= argv[argc-3];
+     seed = (unsigned)atoi(argv[argc-1]);
      //nucleotide = argv[argc-4];
     
      
@@ -546,7 +545,7 @@ int main(int argc,char** argv){
       
       case Sort_nucleotide_AT:
        		recorded_items = readFilePositions(infile);
-      sequence_ordering(recorded_items.first,Sort_nucleotide_AT,recorded_items.second,infile,outfile);
+  sequence_ordering(recorded_items.first,Sort_nucleotide_AT,recorded_items.second,infile,outfile);
                 
                 break;
      case Sort_nucleotide_CG:
