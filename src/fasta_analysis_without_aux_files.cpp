@@ -349,7 +349,7 @@ void sequence_ordering(std::vector<item> items_vec,Options option, std::vector<i
    //for(long int i=0;i<items_data.size();i++){
       do{
      //j=items_data.second[k].initial_position;
-     j=sequences_vec[k].initial_position;
+     j=sequences_vec[k].initial_position-1;
      //cout << j << endl;
      while(j<sequences_vec[k].final_position){
      assert(j>0);
