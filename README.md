@@ -7,7 +7,7 @@ But, if we can work on a previous ordered file, where we group the most similar 
 On the other hand, there's also a compression script being developed where we test 4 different scenarios to understand what works best in compression. One where we just compress the original files, other where we order the sequences and then compress, another where we shuffle the sequences and then compress and finally, one where we mix the previous two strategies.
 
 ## Usage Example
-` ./FASTA_ANALY -sort=AT 5 ordered_sequences_virus.fasta sequences_virus.fasta `
+` ./FASTA_ANALY -sort=AT sequences_virus.fasta ordered_sequences_virus.fasta `
 
 A description of the options available can be obtained by invoking:
 
