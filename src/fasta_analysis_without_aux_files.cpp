@@ -8,7 +8,7 @@
 
 
 Options resolveOption(std::string input) {
-    //if( input == "-h" ) return Help;
+    if( input == "-h" ) return Help;
     if( input == "-V" ) return Version;
     if( input == "-v" ) return Verbose;
     if( input == "-sort=S" ) return Sort_size;
@@ -160,6 +160,7 @@ for(long int i=0; i< aux_seq.size();i++){
 }
 
 
+
 std::pair< std::vector<item>,std::vector<item> > readFilePositions(std::string file_name){
   //items contain label+sequence positions
    std::vector<item> items={{1,1,0,0,0}};
@@ -304,6 +305,7 @@ for(long int i=0; i< items.size();i++ ){
 
 }
 
+
 void sequence_ordering(std::vector<item> items_vec,Options option, std::vector<item> sequences_vec,std::string infile_name,std::string outfile_name){
  //std::fstream infile(infile_name.c_str());
  std::ofstream ordered_fasta_file(outfile_name.c_str());
@@ -347,7 +349,8 @@ void sequence_ordering(std::vector<item> items_vec,Options option, std::vector<i
    //for(long int i=0;i<items_data.size();i++){
       do{
      //j=items_data.second[k].initial_position;
-     j=sequences_vec[k].initial_position-1;
+     j=sequences_vec[k].initial_position;
+     //cout << j << endl;
      while(j<sequences_vec[k].final_position){
      assert(j>0);
        // ordered_fasta_file << buffer[j-1];
@@ -396,6 +399,7 @@ void sequence_ordering(std::vector<item> items_vec,Options option, std::vector<i
      long int final_pos = items_vec[items_vec.size()-1].final_position-1;
   //   cout << "Final Pos: " << final_pos << endl;
   if(option==Sort_size){
+  //cout << "sort size" << endl;
   std::sort(items_vec.begin(), items_vec.end() , compareBySize);
  }
  else if(option==Sort_nucleotide_AT ){
@@ -417,7 +421,7 @@ void sequence_ordering(std::vector<item> items_vec,Options option, std::vector<i
   //std::sort(items_vec.begin(), items_vec.end() ,compareAlphabetically);
  }
   
-     std::sort(items_vec.begin(), items_vec.end() , compareByData);
+     //std::sort(items_vec.begin(), items_vec.end() , compareByData);
 //std::sort(items_data.first.begin(), items_data.first.end() ,compareByCNucleotide);
  //cout << buffer[42885] << endl;
 //for(long int i=41140;i<41170;i++)
@@ -525,10 +529,10 @@ int main(int argc,char** argv){
    
  
  switch(resolveOption(option) ) {
- 	//case Help: if(help){
- 	  //           PrintHelpMenu(1); 
+ 	case Help: 
+ 	             PrintHelpMenu(1); 
  	   //        }
- 	   //        break;
+ 	           break;
  	           
         case Version: PrintVersion();
         	   
