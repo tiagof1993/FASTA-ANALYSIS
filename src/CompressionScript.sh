@@ -9,19 +9,23 @@ rm mbgctimes.txt
 rm gzip_times.txt
 rm mf_compresstimes.txt
 rm stage1_time.txt
-rm sequences_virus.fasta.gz
-rm sequences_virus.fasta.mfc
-rm sequences_virus.mbgc
-rm sequences_virus.naf
+#rm sequences_virus.fasta.gz
+#rm sequences_virus.fasta.mfc
+#rm sequences_virus.mbgc
+#rm sequences_virus.naf
+rm CVDB.fasta.gz
+rm CVDB.fasta.mfc
+rm CVDB.mbgc
+rm CVDB.naf
 
 
-{ time ennaf --strict  sequences_virus.fasta -o sequences_virus.naf --temp-dir /tmp ; } 2>>naf_times.txt
+{ time ennaf --strict  CVDB.fasta -o CVDB.naf --temp-dir /tmp ; } 2>>naf_times.txt
 
-{ time mbgc -i sequences_virus.fasta sequences_virus.mbgc ; } 2>>mbgctimes.txt
+{ time mbgc -i CVDB.fasta CVDB.mbgc ; } 2>>mbgctimes.txt
 
-{ time ./MFCompressC sequences_virus.fasta ; } 2>>mf_compresstimes.txt
+{ time ./MFCompressC CVDB.fasta ; } 2>>mf_compresstimes.txt
 
-{ time gzip -k sequences_virus.fasta ; } 2>>gzip_times.txt
+{ time gzip -k CVDB.fasta ; } 2>>gzip_times.txt
 
 
 #ls -la -ltr | grep \.naf$ |awk '{print $5;}' > naf_files.txt
@@ -112,7 +116,7 @@ rm shuffled.fasta.mfc
 rm shuffled.mbgc
 rm shuffled.naf
 #{ ./SHUFFLE_FASTA AT 5 shuffled.fasta sequences_virus.fasta ; } 2>>shuffle_times.txt
-{ ./FASTA_ANALY -s AT sequences_virus.fasta shuffled.fasta 5 ; } 2>>shuffle_times.txt
+{ ./FASTA_ANALY -S AT CVDB.fasta shuffled.fasta 5 ; } 2>>shuffle_times.txt
 { time ennaf shuffled.fasta -o shuffled.naf --temp-dir /tmp ; } 2>>naf_times_s2.txt
 
 { time mbgc -i shuffled.fasta shuffled.mbgc ; } 2>>mbgctimes_s2.txt
@@ -165,8 +169,8 @@ declare -p times_s2_arr
 
 #time_naf=$(awk '{print $1}' mbgc_time_total.txt)
 #awk '{print $(time_naf)}'
-#echo $((time_naf))
 ls shuffled.* -la -ltr | awk 'BEGIN{ OFS=","; print "File;Size;Time,"}; NR > 1{print $9,$5;}' > Output_s2.csv
+#echo $((time_naf))
 #for i in ${!times_arr[@]}; do
     
 echo $(awk '{print $1}' naf_time_total_s2.txt) 
@@ -188,18 +192,22 @@ rm mbgctimes_s3.txt
 rm gzip_times_s3.txt
 rm mf_compresstimes_s3.txt
 #rm stage1_time.txt
-rm ordered_sequences_virus.fasta.gz
-rm ordered_sequences_virus.fasta.mfc
-rm ordered_sequences_virus.mbgc
-rm ordered_sequences_virus.naf
+#rm ordered_sequences_virus.fasta.gz
+#rm ordered_sequences_virus.fasta.mfc
+#rm ordered_sequences_virus.mbgc
+#rm ordered_sequences_virus.naf
+rm ordered_CVDB.fasta.gz
+rm ordered_CVDB.fasta.mfc
+rm ordered_CVDB.mbgc
+rm ordered_CVDB.naf
 
-{ time ./FASTA_ANALY -sort=CG sequences_virus.fasta ordered_sequences_virus.fasta 5 ; } 2>>ordering_times.txt
-{ time ennaf --strict  ordered_sequences_virus.fasta -o ordered_sequences_virus.naf --temp-dir /tmp ; } 2>>naf_times_s3.txt
-{ time mbgc -i ordered_sequences_virus.fasta ordered_sequences_virus.mbgc ; } 2>>mbgctimes_s3.txt
+{ time ./FASTA_ANALY -sort=S CVDB.fasta ordered_CVDB.fasta 5 ; } 2>>ordering_times.txt
+{ time ennaf --strict  ordered_CVDB.fasta -o ordered_CVDB.naf --temp-dir /tmp ; } 2>>naf_times_s3.txt
+{ time mbgc -i ordered_CVDB.fasta ordered_CVDB.mbgc ; } 2>>mbgctimes_s3.txt
 
-{ time ./MFCompressC ordered_sequences_virus.fasta ; } 2>>mf_compresstimes_s3.txt
+{ time ./MFCompressC ordered_CVDB.fasta ; } 2>>mf_compresstimes_s3.txt
 
-{ time gzip -k ordered_sequences_virus.fasta y ; } 2>>gzip_times_s3.txt
+{ time gzip -k ordered_CVDB.fasta y ; } 2>>gzip_times_s3.txt
 
 declare -a times_s3_arr=()
 

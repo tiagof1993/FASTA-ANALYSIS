@@ -25,13 +25,15 @@ struct item{
 };
 
 enum Options {
-   // Help,
+    Help,
     Version,
     Verbose,
     Sort_size,
     Sort_nucleotide_AT,
     Sort_nucleotide_CG,
     Sort_alphabetically,
+    Sort_combined_AT,
+    Sort_combined_CG,
     Shuffle,
     Option_Invalid
     //others...

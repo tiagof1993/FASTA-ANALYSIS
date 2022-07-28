@@ -17,10 +17,10 @@ void PrintMenuCompression(void){
  std::cout << "      Tiago Fonseca (tiagorfonseca@ua.pt)                               \n";
  std::cout << "                                                                        \n";
  std::cout << "SYNOPSIS                                                                \n";
- std::cout << "      ./FASTA_ANALY [INPUT_FILE] [OUTPUT_FILE] seed nucleotide                                                            \n";
+ std::cout << "      ./FASTA_ANALY [INPUT_FILE] [OUTPUT_FILE] seed                                                            \n";
  std::cout << "                                                                        \n";
 std::cout <<  "SAMPLE                                                                  \n";
-std::cout <<  "      ./FASTA_ANALY genome.fa ordered_genome.fa 12                   \n";
+std::cout <<  "      ./FASTA_ANALY -sort=AT genome.fa ordered_genome.fa 5                    \n";
 std::cout <<  "                                                                        \n";
 std::cout <<  "DESCRIPTION                                                             \n";
 std::cout <<  "     Analysis and Ordering of Fasta files according to diferent parameters \n";
@@ -66,7 +66,7 @@ std::cout <<  "COPYRIGHT                                                        
  
   std::cout<<"                                                                     \n";
  std::cout <<"      -sort=CRIT                                                            \n";
- std::cout << "           sort by given CRIT(Criteria) : size (-S), Nucleotides Pair (-AT or -CG), alphabetically (-A)             \n";
+ std::cout << "           sort by given CRIT(Criteria) : size (-S), Nucleotides Pair (-AT or -CG), alphabetically (-A) or combinations of criteria such as Size+Nucleotides Pair (-CAT or - CCG)             \n";
  
  
   std::cout<<"                                                                     \n";

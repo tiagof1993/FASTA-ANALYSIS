@@ -15,6 +15,8 @@ Options resolveOption(std::string input) {
     if( input == "-sort=AT") return Sort_nucleotide_AT;
     if( input == "-sort=CG") return Sort_nucleotide_CG;
     if( input == "-sort=A" ) return Sort_alphabetically;
+    if( input == " -sort=CAT " ) return Sort_combined_AT;
+    if( input == " -sort=CCG " ) return Sort_combined_CG;
     if( input == "-s" ) return Shuffle;
     return Option_Invalid;
  }
@@ -41,6 +43,21 @@ bool compareByCGNucleotide(const item &a, const item &b){
 bool compareByUnknownNucleotides(const item &a, const item &b){
   return a.N_nucleotides > b.N_nucleotides;
 }
+
+/*bool compareAlphabetically(const item &a, const item &b){
+   char* buffer;
+  pfile = fopen (input_filename.c_str(),"r");
+  
+ fseek(pfile,1, SEEK_END);
+ l_size = ftell(pfile);
+ rewind(pfile);
+ 
+ buffer = (char*) malloc (sizeof(char)*l_size);
+ if(buffer == NULL) {fputs("Memory error",stderr); exit(2);}
+ 
+ result = fread(buffer,1,l_size,pfile);
+ 
+}*/
 
 /*bool compareByGNucleotide(const item &a, const item &b){
    return a.G_nucleotides > b.G_nucleotides;
@@ -151,7 +168,8 @@ for(long int i=0; i< aux_seq.size();i++){
     }
   }
 }*/
-
+free(buffer);
+fclose(pfile);
  sequence_ordering(item_vec,Shuffle,aux_seq,input_filename,"shuffled.fasta");
 
  //shuffle_file.close();
@@ -301,6 +319,9 @@ for(long int i=0; i< items.size();i++ ){
 
   //return items;
   //return sequence;
+  fclose(pfile);
+  free(ofile);
+  free(buffer);
   return std::make_pair(items,sequence);
 
 }
@@ -420,6 +441,14 @@ void sequence_ordering(std::vector<item> items_vec,Options option, std::vector<i
  else if(option==Sort_alphabetically){
   //std::sort(items_vec.begin(), items_vec.end() ,compareAlphabetically);
  }
+ else if(option==Sort_combined_AT){
+ 	std::sort(items_vec.begin(), items_vec.end() , compareByData);
+ 	std::sort(items_vec.begin(), items_vec.end() , compareByATNucleotide);
+ }
+  else if(option==Sort_combined_CG){
+ 	std::sort(items_vec.begin(), items_vec.end() , compareByData);
+ 	std::sort(items_vec.begin(), items_vec.end() , compareByCGNucleotide);
+ }
   
      //std::sort(items_vec.begin(), items_vec.end() , compareByData);
 //std::sort(items_data.first.begin(), items_data.first.end() ,compareByCNucleotide);
@@ -454,6 +483,7 @@ void sequence_ordering(std::vector<item> items_vec,Options option, std::vector<i
 
      
     fclose(pfile);
+   // free(ofile);
     free(buffer);
    //infile.close();
   // fasta_file_2.close();
@@ -497,7 +527,6 @@ int main(int argc,char** argv){
   PrintHelpMenu(1);
   return 0;
 }
- PrintMenuCompression();
 
  std::string option=argv[1];
 
@@ -508,10 +537,10 @@ int main(int argc,char** argv){
  std::string positions_string="";
   // std::vector<item> recorded_items={};
  std::pair<std::vector<item>,std::vector<item>> recorded_items;
- std::vector<label> recorded_labels={};
+ //std::vector<label> recorded_labels={};
  unsigned seed=0;
- stringstream s;
- std::string nucleotide="";
+ //stringstream s;
+ //std::string nucleotide="";
 
      assert(CheckFileisFasta(argv[argc-3])); 
      outfile = argv[argc-2];
@@ -534,7 +563,9 @@ int main(int argc,char** argv){
  	   //        }
  	           break;
  	           
-        case Version: PrintVersion();
+        case Version: 
+        		PrintMenuCompression();
+        		PrintVersion();
         	   
         	   break;
         	   
@@ -563,6 +594,19 @@ int main(int argc,char** argv){
       sequence_ordering(recorded_items.first,Sort_alphabetically,recorded_items.second,infile,outfile);
                 
                 break;
+                
+       case Sort_combined_AT:
+       		recorded_items = readFilePositions(infile);
+      sequence_ordering(recorded_items.first,Sort_combined_AT,recorded_items.second,infile,outfile);
+                
+                break;
+       
+       case Sort_combined_CG:
+       		recorded_items = readFilePositions(infile);
+      sequence_ordering(recorded_items.first,Sort_combined_CG,recorded_items.second,infile,outfile);
+                
+                break;
+       
        
        case Shuffle:
        		recorded_items = readFilePositions(infile);
