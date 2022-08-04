@@ -490,7 +490,6 @@ int main(int argc,char** argv){
  
  
  uint32_t help = ArgsState(0, p, argc, "-h", "--help");
- uint32_t version = ArgsState(0, p, argc, "-V", "--version");
  //if(help){
  // PrintHelpMenu(1);
 //}
@@ -502,11 +501,6 @@ int main(int argc,char** argv){
   PrintHelpMenu(1);
   return 0;
 }
- if(version){
-  PrintMenuCompression();
-  PrintVersion();
-  return 0;
-  }
 
 
  std::string option=argv[1];
