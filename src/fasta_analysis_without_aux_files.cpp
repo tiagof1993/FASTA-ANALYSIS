@@ -313,6 +313,10 @@ fclose(ofile);
 void sequence_ordering(std::vector<item> items_vec,Options option, std::vector<item> sequences_vec,std::string infile_name,std::string outfile_name){
  //std::fstream infile(infile_name.c_str());
  std::ofstream ordered_fasta_file(outfile_name.c_str());
+ 
+ long int j=0;
+ long int k=0;
+ long int final_pos=0;
  assert(ordered_fasta_file.is_open());
  //std::ofstream ordered_file_pos("ordered_file.txt");
  //assert(ordered_file_pos.is_open());
@@ -326,41 +330,73 @@ void sequence_ordering(std::vector<item> items_vec,Options option, std::vector<i
   FILE* pfile;
   size_t result;
   long l_size;
+  //long chunk_read=10000000;
+  long l_size_chunk;
   char* buffer;
   pfile = fopen (infile_name.c_str(),"r");
   
  fseek(pfile,1, SEEK_END);
  l_size = ftell(pfile);
+ //l_size_chunk=chunk_read;
+ //l_size_chunk=sequences_vec[0].final_position;
  rewind(pfile);
+ k=0;
  
- buffer = (char*) malloc (sizeof(char)*l_size);
- if(buffer == NULL) {fputs("Memory error",stderr); exit(2);}
+ //while(l_size_chunk<l_size){
+ /*if(k=0){
+    result = fread(buffer,1,l_size_chunk,pfile);
+ }
+ else{
+  if(l_size_chunk+chunk_read>l_size){
+      //l_size_chunk+=(l_size-l_size_chunk);
+      result = fread(buffer,l_size_chunk,l_size,pfile);
+      
+    }
+    else{
+       //l_size_chunk+=chunk_read;
+       result = fread(buffer,l_size_chunk,l_size_chunk+chunk_read,pfile);
+       
+    }
+  }*/
  
- result = fread(buffer,1,l_size,pfile);
  
  //std::sort(items_data.begin(), items_data.end() , compareByData);
  
- long int j=0;
- long int k=0;
  //std::string seq="";
  /*long int A_count=0;
  long int C_count=0;
  long int G_count=0;
  long int T_count=0;*/
+ long int l=0;
  long int AT_count=0;
  long int CG_count=0;
  long int N_count=0;
    //for(long int i=0;i<items_data.size();i++){
+   
       do{
+      cout << fseek(pfile,sequences_vec[l].initial_position , sequences_vec[l].final_position) << endl;
+      //rewind(pfile);
+      l_size_chunk=sequences_vec[l].final_position-sequences_vec[l].initial_position;   
+ cout << sequences_vec[l].initial_position << endl;
+ buffer = (char*) malloc (sizeof(char)*l_size_chunk);
+ if(buffer == NULL) {fputs("Memory error",stderr); exit(2);}
+ result = fread(buffer,sequences_vec[l].initial_position,sequences_vec[l].final_position,pfile); 
+//cout << sizeof(buffer) << endl;
+
+cout << sizeof(char)*l_size_chunk << endl;
+for(long int i=0; i< sizeof(char)*l_size_chunk ;i++){
+    cout << buffer[i-1] << endl;
+  }
      //j=items_data.second[k].initial_position;
-     j=sequences_vec[k].initial_position;
+     j=sequences_vec[l].initial_position;
      //cout << j << endl;
-     while(j<sequences_vec[k].final_position){
+     while(j<sequences_vec[l].final_position){
      assert(j>0);
        // ordered_fasta_file << buffer[j-1];
         //cout << j-1 << " , " << buffer[j-1] << endl;
         //sequences_read_file << j-2 << " , " << buffer[j-2] << endl;
         j++;
+        //cout << buffer[j-1] << endl;
       //  sequences_read_file << j-2 << " , " << buffer[j-2] << endl;
        // cout << buffer[j] << endl;
         if(buffer[j-1]=='A' || buffer[j-1]=='T'){
@@ -381,9 +417,9 @@ void sequence_ordering(std::vector<item> items_vec,Options option, std::vector<i
         //seq+=buffer[j-1];
       }
       //char seq[data[k].size] = buffer[data[k].initial_position-data[k].final_position];
-      items_vec[k].AT_nucleotides=AT_count;
-      items_vec[k].CG_nucleotides=CG_count;
-      items_vec[k].N_nucleotides=N_count;
+      items_vec[l].AT_nucleotides=AT_count;
+      items_vec[l].CG_nucleotides=CG_count;
+      items_vec[l].N_nucleotides=N_count;
       //cout << items_vec[k].AT_nucleotides << endl;
       //items_data.first[k].G_nucleotides=G_count;
       //items_data.first[k].T_nucleotides=T_count;
@@ -392,15 +428,16 @@ void sequence_ordering(std::vector<item> items_vec,Options option, std::vector<i
       N_count=0;
       //G_count=0;
      // T_count=0;
-      k++;
+      l++;
      // seq="";
-     }while(k<sequences_vec.size()); 
+     }while(l<sequences_vec.size()); 
+     cout << "buffer" << endl;
      //for(long int i=0;i<items_data.first.size();i++){
    //    for(long int i=0;i<items_vec.size();i++){
     //   nucleotide_records << i << " AT: " << items_vec[i].AT_nucleotides << "," << " CG: "  << items_vec[i].CG_nucleotides << " N: " << items_vec[i].N_nucleotides << endl;     
       // cout << i << " A: " << items_data.first[i].A_nucleotides << "," << " C: "  << items_data.first[i].C_nucleotides << "," << " G: " << items_data.first[i].G_nucleotides << "," << " T:" << items_data.first[i].T_nucleotides << endl;
      //}
-     long int final_pos = items_vec[items_vec.size()-1].final_position-1;
+     final_pos = items_vec[items_vec.size()-1].final_position-1;
   //   cout << "Final Pos: " << final_pos << endl;
   if(option==Sort_size){
   //cout << "sort size" << endl;
@@ -424,6 +461,13 @@ void sequence_ordering(std::vector<item> items_vec,Options option, std::vector<i
  else if(option==Sort_alphabetically){
   //std::sort(items_vec.begin(), items_vec.end() ,compareAlphabetically);
  }
+ 
+ k++;
+ //cout << "buffer" << endl;
+ //l_size_chunk+=chunk_read;
+  //fclose(pfile);
+    fclose(pfile); 
+   
   
      //std::sort(items_vec.begin(), items_vec.end() , compareByData);
 //std::sort(items_data.first.begin(), items_data.first.end() ,compareByCNucleotide);
@@ -432,7 +476,21 @@ void sequence_ordering(std::vector<item> items_vec,Options option, std::vector<i
 //{
 // cout << buffer[i] << endl;
 //}
+FILE* wfile;
+wfile = fopen (infile_name.c_str(),"r");
+  
+ //fseek(pfile,1, SEEK_BEG);
+ //l_size = ftell(pfile);
+ //l_size_chunk=chunk_read;
+ //rewind(pfile);
+
  for(long int i=0;i<items_vec.size();i++){
+      buffer = (char*) malloc (sizeof(char)*(items_vec[i].initial_position-items_vec[i].final_position));
+      rewind(wfile);
+ if(buffer == NULL) {fputs("Memory error",stderr); exit(2);}
+ 
+ result = fread(buffer,items_vec[i].initial_position,items_vec[i].final_position,pfile); 
+ 
      j=items_vec[i].initial_position;
      while(j<items_vec[i].final_position){
         ordered_fasta_file << buffer[j-1];
@@ -453,12 +511,24 @@ void sequence_ordering(std::vector<item> items_vec,Options option, std::vector<i
         //cout << j-1 << " , " << buffer[j-1] << endl;
         j++;
       }
+   //fclose(pfile);
+    free(buffer);
+    fclose(wfile);
+    
      }
      
 
-     
-    fclose(pfile);
+  /*  fclose(pfile);
     free(buffer);
+    
+    if(l_size_chunk+chunk_read>l_size){
+      l_size_chunk+=(l_size-l_size_chunk);
+    }
+    else{
+       l_size_chunk+=chunk_read;
+    }
+ }*/
+ 
    //infile.close();
   // fasta_file_2.close();
    ordered_fasta_file.close();
@@ -490,6 +560,7 @@ int main(int argc,char** argv){
  
  
  uint32_t help = ArgsState(0, p, argc, "-h", "--help");
+ uint32_t version = ArgsState(0, p, argc, "-V", "--version");
  //if(help){
  // PrintHelpMenu(1);
 //}
@@ -501,6 +572,11 @@ int main(int argc,char** argv){
   PrintHelpMenu(1);
   return 0;
 }
+ if(version){
+  PrintMenuCompression();
+  PrintVersion();
+  return 0;
+  }
 
 
  std::string option=argv[1];
