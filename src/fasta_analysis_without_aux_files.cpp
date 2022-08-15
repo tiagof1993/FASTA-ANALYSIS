@@ -374,10 +374,12 @@ void sequence_ordering(std::vector<item> items_vec,Options option, std::vector<i
    //for(long int i=0;i<items_data.size();i++){
    
       do{
-      cout << fseek(pfile,sequences_vec[l].initial_position , sequences_vec[l].final_position) << endl;
+       rewind(pfile);      
+       fseek(pfile,sequences_vec[l].initial_position , SEEK_SET);
       //rewind(pfile);
       l_size_chunk=sequences_vec[l].final_position-sequences_vec[l].initial_position;   
- cout << sequences_vec[l].initial_position << endl;
+ cout << "sequences_vec initial_position:" << sequences_vec[l].initial_position << endl;
+ cout << "l_size_chunk: " << l_size_chunk << endl;
  buffer = (char*) malloc (sizeof(char)*l_size_chunk);
  if(buffer == NULL) {fputs("Memory error",stderr); exit(2);}
  result = fread(buffer,sequences_vec[l].initial_position,sequences_vec[l].final_position,pfile); 
@@ -385,7 +387,7 @@ void sequence_ordering(std::vector<item> items_vec,Options option, std::vector<i
 
 cout << sizeof(char)*l_size_chunk << endl;
 for(long int i=0; i< sizeof(char)*l_size_chunk ;i++){
-    cout << buffer[i-1] << endl;
+    cout << buffer[i-1];
   }
      //j=items_data.second[k].initial_position;
      j=sequences_vec[l].initial_position;
@@ -430,6 +432,7 @@ for(long int i=0; i< sizeof(char)*l_size_chunk ;i++){
      // T_count=0;
       l++;
      // seq="";
+     free(buffer);
      }while(l<sequences_vec.size()); 
      cout << "buffer" << endl;
      //for(long int i=0;i<items_data.first.size();i++){
