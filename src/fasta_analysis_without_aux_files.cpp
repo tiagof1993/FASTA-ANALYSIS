@@ -220,10 +220,10 @@ std::pair< std::vector<item>,std::vector<item> > readFilePositions(std::string f
                   continue;
                     
                    // label_size=0;
-        case 'A' : //reads_file << " ";
-        case 'C' : //reads_file << " ";
-        case 'T' : //reads_file << " ";
-        case 'G' : //reads_file << value;
+       // case 'A' : //reads_file << " ";
+    //    case 'C' : //reads_file << " ";
+      //  case 'T' : //reads_file << " ";
+    //    case 'G' : //reads_file << value;
         default: 
         	continue;
                //if(label==1){
@@ -335,11 +335,11 @@ void sequence_ordering(std::vector<item> items_vec,Options option, std::vector<i
   char* buffer;
   pfile = fopen (infile_name.c_str(),"r");
   
- fseek(pfile,1, SEEK_END);
- l_size = ftell(pfile);
+ //fseek(pfile,1, SEEK_END);
+// l_size = ftell(pfile);
  //l_size_chunk=chunk_read;
  //l_size_chunk=sequences_vec[0].final_position;
- rewind(pfile);
+// rewind(pfile);
  k=0;
  
  //while(l_size_chunk<l_size){
@@ -382,18 +382,22 @@ void sequence_ordering(std::vector<item> items_vec,Options option, std::vector<i
  cout << "l_size_chunk: " << l_size_chunk << endl;
  buffer = (char*) malloc (sizeof(char)*l_size_chunk);
  if(buffer == NULL) {fputs("Memory error",stderr); exit(2);}
- result = fread(buffer,sequences_vec[l].initial_position,sequences_vec[l].final_position,pfile); 
+ //result = fread(buffer,sequences_vec[l].initial_position,sequences_vec[l].final_position,pfile); 
+ result = fread(buffer,1,l_size_chunk,pfile);
 //cout << sizeof(buffer) << endl;
 
 cout << sizeof(char)*l_size_chunk << endl;
 for(long int i=0; i< sizeof(char)*l_size_chunk ;i++){
     cout << buffer[i-1];
   }
+  cout << endl;
      //j=items_data.second[k].initial_position;
-     j=sequences_vec[l].initial_position;
+     //j=sequences_vec[l].initial_position;
+     j=0;
      //cout << j << endl;
-     while(j<sequences_vec[l].final_position){
-     assert(j>0);
+     //while(j<sequences_vec[l].final_position){
+     while(j<l_size_chunk){
+     //assert(j>0);
        // ordered_fasta_file << buffer[j-1];
         //cout << j-1 << " , " << buffer[j-1] << endl;
         //sequences_read_file << j-2 << " , " << buffer[j-2] << endl;
@@ -468,8 +472,9 @@ for(long int i=0; i< sizeof(char)*l_size_chunk ;i++){
  k++;
  //cout << "buffer" << endl;
  //l_size_chunk+=chunk_read;
-  //fclose(pfile);
-    fclose(pfile); 
+  fclose(pfile);
+   // fclose(pfile); 
+    cout << "file closed" << endl;
    
   
      //std::sort(items_vec.begin(), items_vec.end() , compareByData);
@@ -481,24 +486,32 @@ for(long int i=0; i< sizeof(char)*l_size_chunk ;i++){
 //}
 FILE* wfile;
 wfile = fopen (infile_name.c_str(),"r");
-  
+  cout << "file opened" << endl;
  //fseek(pfile,1, SEEK_BEG);
  //l_size = ftell(pfile);
  //l_size_chunk=chunk_read;
  //rewind(pfile);
-
+j=0;
  for(long int i=0;i<items_vec.size();i++){
-      buffer = (char*) malloc (sizeof(char)*(items_vec[i].initial_position-items_vec[i].final_position));
-      rewind(wfile);
+     rewind(wfile);      
+     fseek(wfile,items_vec[i].initial_position , SEEK_SET);
+     cout << items_vec[i].initial_position << endl;
+     l_size_chunk=items_vec[i].final_position-items_vec[i].initial_position; 
+     cout << "item chunk: " << l_size_chunk << endl;
+      buffer = (char*) malloc (sizeof(char)*l_size_chunk);
+      //rewind(wfile);
  if(buffer == NULL) {fputs("Memory error",stderr); exit(2);}
  
- result = fread(buffer,items_vec[i].initial_position,items_vec[i].final_position,pfile); 
+ result = fread(buffer,1, l_size_chunk ,wfile); 
+ cout << buffer[0] << endl;
  
-     j=items_vec[i].initial_position;
-     while(j<items_vec[i].final_position){
+   //  j=items_vec[i].initial_position;
+   j=0;
+     //while(j<items_vec[i].final_position){
+     while(j<l_size_chunk){
         ordered_fasta_file << buffer[j-1];
-        //cout << j-1 << endl;
-        if(j==final_pos){
+        //cout << buffer[j-1] << endl;
+        if(j==l_size_chunk){
           ordered_fasta_file << buffer[j-1] << endl;
           //ordered_fasta_file <<"\n"<< endl;
          // cout << j-1 << endl;
@@ -512,14 +525,15 @@ wfile = fopen (infile_name.c_str(),"r");
         cout << j-1 << endl;
         }*/
         //cout << j-1 << " , " << buffer[j-1] << endl;
+        
         j++;
       }
    //fclose(pfile);
     free(buffer);
-    fclose(wfile);
-    
      }
-     
+     cout << "buffer" << endl;
+     fclose(pfile);
+    
 
   /*  fclose(pfile);
     free(buffer);
