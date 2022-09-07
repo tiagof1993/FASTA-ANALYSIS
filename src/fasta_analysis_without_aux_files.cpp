@@ -509,10 +509,10 @@ j=0;
    j=0;
      //while(j<items_vec[i].final_position){
      while(j<l_size_chunk){
-        ordered_fasta_file << buffer[j-1];
+        ordered_fasta_file << buffer[j];
         //cout << buffer[j-1] << endl;
         if(j==l_size_chunk){
-          ordered_fasta_file << buffer[j-1] << endl;
+          ordered_fasta_file << buffer[j] << endl;
           //ordered_fasta_file <<"\n"<< endl;
          // cout << j-1 << endl;
           //ordered_fasta_file << buffer[j];
