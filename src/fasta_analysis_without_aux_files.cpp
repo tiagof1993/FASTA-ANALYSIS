@@ -504,6 +504,9 @@ std::string c="";
         sequences_string="";
         index=file_reads_lines[j].size()-1;
      }
+     
+      
+     
     }while(index<file_reads_lines[j].size()-1);
         
      
@@ -525,26 +528,37 @@ std::string c="";
    
    index=0;
    c=file_reads_lines[j].at(index);
-  cout << j << endl;
+  cout << index << endl;
     // index=0;
     do{
-      //cout << index<< endl;
+      cout << index<< endl;
      if(c.compare(">") != 0){
        sequences_string+=file_reads_lines[j].at(index);
-       // cout << sequences_string << endl;
+       cout << sequences_string << endl;
        // cout << index << endl;
         //cout << file_reads_lines[j].size() << endl;
-        //index++; 
+        index++; 
        //index++;
        
      }
-     else{
+     else if(c.compare(">") == 0 && index>0){
         file_reads.push_back(sequences_string);
         sequences_string=">";
-        //index++;
+        index++;
         //index=file_reads_lines[j].size()-1;
      }
-     index++;
+     else if(c.compare(">") == 0 && index==0){
+        sequences_string=">";
+        index++;
+     }
+      /*else if(c.compare(">") == 0 && index>1 ){
+        file_reads_sequences.push_back(sequences_string);
+        sequences_string="";
+        index=file_reads_lines[j].size()-1;
+     }
+     else if(c.compare(">") == 0 && index==0){
+        file_
+     }*/
      
     }while(index<file_reads_lines[j].size()-1);
         
@@ -556,8 +570,8 @@ std::string c="";
 //}
 
  for(long int p=0;p<file_reads.size();p++){
-   //cout << "Size: " << file_reads.size() << endl;
- // cout << file_reads[p] << endl;
+   cout << "Size: " << file_reads.size() << endl;
+   cout << file_reads[p] << endl;
    }
 
  
@@ -616,7 +630,7 @@ std::string c="";
       items_vec[l].AT_nucleotides=AT_count;
       items_vec[l].CG_nucleotides=CG_count;
       items_vec[l].N_nucleotides=N_count;
-     // cout << "items_nucleotides: " <<items_vec[l].AT_nucleotides << endl;
+     cout << "items_nucleotides: " <<items_vec[l].AT_nucleotides << endl;
       //items_data.first[k].G_nucleotides=G_count;
       //items_data.first[k].T_nucleotides=T_count;
       AT_count=0;
@@ -682,6 +696,7 @@ wfile = fopen (infile_name.c_str(),"r");
  //l_size_chunk=chunk_read;
  //rewind(pfile);
 j=0;
+
  for(long int i=0;i<items_vec.size();i++){
      //rewind(wfile);      
      //fseek(wfile,items_vec[i].initial_position , SEEK_SET);
