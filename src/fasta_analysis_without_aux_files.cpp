@@ -524,7 +524,7 @@ std::string c="";
    cout << sequences_vec.size() << endl;
  
  
-  for(long int j=0; j< file_reads_sequences.size();j++){
+ /* for(long int j=0; j< file_reads_sequences.size();j++){
    cout << file_reads_labels[j] << endl;
    cout << file_reads_sequences[j] << endl;
    if(j<file_reads_sequences.size()-1){
@@ -535,6 +535,8 @@ std::string c="";
    }
    cout << "item: " << sequences_string << endl;
    file_reads.push_back(sequences_string);
+}  */
+   
    /*index=0;
    c=file_reads_lines[j].at(index);
   cout << index << endl;
@@ -572,16 +574,16 @@ std::string c="";
     }while(index<file_reads_lines[j].size()-1);*/
         
      
- }
+
  //file_reads.push_back(sequences_string);
  //sequences_string="";
  //index=0;
 //}
 
-for(long int p=0;p<file_reads.size();p++){
+/*for(long int p=0;p<file_reads.size();p++){
    cout << "Size: " << file_reads.size() << endl;
    cout << file_reads[p] << endl;
-   } 
+   } */
 
  
   // cout << sequences_vec.size() << endl;
@@ -686,10 +688,6 @@ std::vector<item> item_vec_second = items_vec;
  
  //file_reads[order(items)];
  
-
-bool result = std::equal(items_vec.begin(), items_vec.end(), item_vec_second.begin());
-if (result)
-  std::cout << "Both vectors are equal" << std::endl;
         
  /*for(int k=0;k<items_vec.size();k++){
   for(int p=0;p<item_vec_second.size();p++){
@@ -722,6 +720,28 @@ wfile = fopen (infile_name.c_str(),"r");
  //l_size_chunk=chunk_read;
  //rewind(pfile);
 j=0;
+long int position =0;
+sequence_str = "";
+//while((value = fgetc(pfile))!= EOF){
+
+while((value = fgetc(wfile))!= EOF){
+    sequence_str +=value;
+}
+//cout << items_vec[0].initial_position << endl;
+//cout << items_vec[0].final_position << endl;
+//cout << sequence_str.substr(74,104) << endl;
+
+
+for(long int r=0;r<items_vec.size();r++){
+    long int item_size=items_vec[r].final_position-items_vec[r].initial_position;
+    file_reads.push_back(sequence_str.substr(items_vec[r].initial_position-1,item_size));
+}
+
+
+for(long int p=0;p<file_reads.size();p++){
+ cout << "Size: " << file_reads.size() << endl;
+   cout << "file_reads: " <<  file_reads[p] << endl;
+   } 
 
  for(long int i=0;i<items_vec.size();i++){
      //rewind(wfile);      
@@ -740,7 +760,7 @@ j=0;
    //  j=items_vec[i].initial_position;
    j=0;
      //while(j<items_vec[i].final_position){
-     while(j<items_vec[i].final_position){
+     while(j<file_reads[i].size()){
         //ordered_fasta_file << buffer[j];
         //cout << file_reads[i].at(j);
         ordered_fasta_file << file_reads[i].at(j);
