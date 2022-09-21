@@ -160,7 +160,7 @@ free(buffer);
 
 std::pair< std::vector<item>,std::vector<item> > readFilePositions(std::string file_name){
   //items contain label+sequence positions
-   std::vector<item> items={{1,1,0,0,0}};
+   std::vector<item> items={{1,1,0,0,0,0}};
    //std::ofstream reads_file("reads.txt");
    //assert(reads_file.is_open()); 
    //std::ofstream items_read("items.txt");
@@ -200,13 +200,18 @@ std::pair< std::vector<item>,std::vector<item> > readFilePositions(std::string f
     int label=0;
     long int label_size=0;
     long int current_position=0;
+    //max_size = 33 295 309 016
+    //cout << items.max_size() << endl;
+    
     try{
-    while((value = fgetc(pfile))!= EOF){
+    while((value = fgetc(pfile))!= EOF ){
      current_position++;
+     //if(current_position < 33295309016){
         switch(value){
         case '>': label=1; 
                   if(current_position>1){
-                   seq={items[items.size()-1].final_position,current_position, current_position-items[items.size()-1].final_position,0,0,0}; 
+                   seq={items[items.size()-1].final_position,current_position, current_position-items[items.size()-1].final_position,0,0,0};
+                   //cout << current_position << endl;
                    items.push_back(seq);
                   }
                   continue;
@@ -230,6 +235,8 @@ std::pair< std::vector<item>,std::vector<item> > readFilePositions(std::string f
                //  reads_file << value;
               // }
         }
+       
+     //}
 
       
         //while(label==1){
@@ -239,6 +246,33 @@ std::pair< std::vector<item>,std::vector<item> > readFilePositions(std::string f
     }catch(std::bad_alloc & exception){
       std::cerr << "Bad Alloc Exception" << exception.what();
     }
+    string item_str="";
+    
+    //max_size = 32212254720
+   /* try{
+    while((value = fgetc(pfile))!= EOF ){
+    // while(item_str.size() < 32212254720){
+      item_str +=value;
+      //cout << item_str.size() << endl;
+     }
+    }catch(std::bad_alloc & exception){
+      std::cerr << "Bad Alloc Exception" << exception.what();
+      std::cout << item_str.size() << std::endl;
+    }
+    // cout << item_str.size() << endl;
+     
+    for(long int i=2;i<item_str.size();i++){
+      if(item_str[i]=='>'){
+      //cout << item_str[i] << endl;
+        seq={items[items.size()-1].final_position,current_position, current_position-items[items.size()-1].final_position,0,0,0};
+        items.push_back(seq);
+      }
+      else if(item_str[i]=='\n'){
+        seq={line_items[line_items.size()-1].final_position,current_position, current_position-line_items[line_items.size()-1].final_position,0,0,0}; 
+        line_items.push_back(seq);
+      }
+    }*/
+    
     seq={items[items.size()-1].final_position,current_position, current_position-items[items.size()-1].final_position,0,0,0}; 
     items.push_back(seq);
     items.erase(items.begin());
@@ -484,6 +518,9 @@ std::string c="";
    
    
    std::string sequences_string="";
+   fclose(pfile);
+   // fclose(pfile); 
+    cout << "file closed" << endl;
    
    FILE* zfile;
    zfile = fopen (infile_name.c_str(),"r");
@@ -495,13 +532,14 @@ std::string c="";
 
  long int seq_size=0;
  
-for(long int r=0;r<items_vec.size();r++){
+for(long int r=0;r<sequences_vec.size();r++){
     seq_size=sequences_vec[r].final_position-sequences_vec[r].initial_position;
-    // cout << sequence_str.size() << endl;
+    // cout << "sequence_Str_size:" << sequence_str.size() << endl;
     //cout << sequence_str.substr(sequences_vec[r].initial_position-1,seq_size) << endl;
      file_reads_sequences.push_back(sequence_str.substr(sequences_vec[r].initial_position-1,seq_size));
 //cout << file_reads_sequences.empty() << endl;     
 }
+cout << file_reads_sequences.size() << endl;
 
 fclose(zfile);
   
@@ -637,7 +675,7 @@ l=0;
         if(file_reads_sequences[l].size()>1){
         c="";
         c=file_reads_sequences[l].at(j);
-        cout << "c: " << c << endl;
+       // cout << "c: " << c << endl;
         if(c.compare("A") == 0 ){
           AT_count++;
         }
@@ -726,9 +764,7 @@ l=0;
  k++;
  //cout << "buffer" << endl;
  //l_size_chunk+=chunk_read;
-  fclose(pfile);
-   // fclose(pfile); 
-    cout << "file closed" << endl;
+  
    
   
      //std::sort(items_vec.begin(), items_vec.end() , compareByData);
@@ -818,7 +854,7 @@ for(long int p=0;p<file_reads.size();p++){
     //free(buffer);
      }
      cout << "buffer" << endl;
-     fclose(pfile);
+     //fclose(pfile);
     
 
   /*  fclose(pfile);
