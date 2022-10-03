@@ -4,6 +4,8 @@
 #include "msg.hpp"
 #include <sstream>
 
+#define chunk_division_factor 20
+
 
 #define DEF_VERBOSE            0
 
@@ -291,35 +293,52 @@ delete[] buffer;*/
     
     long int chunk_selected=1;
     
+    long int file_upper_limit_adjusted=0;
+    long int file_length_adjusted=0;
+    
   do{
-    char * buff = new char [file_length/20];
-    infile_stream.seekg ((file_length/20)*chunk_selected, infile_stream.beg);
-    infile_stream.read (buff,(file_length/20));
+  //cout << "buff " << endl;
+    char * buff = new char [file_length/(chunk_division_factor/2)];
+   // cout << "buff " << endl;
+    if(chunk_selected==1){
+        infile_stream.seekg (0, infile_stream.beg);
+    }
+    else{
+    	infile_stream.seekg ((file_length/chunk_division_factor)*chunk_selected-1, infile_stream.beg);
+    }
+        infile_stream.read (buff,(file_length/chunk_division_factor));
+        //cout << "buff " << endl;
     long int counter=0;
     
-    cout << file_length/20 << endl;
+    //cout << (file_length/20) << endl;
     //cout << buff[(file_length/20)] << endl;
 
     //char * buff_adjusted = new char[file_length/20];
     
     long int file_lower_limit_adjusted=0;
-    long int file_upper_limit_adjusted=0;
-    long int file_length_adjusted=0;
-   // cout << chunk_selected << endl;
+    //long int file_upper_limit_adjusted=0;
+    //long int file_length_adjusted=0;
+    //cout << chunk_selected << endl;
     
-    if(chunk_selected=1){
-    for(long int p=((file_length/20)-1);p>=0;p--){
+    if(chunk_selected==1){
+   
+    for(long int p=((file_length/chunk_division_factor)-1);p>=0;p--){
        //cout << buff[p];
        if(buff[p]=='>'){
+       //cout << buff[p] << endl;
+      // cout << "p:" << p << endl;
+       //cout << "file_length: " << file_length << endl;
        //file_length_adjusted=p;
        file_lower_limit_adjusted=p;
        break;
        }
        
     }
-    for(long int p=((file_length/20)-1);p<file_length;p++){
+    for(long int p=((file_length/chunk_division_factor)-1);p<file_length;p++){
        //cout << buff[p];
+       //cout << p << endl;
        if(buff[p]=='>'){
+        cout << "p:" << p << endl;
        //file_length_adjusted=p;
        file_upper_limit_adjusted=p;
        break;
@@ -331,57 +350,74 @@ delete[] buffer;*/
     
    }
    else{
+   // cout << "buff " << endl;
+  // cout << chunk_selected << endl;
    //cout << chunk_selected << endl;
-    for(long int p=((file_length/20)*chunk_selected)-1;p>=((file_length/20)*(chunk_selected-1))-1;p--){
+   //cout << "buff " << endl;
+   cout << ((file_length/chunk_division_factor)*chunk_selected)-1 << endl;
+   cout << ((file_length/chunk_division_factor)*(chunk_selected-1))-1 << endl;
+    /*for(long int p=((file_length/chunk_division_factor)*chunk_selected)-1;p>=((file_length/chunk_division_factor)*(chunk_selected-1))-1;p--){
     counter++;
+    cout << counter << endl;
+    cout << buff[p-10] << endl;
+    cout << ((file_length/chunk_division_factor)*chunk_selected) << endl;
        if(buff[p]=='>'){
        	//file_length_adjusted=(((file_length/20)*chunk_selected)-1)-p;
-       	file_lower_limit_adjusted=(((file_length/20)*chunk_selected)-1)-counter;
+       	file_lower_limit_adjusted=(((file_length/chunk_division_factor)*chunk_selected)-1)-counter;
+      // 	cout << "buff " << endl;
+       	//cout << file_lower_limit_adjusted << endl;
        	//file_lower_limit_adjusted=(((file_length/20)*chunk_selected)-1)-p;
        	//cout << file_length_adjusted << endl;
        	break;
        }
        
-    }
+      cout << "buff" << endl;
+       
+    }*/
     cout << "Lower Limit: " << file_lower_limit_adjusted << endl;
     
-    for(long int p=((file_length/20)*chunk_selected)-1;p<file_length;p++){
+       //cout << "buff " << endl;
+      
+    for(long int p=((file_length/chunk_division_factor)*chunk_selected)-1 ;p<file_length;p++){
+      //cout << p << endl;
+      //cout << file_upper_limit_adjusted << endl;
       if(buff[p]=='>'){
        	//file_length_adjusted=(((file_length/20)*chunk_selected)-1)-p;
        	file_upper_limit_adjusted=p;
+        cout << p << endl;
        	//cout << file_length_adjusted << endl;
        	break;
        }
     }
    }
-   
-   file_length_adjusted=file_upper_limit_adjusted - file_lower_limit_adjusted;
+  // cout << "buff " << endl;
+   cout << file_upper_limit_adjusted << endl;
+   cout << file_lower_limit_adjusted << endl;
+   file_length_adjusted=file_upper_limit_adjusted - file_length_adjusted ;
    
     counter=0;
-    cout << "File lenght Adjusted: " << file_length_adjusted << endl;
+    cout << "File length Adjusted: " << file_length_adjusted << endl;
     char * buff_adjusted = new char[file_length_adjusted];
-    if(chunk_selected=1){
+  if(chunk_selected=1){
    for(long int p=0; p<file_length_adjusted;p++){
-    //cout << buff[p];
-    buff_adjusted[p]=buff[p];
+    //cout << "buff" << endl;
+      buff_adjusted[p]=buff[p];
     }
    }
    else{
    
    //for(long int p=0; p<file_length_adjusted;p++){
-     for(long int p=((file_length/20)*(chunk_selected-1))-1 ;p<((file_length/20)*chunk_selected);p++){
+     for(long int p=((file_length/chunk_division_factor)*(chunk_selected-1))-1 ;p<((file_length/chunk_division_factor)*chunk_selected);p++){
     //cout << buff[p];
+    cout << "counter: " << counter << endl;
+    cout << p << endl;
     buff_adjusted[counter]=buff[p];
      counter++;
     }
    
    }
-    
   
   
-  
-  
-  infile_stream.close();
 //try{
  for(long int p=0;p<file_length_adjusted;p++){
    switch(buff_adjusted[p]){
@@ -424,11 +460,12 @@ delete[] buffer;*/
     
     
     delete[] buff;
+    //free(buff);
     
     chunk_selected++;
     cout << "chunk_selected: " << chunk_selected << endl;
- }while(chunk_selected<20);
-    
+ }while(chunk_selected<chunk_division_factor);
+infile_stream.close();    
    // cout << items[1].final_position << endl;
   
   
