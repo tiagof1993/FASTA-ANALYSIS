@@ -319,7 +319,8 @@ delete[] buffer;*/
     //long int file_upper_limit_adjusted=0;
     //long int file_length_adjusted=0;
     //cout << chunk_selected << endl;
-    
+       long int current_chunk =  ((file_length/chunk_division_factor)*chunk_selected)-1;
+        cout << "Current Chunk: " <<  ((file_length/chunk_division_factor)*chunk_selected)-1 << endl;
     if(chunk_selected==1){
    
     for(long int p=((file_length/chunk_division_factor)-1);p>=0;p--){
@@ -346,7 +347,6 @@ delete[] buffer;*/
        
     }
     
-   
     
    }
    else{
@@ -354,8 +354,8 @@ delete[] buffer;*/
   // cout << chunk_selected << endl;
    //cout << chunk_selected << endl;
    //cout << "buff " << endl;
-   cout << ((file_length/chunk_division_factor)*chunk_selected)-1 << endl;
-   cout << ((file_length/chunk_division_factor)*(chunk_selected-1))-1 << endl;
+  
+   cout <<  ((file_length/chunk_division_factor)*(chunk_selected-1))-1 << endl;
     /*for(long int p=((file_length/chunk_division_factor)*chunk_selected)-1;p>=((file_length/chunk_division_factor)*(chunk_selected-1))-1;p--){
     counter++;
     cout << counter << endl;
@@ -377,14 +377,15 @@ delete[] buffer;*/
     cout << "Lower Limit: " << file_lower_limit_adjusted << endl;
     
        //cout << "buff " << endl;
+      cout << current_chunk << endl;
       
-    for(long int p=((file_length/chunk_division_factor)*chunk_selected)-1 ;p<file_length;p++){
+    for(long int p=current_chunk ;p<file_length;p++){
       //cout << p << endl;
       //cout << file_upper_limit_adjusted << endl;
       if(buff[p]=='>'){
        	//file_length_adjusted=(((file_length/20)*chunk_selected)-1)-p;
        	file_upper_limit_adjusted=p;
-        cout << p << endl;
+        cout << "Upper Limit Set: " << p << endl;
        	//cout << file_length_adjusted << endl;
        	break;
        }
@@ -396,8 +397,10 @@ delete[] buffer;*/
    file_length_adjusted=file_upper_limit_adjusted - file_length_adjusted ;
    
     counter=0;
+    cout << "File Upper Limit: " << file_upper_limit_adjusted << endl;
     cout << "File length Adjusted: " << file_length_adjusted << endl;
-    char * buff_adjusted = new char[file_length_adjusted];
+ /*   char * buff_adjusted = new char[file_length_adjusted];
+    cout << "buff: " << buff_adjusted[0] << endl;
   if(chunk_selected=1){
    for(long int p=0; p<file_length_adjusted;p++){
     //cout << "buff" << endl;
@@ -407,7 +410,8 @@ delete[] buffer;*/
    else{
    
    //for(long int p=0; p<file_length_adjusted;p++){
-     for(long int p=((file_length/chunk_division_factor)*(chunk_selected-1))-1 ;p<((file_length/chunk_division_factor)*chunk_selected);p++){
+   cout << "buff" << endl;
+     for(long int p=((file_length/chunk_division_factor)*(chunk_selected-1))-1 ;p<file_upper_limit_adjusted;p++){
     //cout << buff[p];
     cout << "counter: " << counter << endl;
     cout << p << endl;
@@ -415,12 +419,16 @@ delete[] buffer;*/
      counter++;
     }
    
-   }
+   }*/
   
   
 //try{
+//cout << "File Upper Limit: " << file_ << endl;
+cout << "Buff:" << sizeof(buff) <<  endl;
  for(long int p=0;p<file_length_adjusted;p++){
-   switch(buff_adjusted[p]){
+  // switch(buff_adjusted[p]){
+ // cout << buff[p] << endl;
+     switch(buff[p]){
    	case '>': label=1; 
                   if(p>1){ //&& sequences_number < 536870911){
                   seq={items[items.size()-1].final_position,p, p-items[items.size()-1].final_position,0,0,0};
@@ -431,7 +439,8 @@ delete[] buffer;*/
                   continue;
                   //label_size++; continue;
                   //reads_file << ; 
-         case '\n' : label=0; 
+         case '\n' : label=0;
+                    //cout << "buff" << endl;   
                    if(p>1){
                    seq={line_items[line_items.size()-1].final_position,p, p-line_items[line_items.size()-1].final_position,0,0,0}; 
                    /*if(sequences_number > length/100){
@@ -453,6 +462,7 @@ delete[] buffer;*/
         	continue;
     }
   }
+  cout << "items: " << items.size() << endl;
   //}catch(std::bad_alloc & exception){
    //   std::cerr << "Bad Alloc Exception" << exception.what();
    // }
@@ -460,13 +470,13 @@ delete[] buffer;*/
     
     
     delete[] buff;
+    //delete[] buff_adjusted;
     //free(buff);
     
     chunk_selected++;
     cout << "chunk_selected: " << chunk_selected << endl;
  }while(chunk_selected<chunk_division_factor);
 infile_stream.close();    
-   // cout << items[1].final_position << endl;
   
   
   
@@ -532,32 +542,7 @@ infile_stream.close();
       std::cerr << "Bad Alloc Exception" << exception.what();
     }*/
     string item_str="";
-   // in_file.close();
-    
-    //max_size = 32212254720
-   /* try{
-    while((value = fgetc(pfile))!= EOF ){
-    // while(item_str.size() < 32212254720){
-      item_str +=value;
-      //cout << item_str.size() << endl;
-     }
-    }catch(std::bad_alloc & exception){
-      std::cerr << "Bad Alloc Exception" << exception.what();
-      std::cout << item_str.size() << std::endl;
-    }
-    // cout << item_str.size() << endl;
-     
-    for(long int i=2;i<item_str.size();i++){
-      if(item_str[i]=='>'){
-      //cout << item_str[i] << endl;
-        seq={items[items.size()-1].final_position,current_position, current_position-items[items.size()-1].final_position,0,0,0};
-        items.push_back(seq);
-      }
-      else if(item_str[i]=='\n'){
-        seq={line_items[line_items.size()-1].final_position,current_position, current_position-line_items[line_items.size()-1].final_position,0,0,0}; 
-        line_items.push_back(seq);
-      }
-    }*/
+
     
     seq={items[items.size()-1].final_position,current_position, current_position-items[items.size()-1].final_position,0,0,0}; 
     items.push_back(seq);
