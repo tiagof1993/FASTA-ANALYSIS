@@ -295,16 +295,20 @@ delete[] buffer;*/
     
     long int file_upper_limit_adjusted=0;
     long int file_length_adjusted=0;
+    std::vector<long int> adjusted_lengths = {0};
     
+    
+ if(file_length>1000000000){   
   do{
   //cout << "buff " << endl;
-    char * buff = new char [file_length/(chunk_division_factor/2)];
+    char * buff = new char [(file_length/chunk_division_factor)+ (file_length/(chunk_division_factor*2))];
+    cout << "Buff size: " << (file_length/chunk_division_factor)+ (file_length/(chunk_division_factor*2)) << endl;
    // cout << "buff " << endl;
     if(chunk_selected==1){
         infile_stream.seekg (0, infile_stream.beg);
     }
     else{
-    	infile_stream.seekg ((file_length/chunk_division_factor)*chunk_selected-1, infile_stream.beg);
+    	infile_stream.seekg (((file_length/chunk_division_factor)*chunk_selected)-1, infile_stream.beg);
     }
         infile_stream.read (buff,(file_length/chunk_division_factor));
         //cout << "buff " << endl;
@@ -321,8 +325,9 @@ delete[] buffer;*/
     //cout << chunk_selected << endl;
        long int current_chunk =  ((file_length/chunk_division_factor)*chunk_selected)-1;
         cout << "Current Chunk: " <<  ((file_length/chunk_division_factor)*chunk_selected)-1 << endl;
-    if(chunk_selected==1){
-   
+        //cout << "Buff size: " << sizeof(buff) << endl; 
+   if(chunk_selected==1){
+  
     for(long int p=((file_length/chunk_division_factor)-1);p>=0;p--){
        //cout << buff[p];
        if(buff[p]=='>'){
@@ -335,7 +340,7 @@ delete[] buffer;*/
        }
        
     }
-    for(long int p=((file_length/chunk_division_factor)-1);p<file_length;p++){
+    for(long int p=((file_length/chunk_selected+1)-1);p<file_length;p++){
        //cout << buff[p];
        //cout << p << endl;
        if(buff[p]=='>'){
@@ -378,14 +383,16 @@ delete[] buffer;*/
     
        //cout << "buff " << endl;
       cout << current_chunk << endl;
-      
-    for(long int p=current_chunk ;p<file_length;p++){
+      cout << file_length << endl;
+      cout <<  ((file_length/chunk_division_factor)*(chunk_selected-1))-1 << endl;
+    for(long int p=0 ;p<current_chunk;p++){
+    //for(long int p=current_chunk ;p< ((file_length/chunk_division_factor)*(chunk_selected+1))-1;p++){
       //cout << p << endl;
       //cout << file_upper_limit_adjusted << endl;
       if(buff[p]=='>'){
        	//file_length_adjusted=(((file_length/20)*chunk_selected)-1)-p;
-       	file_upper_limit_adjusted=p;
-        cout << "Upper Limit Set: " << p << endl;
+       	file_upper_limit_adjusted=current_chunk+p;
+        cout << "Upper Limit Set: " << file_upper_limit_adjusted << endl;
        	//cout << file_length_adjusted << endl;
        	break;
        }
@@ -394,7 +401,11 @@ delete[] buffer;*/
   // cout << "buff " << endl;
    cout << file_upper_limit_adjusted << endl;
    cout << file_lower_limit_adjusted << endl;
+   //if(chunk_selected > 3){
    file_length_adjusted=file_upper_limit_adjusted - file_length_adjusted ;
+   adjusted_lengths.push_back(file_length_adjusted-adjusted_lengths[adjusted_lengths.size()-1]);
+  // file_length_adjusted = (file_length/chunk_selected) -  file_upper_limit_adjusted;
+  // }
    
     counter=0;
     cout << "File Upper Limit: " << file_upper_limit_adjusted << endl;
@@ -425,11 +436,13 @@ delete[] buffer;*/
 //try{
 //cout << "File Upper Limit: " << file_ << endl;
 cout << "Buff:" << sizeof(buff) <<  endl;
- for(long int p=0;p<file_length_adjusted;p++){
+cout << adjusted_lengths[adjusted_lengths.size()-1] << endl;
+ for(long int p=0;p<adjusted_lengths[adjusted_lengths.size()-1];p++){
   // switch(buff_adjusted[p]){
  // cout << buff[p] << endl;
      switch(buff[p]){
    	case '>': label=1; 
+   			//cout << "buff" << endl;   
                   if(p>1){ //&& sequences_number < 536870911){
                   seq={items[items.size()-1].final_position,p, p-items[items.size()-1].final_position,0,0,0};
             
@@ -447,8 +460,8 @@ cout << "Buff:" << sizeof(buff) <<  endl;
                     cout<< sequences_number << endl;
                    }*/
                    //items.reserve(seq);
-                   sequences_number++;
-                   //cout << sequences_number << endl;
+                   //sequences_number++;
+                   cout << sequences_number << endl;
                    line_items.push_back(seq);
                   }
                   continue;
@@ -475,44 +488,30 @@ cout << "Buff:" << sizeof(buff) <<  endl;
     
     chunk_selected++;
     cout << "chunk_selected: " << chunk_selected << endl;
- }while(chunk_selected<chunk_division_factor);
-infile_stream.close();    
-  
-  
-  
-  /*
+  }while(chunk_selected<chunk_division_factor);
+  infile_stream.close();    
+ }
+
+
+else{
+ 
     try{
-     while((value = fgetc(pfile))!= EOF ){
-    // while(std::getline(in_file,line)){
-    //while(in_file.good()){
-    //value=in_file.get();
+    while((value = fgetc(pfile))!= EOF ){
      current_position++;
-      // if(current_position < length/20){
-        //switch(line[0]){
-        //if(current_position=743424460){
-         // cout << current_position << endl;
-       // }
-        
+     //if(current_position < 33295309016){
         switch(value){
-         case '>': label=1; 
-                  if(current_position>1){ //&& sequences_number < 536870911){
-                  seq={items[items.size()-1].final_position,current_position, current_position-items[items.size()-1].final_position,0,0,0};
-            
-                  items.push_back(seq);
-                   //break;
+        case '>': label=1; 
+                  if(current_position>1){
+                   seq={items[items.size()-1].final_position,current_position, current_position-items[items.size()-1].final_position,0,0,0};
+                   //cout << current_position << endl;
+                   items.push_back(seq);
                   }
                   continue;
                   //label_size++; continue;
                   //reads_file << ; 
-         case '\n' : label=0; 
-                   if(current_position>1 ){
+        case '\n' : label=0; 
+                   if(current_position>1){
                    seq={line_items[line_items.size()-1].final_position,current_position, current_position-line_items[line_items.size()-1].final_position,0,0,0}; 
-                   /*if(sequences_number > length/100){
-                    cout<< sequences_number << endl;
-                   }*/
-                   //items.reserve(seq);
-                  /* sequences_number++;
-                   //cout << sequences_number << endl;
                    line_items.push_back(seq);
                   }
                   continue;
@@ -528,19 +527,25 @@ infile_stream.close();
                //  reads_file << value;
               // }
         }
-       // cout << sequences_number << endl;
        
      //}
-     
 
       
         //while(label==1){
         //  reads_file << value;
        // }
     }
+     
+
+      
+        //while(label==1){
+        //  reads_file << value;
+       // }
+    
     }catch(std::bad_alloc & exception){
       std::cerr << "Bad Alloc Exception" << exception.what();
-    }*/
+    }
+   }
     string item_str="";
 
     
@@ -788,7 +793,7 @@ std::string c="";
  for(long int p=0;p<file_reads_labels.size();p++){
    cout  << "Size: " << file_reads_labels.size() << endl;
    cout << file_reads_labels[p];
-   }
+  }
    
    
    
@@ -800,8 +805,10 @@ std::string c="";
    FILE* zfile;
    zfile = fopen (infile_name.c_str(),"r");
   cout << "file opened" << endl;
-  
-  current_position=sequences_vec[0].initial_position;
+  cout << sequences_vec[0].initial_position << endl;
+  //current_position=sequences_vec[0].initial_position;
+   current_position=0;
+    cout << current_position << endl;
   for(long int i=0;i<sequences_vec.size();i++){
     if(sequences_vec[i].initial_position == 56011){
       cout << i << endl;
@@ -809,12 +816,15 @@ std::string c="";
   }
   
   value=' ';
+  cout << current_position << endl;
+  cout << sequences_vec.size() << endl;
  // while((value = fgetc(zfile))!= EOF){
-   while(current_position < sequences_vec[sequences_vec.size()-1].final_position){
+   while(current_position <= sequences_vec[sequences_vec.size()-1].final_position){
   // sequence_str="";
-  cout << current_position;
+  cout << current_position << endl;
   value=fgetc(zfile);
     sequence_str +=value;
+    cout << value << endl;
     current_position++;
 }
 //cout << sequence_str << endl;
@@ -822,8 +832,9 @@ std::string c="";
  long int seq_size=0;
  
 for(long int r=0;r<sequences_vec.size();r++){
-    seq_size=sequences_vec[r].final_position-sequences_vec[r].initial_position;
-    // cout << "sequence_Str_size:" << sequence_str.size() << endl;
+cout << sequences_vec[r].initial_position << endl;
+    seq_size=sequences_vec[r].final_position-sequences_vec[r].final_position;
+     cout << "sequence_Str_size:" << sequence_str.size() << endl;
     //cout << sequence_str.substr(sequences_vec[r].initial_position-1,seq_size) << endl;
      file_reads_sequences.push_back(sequence_str.substr(sequences_vec[r].initial_position-1,seq_size));
 //cout << file_reads_sequences.empty() << endl;     
