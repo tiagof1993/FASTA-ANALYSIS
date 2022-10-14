@@ -300,6 +300,7 @@ delete[] buffer;*/
     std::vector<item> labels = {}; 
     std::vector<long int> items_by_chunk={0};
     std::vector<long int> line_items_by_chunk={0};
+    long int large_position=0;
     
     
  if(file_length>1000000000){   
@@ -316,7 +317,7 @@ delete[] buffer;*/
     }
         //infile_stream.read (buff,(file_length/chunk_division_factor)+ (file_length/(chunk_division_factor*2)));
         
-        infile_stream.read(buff,(file_length/chunk_division_factor)+10000);
+        infile_stream.read(buff,(file_length/chunk_division_factor)+1000000);
         //cout << "buff " << endl;
     long int counter=0;
     
@@ -329,7 +330,7 @@ delete[] buffer;*/
     //long int file_upper_limit_adjusted=0;
     //long int file_length_adjusted=0;
     //cout << chunk_selected << endl;
-       long int current_chunk =  ((file_length/chunk_division_factor)*chunk_selected)-1;
+    long int current_chunk =  ((file_length/chunk_division_factor)*chunk_selected)-1;
         cout << "Current Chunk: " <<  ((file_length/chunk_division_factor)*chunk_selected)-1 << endl;
         //cout << "Buff size: " << sizeof(buff) << endl; 
    if(chunk_selected==1){
@@ -361,7 +362,7 @@ delete[] buffer;*/
     
    }
    else if(chunk_selected==20){
-    for(long int p=(file_length);p>=0;p--){
+   /* for(long int p=(file_length);p>=0;p--){
        //cout << buff[p];
        if(buff[p]=='>'){
        //cout << buff[p] << endl;
@@ -372,7 +373,7 @@ delete[] buffer;*/
         break;
        }
        
-    }
+    }*/
     /*for(long int p=((file_length/chunk_selected+)-1);p<file_length;p++){
        cout << "buff[p] : " << buff[p] << endl;
        //cout << p << endl;
@@ -481,12 +482,13 @@ cout << "Buff:" << sizeof(buff) <<  endl;
  for(long int p=0;p<adjusted_lengths[adjusted_lengths.size()-1];p++){
    //for(long int p=0;p<current_chunk;p++){
   // switch(buff_adjusted[p]){
+  //large_position++;
  // cout << buff[p] << endl;
      switch(buff[p]){
    	case '>': label=1; 
    			//cout << "buff" << endl;   
                   if(p>1){ //&& sequences_number < 536870911){
-                  seq={items[items.size()-1].final_position,p, p-items[items.size()-1].final_position,0,0,0};
+                  seq={items[items.size()-1].final_position, p, p-items[items.size()-1].final_position,0,0,0};
             
                   items.push_back(seq);
                    //break;
@@ -498,7 +500,7 @@ cout << "Buff:" << sizeof(buff) <<  endl;
          case '\n' : label=0;
                     //cout << "buff" << endl;   
                    if(p>1){
-                   seq={line_items[line_items.size()-1].final_position,p, p-line_items[line_items.size()-1].final_position,0,0,0}; 
+                   seq={line_items[line_items.size()-1].final_position, p, p-line_items[line_items.size()-1].final_position,0,0,0}; 
                    /*if(sequences_number > length/100){
                     cout<< sequences_number << endl;
                    }*/
@@ -558,6 +560,10 @@ cout << "Buff:" << sizeof(buff) <<  endl;
   seq={items[items.size()-1].final_position,file_length, file_length-items[items.size()-1].final_position,0,0,0}; 
     items.push_back(seq);
     items.erase(items.begin());
+    
+    /*for(int i=0;i<100;i++){
+      cout << "item : " << i << " : " << items[i].final_position-items[i].initial_position << endl;
+    }*/
     
  //seq = {line_items[1].initial_position,line_items[1].final_position,line_items[1].size,0,0,0};
  //labels.push_back(seq);
@@ -754,7 +760,11 @@ void sequence_ordering(std::vector<item> items_vec,Options option, std::vector<i
  std::vector<std::string> file_reads_lines={};
  std::vector<std::string> file_reads_labels={};
  std::vector<std::string> file_writes={};
-   std::vector<std::string> file_reads_sequences={};
+ std::vector<std::string> file_reads_sequences={};
+   
+ /*for(int i=0;i<100;i++){
+cout << "item : " << i << " : " << items_vec[i].final_position-items_vec[i].initial_position << endl;
+ }*/
  
  long int j=0;
  long int k=0;
@@ -917,7 +927,7 @@ std::string c="";
  
  for(long int p=0;p<file_reads_labels.size();p++){
    cout  << "Size: " << file_reads_labels.size() << endl;
-   cout << file_reads_labels[p];
+   //cout << file_reads_labels[p];
   }
    
    
@@ -950,7 +960,7 @@ std::string c="";
   cout << current_position << endl;
   value=fgetc(zfile);
     sequence_str +=value;
-    cout << value << endl;
+    //cout << value << endl;
     current_position++;
 }
 //cout << sequence_str << endl;
@@ -1006,7 +1016,7 @@ fclose(zfile);
  
   for(long int p=0;p<file_reads_sequences.size();p++){
    //cout << "Size: " << file_reads_sequences.size() << endl;
-  cout << file_reads_sequences[p] << endl;
+  //cout << file_reads_sequences[p] << endl;
    }
    //cout << sequences_vec.size() << endl;
  
@@ -1154,6 +1164,13 @@ l=0;
       // cout << i << " A: " << items_data.first[i].A_nucleotides << "," << " C: "  << items_data.first[i].C_nucleotides << "," << " G: " << items_data.first[i].G_nucleotides << "," << " T:" << items_data.first[i].T_nucleotides << endl;
      //}
      final_pos = items_vec[items_vec.size()-1].final_position-1;
+     
+    for(int i=0;i<items_vec.size();i++){
+    if(items_vec[i].final_position==699){
+cout << "item : " << i << " : " << items_vec[i].final_position<< endl;
+cout << "items size: " << items_vec.size() << endl;
+  }
+ }
   //   cout << "Final Pos: " << final_pos << endl;
   if(option==Sort_size){
   //cout << "sort size" << endl;
@@ -1178,6 +1195,9 @@ l=0;
   //std::sort(items_vec.begin(), items_vec.end() ,compareAlphabetically);
  }
  
+ /*for(int i=0;i<100;i++){
+cout << "item : " << i << " : " << items_vec[i].final_position << endl;
+ }*/
  //file_reads[order(items)];
  
         
@@ -1247,7 +1267,7 @@ for(long int r=0;r<items_vec.size();r++){
 
 for(long int p=0;p<file_reads.size();p++){
  cout << "Size: " << file_reads.size() << endl;
- cout << "file_reads: " <<  file_reads[p] << endl;
+ //cout << "file_reads: " <<  file_reads[p] << endl;
    } 
 
  for(long int i=0;i<items_vec.size();i++){
@@ -1255,6 +1275,8 @@ for(long int p=0;p<file_reads.size();p++){
      //fseek(wfile,items_vec[i].initial_position , SEEK_SET);
      cout << items_vec.size() << endl;
      l_size_chunk=items_vec[i].final_position-items_vec[i].initial_position; 
+    // cout << "item final: " << items_vec[i].final_position << endl;
+    // cout << "item initial: " << items_vec[i].initial_position << endl;
      //cout << items_vec[i].final_position;
      cout << "item chunk: " << l_size_chunk << endl;
       //buffer = (char*) malloc (sizeof(char)*l_size_chunk);
