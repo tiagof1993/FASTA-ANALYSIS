@@ -593,6 +593,7 @@ std::string c="";
  
  current_position=0;
  sequence_str="";
+ 
  for(long int p=1;p<items_vec.size();p++){
   cout << p << ", total size: " << items_vec.size() << endl;
  current_position=items_vec[p].initial_position;
@@ -604,9 +605,10 @@ std::string c="";
        //cout << sequence_str << endl;
         current_position++;
   }
-  file_reads.push_back(sequence_str);
+ // file_reads.push_back(sequence_str);
   
-   sequence_str="";
+  
+   
    //cout << sequence_str << endl;
    
    l_size_chunk=items_vec[p].final_position-items_vec[p].initial_position; 
@@ -625,20 +627,25 @@ std::string c="";
    //  j=items_vec[i].initial_position;
    j=0;
      //while(j<items_vec[i].final_position){
-     while(j<file_reads[0].size()){
-        ordered_fasta_file << file_reads[0].at(j);
+    // while(j<file_reads[0].size()){
+    while(j<sequence_str.size()){
+        //ordered_fasta_file << file_reads[0].at(j);
+        ordered_fasta_file << sequence_str.at(j);
         //cout << file_reads[p].at(j);
         if(j==l_size_chunk){
           //ordered_fasta_file << file_reads_labels[i].at(j);
-          ordered_fasta_file << file_reads[0].at(j) << endl;
+          //ordered_fasta_file << file_reads[0].at(j) << endl;
+        ordered_fasta_file << sequence_str.at(j) << endl;
         
-        
-        j++;
+       
       }
+       j++;
   // fclose(pfile);
     //free(buffer);
      }
-     file_reads.clear();
+     sequence_str="";
+     
+     //file_reads.clear();
      //items_vec_record.close();
      cout << "buffer" << endl;
      //fclose(pfile)
@@ -662,10 +669,12 @@ std::string c="";
   
   
    
- }
+  }
  fclose(pfile);
  items_vec_record.close();
  ordered_fasta_file.close(); 
+ 
+ }
  
 /* for(long int p=0;p<file_reads.size();p++){
  cout << "Size: " << file_reads.size() << endl;
@@ -726,7 +735,7 @@ std::string c="";
   // nucleotide_records.close();
 //}
    
-}
+
 
 uint8_t ArgsState(uint8_t d, char *a[], uint32_t n, char *s, char *s2){
 
