@@ -409,9 +409,9 @@ std::string c="";
   value=fgetc(pfile);
        sequence_str+=value;
        //cout << sequence_str << endl;
-        current_position++;
+       current_position++;
       // cout << value << endl;
-        switch(value){
+       switch(value){
         /*case '>': //label=1; 
                   if(current_position>1){
                    //seq={items[items.size()-1].final_position,current_position, current_position-items[items.size()-1].final_position,0,0,0}; 
@@ -594,8 +594,9 @@ std::string c="";
  current_position=0;
  sequence_str="";
  
- for(long int p=1;p<items_vec.size();p++){
-  cout << p << ", total size: " << items_vec.size() << endl;
+ ordered_fasta_file << ">";
+ for(long int p=1;p<items_vec.size()-1;p++){
+ // cout << p << ", total size: " << items_vec.size() << endl;
  current_position=items_vec[p].initial_position;
    fseek(pfile,current_position , SEEK_SET);
    while(current_position < items_vec[p].final_position){
@@ -615,7 +616,7 @@ std::string c="";
     // cout << "item final: " << items_vec[i].final_position << endl;
     // cout << "item initial: " << items_vec[i].initial_position << endl;
      //cout << items_vec[i].final_position;
-     cout << "item chunk: " << l_size_chunk << endl;
+//     cout << "item chunk: " << l_size_chunk << endl;
      
       //buffer = (char*) malloc (sizeof(char)*l_size_chunk);
       //rewind(wfile);
