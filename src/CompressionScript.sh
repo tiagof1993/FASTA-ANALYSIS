@@ -116,7 +116,7 @@ rm shuffled.fasta.mfc
 rm shuffled.mbgc
 rm shuffled.naf
 #{ ./SHUFFLE_FASTA AT 5 shuffled.fasta sequences_virus.fasta ; } 2>>shuffle_times.txt
-{ ./FASTA_ANALY -S AT CVDB.fasta shuffled.fasta 5 ; } 2>>shuffle_times.txt
+{ ./FASTA_ANALY -s AT CVDB.fasta shuffled.fasta 5 ; } 2>>shuffle_times.txt
 { time ennaf shuffled.fasta -o shuffled.naf --temp-dir /tmp ; } 2>>naf_times_s2.txt
 
 { time mbgc -i shuffled.fasta shuffled.mbgc ; } 2>>mbgctimes_s2.txt
