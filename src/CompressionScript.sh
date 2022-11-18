@@ -36,11 +36,11 @@ rm CVDB_mbgc.fasta
 
 #Decompress
 
-{ time unnaf --strict  CVDB.naf -o CVDB_naf.fasta --temp-dir /tmp ; } 2>>unnaf_times.txt
+{ time unnaf CVDB.naf -o CVDB_naf.fasta --temp-dir /tmp ; } 2>>unnaf_times.txt
 
 { time mbgc -d CVDB.mbgc CVDB_mbgc.fasta ; } 2>>mbgcdtimes.txt
 
-{ time ./MFCompressD CVDB.fasta.mfc ; } 2>>mf_decompresstimes.txt
+{ time ./MFCompressD -t 2  -o CVDB.fasta.mfc ; } 2>>mf_decompresstimes.txt
 
 { time gunzip -k CVDB.fasta.gz ; } 2>>gunzip_times.txt
 
@@ -283,7 +283,7 @@ sed -i '$ s/.$//' ordered_CVDB.fasta
 { time gzip -k ordered_CVDB.fasta y ; } 2>>gzip_times_s3.txt
 
 #Decompress
-{ time unnaf --strict  ordered_CVDB.naf -o ordered_CVDB_naf.fasta --temp-dir /tmp ; } 2>>unnaf_times_s3.txt
+{ time unnaf  ordered_CVDB.naf -o ordered_CVDB_naf.fasta --temp-dir /tmp ; } 2>>unnaf_times_s3.txt
 { time mbgc -d ordered_CVDB.mbgc ordered_CVDB_mbgc.fasta ; } 2>>mbgcdtimes_s3.txt
 
 { time ./MFCompressD -t 2 ordered_CVDB.fasta.mfc ; } 2>>mf_decompresstimes_s3.txt
@@ -381,7 +381,7 @@ sed -i '$ s/.$//' ordered_shuffled_v2.fasta
 { time ./MFCompressC ordered_shuffled_v2.fasta ; } 2>>mf_compresstimes_s4.txt
 
 { time gzip -k ordered_shuffled_v2.fasta y ; } 2>>gzip_times_s4.txt
-{ time unnaf --strict  ordered_shuffled_v2.naf -o ordered_shuffled_v2_naf.fasta --temp-dir /tmp ; } 2>>unnaf_times_s4.txt
+{ time unnaf ordered_shuffled_v2.naf -o ordered_shuffled_v2_naf.fasta --temp-dir /tmp ; } 2>>unnaf_times_s4.txt
 { time mbgc -d ordered_shuffled_v2.mbgc ordered_shuffled_v2_mbgc.fasta ; } 2>>mbgcdtimes_s4_.txt
 
 { time ./MFCompressD ordered_shuffled_v2.fasta.mfc ; } 2>>mf_decompresstimes_s4.txt
