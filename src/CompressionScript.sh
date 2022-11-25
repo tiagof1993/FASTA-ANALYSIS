@@ -1,6 +1,6 @@
 #bin/bash
 #!/usr/bin/bash
-
+time {
 # Scenario 1 - Compress original file (sequences_virus.fasta)
 
 time {
@@ -26,23 +26,27 @@ rm CVDB_mbgc.fasta
 
 #Compress
 
-{ time ennaf --strict  CVDB.fasta -o CVDB.naf --temp-dir /tmp ; } 2>>naf_times.txt
+{ time ennaf --strict CVDB.fasta -o CVDB.naf --temp-dir tmp/ ; } 2>>naf_times.txt
 
 { time mbgc -i CVDB.fasta CVDB.mbgc ; } 2>>mbgctimes.txt
 
 { time ./MFCompressC CVDB.fasta ; } 2>>mf_compresstimes.txt
 
-{ time gzip -k CVDB.fasta ; } 2>>gzip_times.txt
+{ time gzip -k -9 CVDB.fasta ; } 2>>gzip_times.txt
 
-#Decompress
 
-{ time unnaf CVDB.naf -o CVDB_naf.fasta --temp-dir /tmp ; } 2>>unnaf_times.txt
+
+{ time unnaf CVDB.naf -o CVDB_naf.fasta ; } 2>>unnaf_times.txt
 
 { time mbgc -d CVDB.mbgc CVDB_mbgc.fasta ; } 2>>mbgcdtimes.txt
 
-{ time ./MFCompressD -t 2  -o CVDB.fasta.mfc ; } 2>>mf_decompresstimes.txt
+{ time ./MFCompressD -t 2 -o CVDB.fasta.mfc ; } 2>>mf_decompresstimes.txt
 
-{ time gunzip -k CVDB.fasta.gz ; } 2>>gunzip_times.txt
+{ time gunzip -c CVDB.fasta.gz >CVDB_gz.fasta  ; } 2>>gunzip_times.txt
+
+#awk 'NR==1, NR==2 {print NR,$2}' naf_times.txt 
+
+#Decompress
 
 
 #ls -la -ltr | grep \.naf$ |awk '{print $5;}' > naf_files.txt
@@ -86,6 +90,9 @@ awk 'FNR == 2 {print $2}' gunzip_times.txt > gunzip_time_total.txt
 #times_arr+=$(awk 'FNR == 2 {print $2}' mf_compresstimes.txt)
 #times_arr+=$(awk 'FNR == 2 {print $2}' gzip_times.txt)
 
+#time=awk 'FNR == 2 {print $2}' naf_times.txt;
+#
+
 while read line; do
    times_arr+=($line)
 done < naf_time_total.txt
@@ -121,7 +128,11 @@ declare -p times_arr
  # done  
 
 time_naf=$(awk '{print $1}' mbgc_time_total.txt)
-#awk '{print $(time_naf)}'
+time_naf=$(awk '{print $1}' mbgc_time_total.txt)
+awk '{print $(time_naf)}'
+#awk -F "," 'BEGIN {OFS=","} {$time_naf; print}' Output.csv >> Output.csv
+
+
 #echo $((time_naf))
 ls CVDB* -la -ltr | awk 'BEGIN{ OFS=","; print "File;Size;Time,"}; NR > 1{print $9,$5;}' > Output.csv
 #for i in ${!times_arr[@]}; do
@@ -130,7 +141,7 @@ echo $(awk '{print $1}' naf_time_total.txt)
 #| awk '{print $1;}' OFS="," > Output_n.csv
    
  # done  
-}
+}; 2 >>stage1_time.txt
 
 #awk  '{print $10,$6,"a"," b","c";}' OFS="," > Results.csv
 
@@ -155,7 +166,7 @@ rm shuffled_naf.fasta
 rm shuffled_mbgc.fasta
 
 #{ ./SHUFFLE_FASTA AT 5 shuffled.fasta sequences_virus.fasta ; } 2>>shuffle_times.txt
-{ ./FASTA_ANALY -sort=S CVDB.fasta shuffled.fasta 5 ; } 2>>shuffle_times.txt
+{ ./FASTA_ANALY -s CVDB.fasta shuffled.fasta 5 ; } 2>>shuffle_times.txt
 sed -i '$ s/.$//' shuffled.fasta
 { time ennaf shuffled.fasta -o shuffled.naf --temp-dir /tmp ; } 2>>naf_times_s2.txt
 
@@ -163,17 +174,17 @@ sed -i '$ s/.$//' shuffled.fasta
 
 { time ./MFCompressC -1 -t 2 shuffled.fasta ; } 2>>mf_compresstimes_s2.txt
 
-{ time gzip -k shuffled.fasta ; } 2>>gzip_times_s2.txt
+{ time gzip -k -9 shuffled.fasta ; } 2>>gzip_times_s2.txt
 
 #Decompress
 
-{ time unnaf shuffled.naf -o shuffled_naf.fasta --temp-dir /tmp ; } 2>>unnaf_times_s2.txt
+{ time unnaf shuffled.naf -o shuffled_naf.fasta ; } 2>>unnaf_times_s2.txt
 
 { time mbgc -d shuffled.mbgc shuffled_mbgc.fasta ; } 2>>mbgcdtimes_s2.txt
 
 { time ./MFCompressD -t 2 shuffled.fasta.mfc ; } 2>>mf_decompresstimes_s2.txt
 
-{ time gunzip -k shuffled.fasta.gz ; } 2>>gunzip_times_s2.txt
+{ time gunzip -c shuffled.fasta.gz >shuffled_gz.fasta ; } 2>>gunzip_times_s2.txt
 
 #ls -la -ltr | grep \.naf$ |awk '{print $5;}' > naf_files_s2.txt
 #ls -la -ltr | grep \.mbgc$ |awk '{print $5;}' > mbgc_files_s2.txt
@@ -244,7 +255,7 @@ echo $(awk '{print $1}' naf_time_total_s2.txt)
    
  # done  
 
-}
+}; 2 >>stage2_time.txt
 
 
 #Scenario 3 - Order Input File and then Compress
@@ -273,22 +284,43 @@ rm ordered_CVDB.naf
 rm ordered_CVDB_naf.fasta
 rm ordered_CVDB_mbgc.fasta
 
-{ time ./FASTA_ANALY -sort=S CVDB.fasta ordered_CVDB.fasta 5 ; } 2>>ordering_times.txt
+{ time ./FASTA_ANALY -sort=S CVDB.fasta ordered_CVDB_size.fasta 5 ; } 2>>ordering_times.txt
 sed -i '$ s/.$//' ordered_CVDB.fasta
-{ time ennaf --strict  ordered_CVDB.fasta -o ordered_CVDB.naf --temp-dir /tmp ; } 2>>naf_times_s3.txt
-{ time mbgc -i ordered_CVDB.fasta ordered_CVDB.mbgc ; } 2>>mbgctimes_s3.txt
+{ time ./FASTA_ANALY -sort=AT CVDB.fasta ordered_CVDB_AT.fasta 5 ; } 2>>ordering_times.txt
+sed -i '$ s/.$//' ordered_CVDB.fasta
+{ time ./FASTA_ANALY -sort=CG CVDB.fasta ordered_CVDB_CG.fasta 5 ; } 2>>ordering_times.txt
+sed -i '$ s/.$//' ordered_CVDB.fasta
+{ time ennaf --strict  ordered_CVDB_size.fasta -o ordered_CVDB_size.naf --temp-dir /tmp ; } 2>>naf_times_s3.txt
+{ time ennaf --strict  ordered_CVDB_AT.fasta -o ordered_CVDB_AT.naf --temp-dir /tmp ; } 2>>naf_times_s3.txt
+{ time ennaf --strict  ordered_CVDB_CG.fasta -o ordered_CVDB_CG.naf --temp-dir /tmp ; } 2>>naf_times_s3.txt
+{ time mbgc -i ordered_CVDB_size.fasta ordered_CVDB_size.mbgc ; } 2>>mbgctimes_s3.txt
+{ time mbgc -i ordered_CVDB_AT.fasta ordered_CVDB_AT.mbgc ; } 2>>mbgctimes_s3.txt
+{ time mbgc -i ordered_CVDB_CG.fasta ordered_CVDB_CG.mbgc ; } 2>>mbgctimes_s3.txt
 
-{ time ./MFCompressC -1 -t 2 ordered_CVDB.fasta ; } 2>>mf_compresstimes_s3.txt
+{ time ./MFCompressC -1 -t 2 ordered_CVDB_size.fasta ; } 2>>mf_compresstimes_s3.txt
+{ time ./MFCompressC -1 -t 2 ordered_CVDB_AT.fasta ; } 2>>mf_compresstimes_s3.txt
+{ time ./MFCompressC -1 -t 2 ordered_CVDB_CG.fasta ; } 2>>mf_compresstimes_s3.txt
 
-{ time gzip -k ordered_CVDB.fasta y ; } 2>>gzip_times_s3.txt
+{ time gzip -k -9 ordered_CVDB_size.fasta y ; } 2>>gzip_times_s3.txt
+{ time gzip -k -9 ordered_CVDB_AT.fasta y ; } 2>>gzip_times_s3.txt
+{ time gzip -k -9 ordered_CVDB_CG.fasta y ; } 2>>gzip_times_s3.txt
 
 #Decompress
-{ time unnaf  ordered_CVDB.naf -o ordered_CVDB_naf.fasta --temp-dir /tmp ; } 2>>unnaf_times_s3.txt
-{ time mbgc -d ordered_CVDB.mbgc ordered_CVDB_mbgc.fasta ; } 2>>mbgcdtimes_s3.txt
+{ time unnaf  ordered_CVDB_size.naf -o ordered_CVDB_size_naf.fasta ; } 2>>unnaf_times_s3.txt
+{ time unnaf  ordered_CVDB_AT.naf -o ordered_CVDB_AT_naf.fasta ; } 2>>unnaf_times_s3.txt
+{ time unnaf  ordered_CVDB_CG.naf -o ordered_CVDB_CG_naf.fasta ; } 2>>unnaf_times_s3.txt
 
-{ time ./MFCompressD -t 2 ordered_CVDB.fasta.mfc ; } 2>>mf_decompresstimes_s3.txt
+{ time mbgc -d ordered_CVDB_size.mbgc ordered_CVDB_size_mbgc.fasta ; } 2>>mbgcdtimes_s3.txt
+{ time mbgc -d ordered_CVDB_AT.mbgc ordered_CVDB_AT_mbgc.fasta ; } 2>>mbgcdtimes_s3.txt
+{ time mbgc -d ordered_CVDB_CG.mbgc ordered_CVDB_CG_mbgc.fasta ; } 2>>mbgcdtimes_s3.txt
 
-{ time gunzip -k ordered_CVDB.fasta.gz ; } 2>>gunzip_times_s3.txt
+{ time ./MFCompressD -t 2 ordered_CVDB_size.fasta.mfc ; } 2>>mf_decompresstimes_s3.txt
+{ time ./MFCompressD -t 2 ordered_CVDB_AT.fasta.mfc ; } 2>>mf_decompresstimes_s3.txt
+{ time ./MFCompressD -t 2 ordered_CVDB_CG.fasta.mfc ; } 2>>mf_decompresstimes_s3.txt
+
+{ time gunzip -c ordered_CVDB_size.fasta.gz >ordered_CVDB_size_gz.fasta  ; } 2>>gunzip_times_s3.txt
+{ time gunzip -c ordered_CVDB_AT.fasta.gz >ordered_CVDB_AT_gz.fasta   ; } 2>>gunzip_times_s3.txt
+{ time gunzip -c ordered_CVDB_CG.fasta.gz >ordered_CVDB_CG_gz.fasta  ; } 2>>gunzip_times_s3.txt
 
 declare -a times_s3_arr=()
 
@@ -355,7 +387,7 @@ echo $(awk '{print $1}' naf_time_total_s3.txt)
    
  # done  
 
-}
+}; 2 >>stage3_time.txt
 
 rm naf_times_s4.txt
 rm mbgctimes_s4.txt
@@ -373,20 +405,43 @@ time {
 #{ time ./FASTA_ANALY AT 5 ordered_shuffled.fasta shuffled.fasta ; } 2>>ordering_times_s4.txt
 { ./FASTA_ANALY -s CVDB.fasta shuffled_v2.fasta 5 ; } 2>>shuffle_times_s4.txt
 sed -i '$ s/.$//' shuffled_v2.fasta
-{ time ./FASTA_ANALY -sort=S shuffled_v2.fasta ordered_shuffled_v2.fasta 5 ; } 2>>ordering_times_s4.txt
+{ time ./FASTA_ANALY -sort=S shuffled_v2.fasta ordered_shuffled_v2_size.fasta 5 ; } 2>>ordering_times_s4.txt
 sed -i '$ s/.$//' ordered_shuffled_v2.fasta
-{ time ennaf --strict  ordered_shuffled_v2.fasta -o ordered_shuffled_v2.naf --temp-dir /tmp ; } 2>>naf_times_s4.txt
-{ time mbgc -i ordered_shuffled_v2.fasta ordered_shuffled_v2.mbgc ; } 2>>mbgctimes_s4.txt
+{ time ./FASTA_ANALY -sort=S shuffled_v2.fasta ordered_shuffled_v2_AT.fasta 5 ; } 2>>ordering_times_s4.txt
+sed -i '$ s/.$//' ordered_shuffled_v2.fasta
+{ time ./FASTA_ANALY -sort=S shuffled_v2.fasta ordered_shuffled_v2_CG.fasta 5 ; } 2>>ordering_times_s4.txt
+sed -i '$ s/.$//' ordered_shuffled_v2.fasta
+{ time ennaf --strict  ordered_shuffled_v2_size.fasta -o ordered_shuffled_v2_size.naf --temp-dir /tmp ; } 2>>naf_times_s4.txt
+{ time ennaf --strict  ordered_shuffled_v2_AT.fasta -o ordered_shuffled_v2_AT.naf --temp-dir /tmp ; } 2>>naf_times_s4.txt
+{ time ennaf --strict  ordered_shuffled_v2_CG.fasta -o ordered_shuffled_v2_CG.naf --temp-dir /tmp ; } 2>>naf_times_s4.txt
+{ time mbgc -i ordered_shuffled_v2_size.fasta ordered_shuffled_v2_size.mbgc ; } 2>>mbgctimes_s4.txt
+{ time mbgc -i ordered_shuffled_v2_AT.fasta ordered_shuffled_v2_AT.mbgc ; } 2>>mbgctimes_s4.txt
+{ time mbgc -i ordered_shuffled_v2_CG.fasta ordered_shuffled_v2_CG.mbgc ; } 2>>mbgctimes_s4.txt
 
-{ time ./MFCompressC ordered_shuffled_v2.fasta ; } 2>>mf_compresstimes_s4.txt
+{ time ./MFCompressC ordered_shuffled_v2_size.fasta ; } 2>>mf_compresstimes_s4.txt
+{ time ./MFCompressC ordered_shuffled_v2_AT.fasta ; } 2>>mf_compresstimes_s4.txt
+{ time ./MFCompressC ordered_shuffled_v2_CG.fasta ; } 2>>mf_compresstimes_s4.txt
 
-{ time gzip -k ordered_shuffled_v2.fasta y ; } 2>>gzip_times_s4.txt
-{ time unnaf ordered_shuffled_v2.naf -o ordered_shuffled_v2_naf.fasta --temp-dir /tmp ; } 2>>unnaf_times_s4.txt
-{ time mbgc -d ordered_shuffled_v2.mbgc ordered_shuffled_v2_mbgc.fasta ; } 2>>mbgcdtimes_s4_.txt
 
-{ time ./MFCompressD ordered_shuffled_v2.fasta.mfc ; } 2>>mf_decompresstimes_s4.txt
+{ time gzip -k -9 ordered_shuffled_v2_size.fasta y ; } 2>>gzip_times_s4.txt
+{ time gzip -k -9 ordered_shuffled_v2_AT.fasta y ; } 2>>gzip_times_s4.txt
+{ time gzip -k -9 ordered_shuffled_v2_CG.fasta y ; } 2>>gzip_times_s4.txt
 
-{ time gunzip -k ordered_shuffled_v2.fasta.gz y ; } 2>>gunzip_times_s4.txt
+{ time unnaf ordered_shuffled_v2_size.naf -o ordered_shuffled_v2_naf_size.fasta ; } 2>>unnaf_times_s4.txt
+{ time unnaf ordered_shuffled_v2_AT.naf -o ordered_shuffled_v2_naf_AT.fasta ; } 2>>unnaf_times_s4.txt
+{ time unnaf ordered_shuffled_v2_CG.naf -o ordered_shuffled_v2_naf_CG.fasta ; } 2>>unnaf_times_s4.txt
+
+{ time mbgc -d ordered_shuffled_v2_size.mbgc ordered_shuffled_v2_mbgc_size.fasta ; } 2>>mbgcdtimes_s4_.txt
+{ time mbgc -d ordered_shuffled_v2_AT.mbgc ordered_shuffled_v2_mbgc_AT.fasta ; } 2>>mbgcdtimes_s4_.txt
+{ time mbgc -d ordered_shuffled_v2_CG.mbgc ordered_shuffled_v2_mbgc_CG.fasta ; } 2>>mbgcdtimes_s4_.txt
+
+{ time ./MFCompressD ordered_shuffled_v2.fasta_size.mfc ; } 2>>mf_decompresstimes_s4.txt
+{ time ./MFCompressD ordered_shuffled_v2.fasta_AT.mfc ; } 2>>mf_decompresstimes_s4.txt
+{ time ./MFCompressD ordered_shuffled_v2.fasta_CG.mfc ; } 2>>mf_decompresstimes_s4.txt
+
+{ time gunzip -c ordered_shuffled_v2_size.fasta.gz >ordered_shuffled_v2_size_gz.fasta  ; } 2>>gunzip_times_s4.txt
+{ time gunzip -c ordered_shuffled_v2_AT.fasta.gz >ordered_shuffled_v2_AT_gz.fasta ; } 2>>gunzip_times_s4.txt
+{ time gunzip -c ordered_shuffled_v2_CG.fasta.gz >ordered_shuffled_v2_CG_gz.fasta ; } 2>>gunzip_times_s4.txt
 
 ls ordered_shuffled_v2* -la -ltr | awk 'BEGIN{ OFS=","; print "File;Size,"}; NR > 1{print $9,$5;}' > Output_s4.csv
 
@@ -455,9 +510,11 @@ declare -p times_s4_arr
 #time_naf=$(awk '{print $1}' mbgc_time_total.txt)
 #awk '{print $(time_naf)}'
 #echo $((time_naf))
-ls ordered_CVDB* -la -ltr | awk 'BEGIN{ OFS=","; print "File;Size;Time,"}; NR > 1{print $9,$5;}' > Output_s4.csv
+ls ordered_shuffled* -la -ltr | awk 'BEGIN{ OFS=","; print "File;Size;Time,"}; NR > 1{print $9,$5;}' > Output_s4.csv
 #for i in ${!times_arr[@]}; do
     
 echo $(awk '{print $1}' naf_time_total_s4.txt) 
 
-}
+}; 2 >>stage4_time.txt
+
+}; 2 >>full_script_time.txt
