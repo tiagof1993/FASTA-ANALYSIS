@@ -1,6 +1,5 @@
 #bin/bash
 #!/usr/bin/bash
-time {
 # Scenario 1 - Compress original file (sequences_virus.fasta)
 
 time {
@@ -30,7 +29,7 @@ rm CVDB_mbgc.fasta
 
 { time mbgc -i CVDB.fasta CVDB.mbgc ; } 2>>mbgctimes.txt
 
-{ time ./MFCompressC CVDB.fasta ; } 2>>mf_compresstimes.txt
+{ time ./MFCompressC -1 -t 2 CVDB.fasta ; } 2>>mf_compresstimes.txt
 
 { time gzip -k -9 CVDB.fasta ; } 2>>gzip_times.txt
 
@@ -74,6 +73,7 @@ declare -a times_arr=()
 #while read line; do
 #    times_arr+=($line)
 #done < naf$_times.txt
+
 awk 'FNR == 2 {print $2}' naf_times.txt > naf_time_total.txt
 awk 'FNR == 2 {print $2}' mbgctimes.txt > mbgc_time_total.txt
 awk 'FNR == 2 {print $2}' mf_compresstimes.txt > mfcompress_time_total.txt
@@ -127,9 +127,9 @@ declare -p times_arr
  #   time echo "$((${fasta_arr[i]}))"
  # done  
 
-time_naf=$(awk '{print $1}' mbgc_time_total.txt)
-time_naf=$(awk '{print $1}' mbgc_time_total.txt)
-awk '{print $(time_naf)}'
+#time_naf=$(awk '{print $1}' mbgc_time_total.txt)
+#time_naf=$(awk '{print $1}' mbgc_time_total.txt)
+#awk '{print $(time_naf)}'
 #awk -F "," 'BEGIN {OFS=","} {$time_naf; print}' Output.csv >> Output.csv
 
 
@@ -141,7 +141,7 @@ echo $(awk '{print $1}' naf_time_total.txt)
 #| awk '{print $1;}' OFS="," > Output_n.csv
    
  # done  
-}; 2 >>stage1_time.txt
+}
 
 #awk  '{print $10,$6,"a"," b","c";}' OFS="," > Results.csv
 
@@ -157,7 +157,7 @@ rm mf_compresstimes_s2.txt
 rm mbgcdtimes_s2.txt
 rm mf_decompresstimes_s2.txt
 run gunzip_times_s2.txt
-#rm stage1_time.txt
+rm stage2_time.txt
 rm shuffled.fasta.gz
 rm shuffled.fasta.mfc
 rm shuffled.mbgc
@@ -255,7 +255,7 @@ echo $(awk '{print $1}' naf_time_total_s2.txt)
    
  # done  
 
-}; 2 >>stage2_time.txt
+}
 
 
 #Scenario 3 - Order Input File and then Compress
@@ -272,7 +272,7 @@ rm unnaf_times_s3.txt
 rm mbgcdtimes_s3.txt
 rm gunzip_times_s3.txt
 rm mf_decompresstimes_s3.txt
-#rm stage1_time.txt
+rm stage3_time.txt
 #rm ordered_sequences_virus.fasta.gz
 #rm ordered_sequences_virus.fasta.mfc
 #rm ordered_sequences_virus.mbgc
@@ -283,6 +283,7 @@ rm ordered_CVDB.mbgc
 rm ordered_CVDB.naf
 rm ordered_CVDB_naf.fasta
 rm ordered_CVDB_mbgc.fasta
+rm ordering_times.txt
 
 { time ./FASTA_ANALY -sort=S CVDB.fasta ordered_CVDB_size.fasta 5 ; } 2>>ordering_times.txt
 sed -i '$ s/.$//' ordered_CVDB.fasta
@@ -387,7 +388,7 @@ echo $(awk '{print $1}' naf_time_total_s3.txt)
    
  # done  
 
-}; 2 >>stage3_time.txt
+}
 
 rm naf_times_s4.txt
 rm mbgctimes_s4.txt
@@ -398,6 +399,7 @@ rm mbgcdtimes_s4.txt
 rm gunzip_times_s4.txt
 rm mf_decompresstimes_s4.txt
 rm ordering_times_s4.txt
+rm stage4_time.txt
 
 #Scenario 4 - Shuffle then Order then Compress
 time {
@@ -515,6 +517,4 @@ ls ordered_shuffled* -la -ltr | awk 'BEGIN{ OFS=","; print "File;Size;Time,"}; N
     
 echo $(awk '{print $1}' naf_time_total_s4.txt) 
 
-}; 2 >>stage4_time.txt
-
-}; 2 >>full_script_time.txt
+}
