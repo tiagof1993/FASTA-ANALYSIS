@@ -2,7 +2,7 @@
 #!/usr/bin/bash
 # Scenario 1 - Compress original file (sequences_virus.fasta)
 
-time {
+#time {
 rm naf_times.txt
 rm mbgctimes.txt
 rm gzip_times.txt
@@ -43,112 +43,10 @@ rm CVDB_mbgc.fasta
 
 { time gunzip -c CVDB.fasta.gz >CVDB_gz.fasta  ; } 2>>gunzip_times.txt
 
-#awk 'NR==1, NR==2 {print NR,$2}' naf_times.txt 
-
-#Decompress
-
-
-#ls -la -ltr | grep \.naf$ |awk '{print $5;}' > naf_files.txt
-#ls -la -ltr | grep \.mbgc$ |awk '{print $5;}' > mbgc_files.txt
-#ls -la -ltr | grep \.gz$ |awk '{print $5;}' > gzip_files.txt
-#ls -la -ltr | grep \.mfc$ |awk '{print $5;}' > mfc_files.txt
-
-#ls sequences_virus* -la -ltr | grep \.naf$ |awk '{print $5;}' > naf_files.txt
-#ls sequences_virus* -la -ltr | grep \.mbgc$ |awk '{print $5;}' > mbgc_files.txt
-#ls sequences_virus* -la -ltr | grep \.gz$ |awk '{print $5;}' > gzip_files.txt
-#ls sequences_virus* -la -ltr | grep \.mfc$ |awk '{print $5;}' > mfc_files.txt
-
-#awk '{print $1}' OFS="|" naf_files.txt > output_naf.csv
-#awk '{print $1}' OFS="|" mbgc_files.txt > output_mbgc.csv
-#awk '{print $1}' OFS="|" gzip_files.txt > outfile_gzip.csv
-#awk '{print $1}' OFS="|" mfc_files.txt > outfile_mfc.csv
-
-#valgrind
-#perfis de ordenação
-#cg
-
-declare -a times_arr=()
-
-#times_arr+=$(awk '{print $2}' OFS="|" naf_files.txt)
-#while read line; do
-#    times_arr+=($line)
-#done < naf$_times.txt
-
-awk 'FNR == 2 {print $2}' naf_times.txt > naf_time_total.txt
-awk 'FNR == 2 {print $2}' mbgctimes.txt > mbgc_time_total.txt
-awk 'FNR == 2 {print $2}' mf_compresstimes.txt > mfcompress_time_total.txt
-awk 'FNR == 2 {print $2}' gzip_times.txt > gzip_time_total.txt
-awk 'FNR == 2 {print $2}' unnaf_times.txt > unnaf_time_total.txt
-awk 'FNR == 2 {print $2}' mbgcdtimes.txt > mbgcd_time_total.txt
-awk 'FNR == 2 {print $2}' mf_decompresstimes.txt > mfdecompress_time_total.txt
-awk 'FNR == 2 {print $2}' gunzip_times.txt > gunzip_time_total.txt
-
-
-
-
-#times_arr+=$(awk 'FNR == 2 {print $2}' mbgctimes.txt)
-#times_arr+=$(awk 'FNR == 2 {print $2}' mf_compresstimes.txt)
-#times_arr+=$(awk 'FNR == 2 {print $2}' gzip_times.txt)
-
-#time=awk 'FNR == 2 {print $2}' naf_times.txt;
-#
-
-while read line; do
-   times_arr+=($line)
-done < naf_time_total.txt
-while read line; do
-   times_arr+=($line)
-done < mbgc_time_total.txt
-while read line; do
-    times_arr+=($line)
-done < mfcompress_time_total.txt
-while read line; do
-    times_arr+=($line)
-done < gzip_time_total.txt
-while read line; do
-   times_arr+=($line)
-done < unnaf_time_total.txt
-while read line; do
-   times_arr+=($line)
-done < mbgcd_time_total.txt
-while read line; do
-    times_arr+=($line)
-done < mfdecompress_time_total.txt
-while read line; do
-    times_arr+=($line)
-done < gunzip_time_total.txt
-
-echo "${#times_arr[@]}"
-
-
-declare -p times_arr
-#for i in ${!fasta_arr[@]}; do
-    
- #   time echo "$((${fasta_arr[i]}))"
- # done  
-
-#time_naf=$(awk '{print $1}' mbgc_time_total.txt)
-#time_naf=$(awk '{print $1}' mbgc_time_total.txt)
-#awk '{print $(time_naf)}'
-#awk -F "," 'BEGIN {OFS=","} {$time_naf; print}' Output.csv >> Output.csv
-
-
-#echo $((time_naf))
-ls CVDB* -la -ltr | awk 'BEGIN{ OFS=","; print "File;Size;Time,"}; NR > 1{print $9,$5;}' > Output.csv
-#for i in ${!times_arr[@]}; do
-    
-echo $(awk '{print $1}' naf_time_total.txt) 
-#| awk '{print $1;}' OFS="," > Output_n.csv
-   
- # done  
-}
-
-#awk  '{print $10,$6,"a"," b","c";}' OFS="," > Results.csv
-
 
 #Scenario 2 - Shuffle Input File and then Compress
 
-time {
+#time {
 
 rm naf_times_s2.txt
 rm mbgctimes_s2.txt
@@ -186,83 +84,12 @@ sed -i '$ s/.$//' shuffled.fasta
 
 { time gunzip -c shuffled.fasta.gz >shuffled_gz.fasta ; } 2>>gunzip_times_s2.txt
 
-#ls -la -ltr | grep \.naf$ |awk '{print $5;}' > naf_files_s2.txt
-#ls -la -ltr | grep \.mbgc$ |awk '{print $5;}' > mbgc_files_s2.txt
-#ls -la -ltr | grep \.gz$ |awk '{print $5;}' > gzip_files_s2.txt
-#ls -la -ltr | grep \.mfc$ |awk '{print $5;}' > mfc_files_s2.txt
-declare -a times_s2_arr=()
-
-#times_arr+=$(awk '{print $2}' OFS="|" naf_files.txt)
-#while read line; do
-#    times_arr+=($line)
-#done < naf$_times.txt
-awk 'FNR == 2 {print $2}' naf_times_s2.txt > naf_time_total_s2.txt
-awk 'FNR == 2 {print $2}' mbgctimes_s2.txt > mbgc_time_total_s2.txt
-awk 'FNR == 2 {print $2}' mf_compresstimes_s2.txt > mfcompress_time_total_s2.txt
-awk 'FNR == 2 {print $2}' gzip_times_s2.txt > gzip_time_total_s2.txt
-awk 'FNR == 2 {print $2}' unnaf_times_s2.txt > unnaf_time_total_s2.txt
-awk 'FNR == 2 {print $2}' mbgcdtimes_s2.txt > mbgcd_time_total_s2.txt
-awk 'FNR == 2 {print $2}' mf_decompresstimes_s2.txt > mfdecompress_time_total_s2.txt
-awk 'FNR == 2 {print $2}' gunzip_times_s2.txt > gunzip_time_total_s2.txt
-
-
-#times_arr+=$(awk 'FNR == 2 {print $2}' mbgctimes.txt)
-#times_arr+=$(awk 'FNR == 2 {print $2}' mf_compresstimes.txt)
-#times_arr+=$(awk 'FNR == 2 {print $2}' gzip_times.txt)
-
-while read line; do
-   times_s2_arr+=($line)
-done < naf_time_total_s2.txt
-while read line; do
-   times_s2_arr+=($line)
-done < mbgc_time_total_s2.txt
-while read line; do
-    times_s2_arr+=($line)
-done < mfcompress_time_total_s2.txt
-while read line; do
-    times_s2_arr+=($line)
-done < gzip_time_total_s2.txt
-while read line; do
-   times_s2_arr+=($line)
-done < unnaf_time_total_s2.txt
-while read line; do
-   times_s2_arr+=($line)
-done < mbgcd_time_total_s2.txt
-while read line; do
-    times_s2_arr+=($line)
-done < mfdecompress_time_total_s2.txt
-while read line; do
-    times_s2_arr+=($line)
-done < gunzip_time_total_s2.txt
-
-echo "${#times_s2_arr[@]}"
-
-
-declare -p times_s2_arr
-#for i in ${!fasta_arr[@]}; do
-    
- #   time echo "$((${fasta_arr[i]}))"
- # done  
-
-#time_naf=$(awk '{print $1}' mbgc_time_total.txt)
-#awk '{print $(time_naf)}'
-ls shuffled.* -la -ltr | awk 'BEGIN{ OFS=","; print "File;Size;Time,"}; NR > 1{print $9,$5;}' > Output_s2.csv
-#echo $((time_naf))
-#for i in ${!times_arr[@]}; do
-    
-echo $(awk '{print $1}' naf_time_total_s2.txt) 
-#| awk '{print $1;}' OFS="," > Output_n.csv
-   
- # done  
-
-}
-
 
 #Scenario 3 - Order Input File and then Compress
 
 #{ time ./FASTA_ANALY AT 5 ordered_sequences_virus.fasta sequences_virus.fasta ; } 2>>ordering_times.tx
 
-time {
+#time {
 
 rm naf_times_s3.txt
 rm mbgctimes_s3.txt
@@ -323,72 +150,10 @@ sed -i '$ s/.$//' ordered_CVDB.fasta
 { time gunzip -c ordered_CVDB_AT.fasta.gz >ordered_CVDB_AT_gz.fasta   ; } 2>>gunzip_times_s3.txt
 { time gunzip -c ordered_CVDB_CG.fasta.gz >ordered_CVDB_CG_gz.fasta  ; } 2>>gunzip_times_s3.txt
 
-declare -a times_s3_arr=()
-
-#times_arr+=$(awk '{print $2}' OFS="|" naf_files.txt)
-#while read line; do
-#    times_arr+=($line)
-#done < naf$_times.txt
-
-awk 'FNR == 2 {print $2}' naf_times_s3.txt > naf_time_total_s3.txt
-awk 'FNR == 2 {print $2}' mbgctimes_s3.txt > mbgc_time_total_s3.txt
-awk 'FNR == 2 {print $2}' mf_compresstimes_s3.txt > mfcompress_time_total_s3.txt
-awk 'FNR == 2 {print $2}' gzip_times_s3.txt > gzip_time_total_s3.txt
-awk 'FNR == 2 {print $2}' unnaf_times_s3.txt > unnaf_time_total_s3.txt
-awk 'FNR == 2 {print $2}' mbgcdtimes_s3.txt > mbgcd_time_total_s3.txt
-awk 'FNR == 2 {print $2}' mf_decompresstimes_s3.txt > mfdecompress_time_total_s3.txt
-awk 'FNR == 2 {print $2}' gunzip_times_s3.txt > gunzip_time_total_s3.txt
-
-#times_arr+=$(awk 'FNR == 2 {print $2}' mbgctimes.txt)
-#times_arr+=$(awk 'FNR == 2 {print $2}' mf_compresstimes.txt)
-#times_arr+=$(awk 'FNR == 2 {print $2}' gzip_times.txt)
-
-while read line; do
-   times_s3_arr+=($line)
-done < naf_time_total_s3.txt
-while read line; do
-   times_s3_arr+=($line)
-done < mbgc_time_total_s3.txt
-while read line; do
-    times_s3_arr+=($line)
-done < mfcompress_time_total_s3.txt
-while read line; do
-    times_s3_arr+=($line)
-done < gzip_time_total_s3.txt
-while read line; do
-   times_s3_arr+=($line)
-done < unnaf_time_total_s3.txt
-while read line; do
-   times_s3_arr+=($line)
-done < mbgcd_time_total_s3.txt
-while read line; do
-    times_s3_arr+=($line)
-done < mfdecompress_time_total_s3.txt
-while read line; do
-    times_s3_arr+=($line)
-done < gunzip_time_total_s3.txt
-
-echo "${#times_s3_arr[@]}"
-
-
-declare -p times_s3_arr
-#for i in ${!fasta_arr[@]}; do
-    
- #   time echo "$((${fasta_arr[i]}))"
- # done  
-
-#time_naf=$(awk '{print $1}' mbgc_time_total.txt)
-#awk '{print $(time_naf)}'
-#echo $((time_naf))
-ls ordered_CVDB* -la -ltr | awk 'BEGIN{ OFS=","; print "File;Size;Time,"}; NR > 1{print $9,$5;}' > Output_s3.csv
-#for i in ${!times_arr[@]}; do
-    
-echo $(awk '{print $1}' naf_time_total_s3.txt) 
-#| awk '{print $1;}' OFS="," > Output_n.csv
    
  # done  
-
-}
+#Scenario 4 - Shuffle, Order and Compress
+#}
 
 rm naf_times_s4.txt
 rm mbgctimes_s4.txt
@@ -402,7 +167,7 @@ rm ordering_times_s4.txt
 rm stage4_time.txt
 
 #Scenario 4 - Shuffle then Order then Compress
-time {
+#time {
 #{ time ./SHUFFLE_FASTA AT 5 shuffled.fasta sequences_virus.fasta ; } 2>>shuffle_times_s4.txt
 #{ time ./FASTA_ANALY AT 5 ordered_shuffled.fasta shuffled.fasta ; } 2>>ordering_times_s4.txt
 { ./FASTA_ANALY -s CVDB.fasta shuffled_v2.fasta 5 ; } 2>>shuffle_times_s4.txt
@@ -445,76 +210,1238 @@ sed -i '$ s/.$//' ordered_shuffled_v2.fasta
 { time gunzip -c ordered_shuffled_v2_AT.fasta.gz >ordered_shuffled_v2_AT_gz.fasta ; } 2>>gunzip_times_s4.txt
 { time gunzip -c ordered_shuffled_v2_CG.fasta.gz >ordered_shuffled_v2_CG_gz.fasta ; } 2>>gunzip_times_s4.txt
 
-ls ordered_shuffled_v2* -la -ltr | awk 'BEGIN{ OFS=","; print "File;Size,"}; NR > 1{print $9,$5;}' > Output_s4.csv
+
+#XLS
+
+#Extract data from txt files
+
+rm Output_naf.csv
+
+#Stage 4
+
+#Decompression CG
+file_name=$(ls ordered_shuffled_CG* -la -ltr | grep \_gz.fasta$ |awk '{print $9;}')
+size=$(ls ordered_shuffled_CG* -la -ltr | grep \._gz.fasta$ |awk '{print $5;}')
+time=$(awk 'FNR ==10 {print $2}' gunzip_times_s4.txt)
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
 
 
-#ls -la -ltr | grep \.naf$ |awk '{print $5;}' > naf_files_s4.txt
-#ls -la -ltr | grep \.mbgc$ |awk '{print $5;}' > mbgc_files_s4.txt
-#ls -la -ltr | grep \.gz$ |awk '{print $5;}' > gzip_files_s4.txt
-#ls -la -ltr | grep \.mfc$ |awk '{print $5;}' > mfc_files_s4.txt
+file="Output_naf.csv"
 
-declare -a times_s4_arr=()
-
-#times_arr+=$(awk '{print $2}' OFS="|" naf_files.txt)
-#while read line; do
-#    times_arr+=($line)
-#done < naf$_times.txt
-awk 'FNR == 2 {print $2}' naf_times_s4.txt > naf_time_total_s4.txt
-awk 'FNR == 2 {print $2}' mbgctimes_s4.txt > mbgc_time_total_s4.txt
-awk 'FNR == 2 {print $2}' mf_compresstimes_s4.txt > mfcompress_time_total_s4.txt
-awk 'FNR == 2 {print $2}' gzip_times_s4.txt > gzip_time_total_s4.txt
-awk 'FNR == 2 {print $2}' unnaf_times_s4.txt > unnaf_time_total_s4.txt
-awk 'FNR == 2 {print $2}' mbgcdtimes_s4.txt > mbgcd_time_total_s4.txt
-awk 'FNR == 2 {print $2}' mf_decompresstimes_s4.txt > mfdecompress_time_total_s4.txt
-awk 'FNR == 2 {print $2}' gunzip_times_s4.txt > gunzip_time_total_s4.txt
-
-
-
-
-#times_arr+=$(awk 'FNR == 2 {print $2}' mbgctimes.txt)
-#times_arr+=$(awk 'FNR == 2 {print $2}' mf_compresstimes.txt)
-#times_arr+=$(awk 'FNR == 2 {print $2}' gzip_times.txt)
-
-while read line; do
-   times_s4_arr+=($line)
-done < naf_time_total_s4.txt
-while read line; do
-   times_s4_arr+=($line)
-done < mbgc_time_total_s4.txt
-while read line; do
-    times_s4_arr+=($line)
-done < mfcompress_time_total_s4.txt
-while read line; do
-    times_s4_arr+=($line)
-done < gzip_time_total_s4.txt
-while read line; do
-   times_s4_arr+=($line)
-done < unnaf_time_total_s4.txt
-while read line; do
-   times_s4_arr+=($line)
-done < mbgcd_time_total_s4.txt
-while read line; do
-    times_s4_arr+=($line)
-done < mfdecompress_time_total_s4.txt
-while read line; do
-    times_s4_arr+=($line)
-done < gunzip_time_total_s4.txt
-
-echo "${#times_s4_arr[@]}"
-
-
-declare -p times_s4_arr
-#for i in ${!fasta_arr[@]}; do
-    
- #   time echo "$((${fasta_arr[i]}))"
- # done  
-
-#time_naf=$(awk '{print $1}' mbgc_time_total.txt)
-#awk '{print $(time_naf)}'
-#echo $((time_naf))
-ls ordered_shuffled* -la -ltr | awk 'BEGIN{ OFS=","; print "File;Size;Time,"}; NR > 1{print $9,$5;}' > Output_s4.csv
-#for i in ${!times_arr[@]}; do
-    
-echo $(awk '{print $1}' naf_time_total_s4.txt) 
-
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
 }
+
+file_name=$(ls ordered_shuffled_CG* -la -ltr | grep \.mfc.d$ |awk '{print $9;}')
+size=$(ls ordered_shuffled_CG* -la -ltr | grep \.mfc.d$ |awk '{print $5;}')
+time=$(awk 'FNR ==10 {print $2}' mf_decompresstimes_s4.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+file_name=$(ls ordered_shuffled_CG* -la -ltr | grep \._naf.fasta$ |awk '{print $9;}')
+size=$(ls ordered_shuffled_CG* -la -ltr | grep \._naf.fasta$ |awk '{print $5;}')
+time=$(awk 'FNR ==10 {print $2}' unnaf_times_s4.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+#printf
+#paste file_name_x size_x time_x > Output_naf.csv
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+#Decompression AT
+file_name=$(ls ordered_shuffled_AT* -la -ltr | grep \_gz.fasta$ |awk '{print $9;}')
+size=$(ls ordered_shuffled_AT* -la -ltr | grep \._gz.fasta$ |awk '{print $5;}')
+time=$(awk 'FNR ==6 {print $2}' gunzip_times_s4.txt)
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+file_name=$(ls ordered_shuffled_AT* -la -ltr | grep \.mfc.d$ |awk '{print $9;}')
+size=$(ls ordered_shuffled_AT* -la -ltr | grep \.mfc.d$ |awk '{print $5;}')
+time=$(awk 'FNR ==6 {print $2}' mf_decompresstimes_s4.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+file_name=$(ls ordered_shuffled_AT* -la -ltr | grep \._naf.fasta$ |awk '{print $9;}')
+size=$(ls ordered_shuffled_AT* -la -ltr | grep \._naf.fasta$ |awk '{print $5;}')
+time=$(awk 'FNR ==6 {print $2}' unnaf_times_s4.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+#printf
+#paste file_name_x size_x time_x > Output_naf.csv
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+#Decompression
+file_name=$(ls ordered_shuffled_size* -la -ltr | grep \_gz.fasta$ |awk '{print $9;}')
+size=$(ls ordered_shuffled_size* -la -ltr | grep \._gz.fasta$ |awk '{print $5;}')
+time=$(awk 'FNR ==2 {print $2}' gunzip_times_s4.txt)
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+file_name=$(ls ordered_shuffled_size* -la -ltr | grep \.mfc.d$ |awk '{print $9;}')
+size=$(ls ordered_shuffled_size* -la -ltr | grep \.mfc.d$ |awk '{print $5;}')
+time=$(awk 'FNR ==2 {print $2}' mf_decompresstimes_s4.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+file_name=$(ls ordered_shuffled_size* -la -ltr | grep \._naf.fasta$ |awk '{print $9;}')
+size=$(ls ordered_shuffled_size* -la -ltr | grep \._naf.fasta$ |awk '{print $5;}')
+time=$(awk 'FNR ==2 {print $2}' unnaf_times_s4.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+#printf
+#paste file_name_x size_x time_x > Output_naf.csv
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+"File Name","Size","Time"
+.
+wq
+EOF
+}
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+"Decompression Data",
+.
+wq
+EOF
+}
+
+#Compression CG
+file_name=$(ls ordered_shuffled_CG* -la -ltr | grep \.fasta.gz$ |awk '{print $9;}')
+size=$(ls ordered_shuffled_CG* -la -ltr | grep \.fasta.gz$ |awk '{print $5;}')
+time=$(awk 'FNR ==10 {print $2}' gzip_times_s4.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+#compression_percentage=$($size/$original_file_size | dc) 
+#echo $compression_percentage
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+file_name=$(ls ordered_shuffled_CG* -la -ltr | grep \.mfc$ |awk '{print $9;}')
+size=$(ls ordered_shuffled_CG* -la -ltr | grep \.mfc$ |awk '{print $5;}')
+time=$(awk 'FNR ==10 {print $2}' mf_compresstimes_s4.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+file_name=$(ls ordered_shuffled_CG* -la -ltr | grep \.naf$ |awk '{print $9;}')
+size=$(ls ordered_shuffled_CG* -la -ltr | grep \.naf$ |awk '{print $5;}')
+time=$(awk 'FNR ==10 {print $2}' naf_times_s4.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+#printf
+#paste file_name_x size_x time_x > Output_naf.csv
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+#Compression AT
+file_name=$(ls ordered_shuffled_AT* -la -ltr | grep \.fasta.gz$ |awk '{print $9;}')
+size=$(ls ordered_shuffled_AT* -la -ltr | grep \.fasta.gz$ |awk '{print $5;}')
+time=$(awk 'FNR ==6 {print $2}' gzip_times_s4.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+#compression_percentage=$($size/$original_file_size | dc) 
+#echo $compression_percentage
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+file_name=$(ls ordered_shuffled_AT* -la -ltr | grep \.mfc$ |awk '{print $9;}')
+size=$(ls ordered_shuffled_AT* -la -ltr | grep \.mfc$ |awk '{print $5;}')
+time=$(awk 'FNR ==6 {print $2}' mf_compresstimes_s4.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+file_name=$(ls ordered_shuffled_AT* -la -ltr | grep \.naf$ |awk '{print $9;}')
+size=$(ls ordered_shuffled_AT* -la -ltr | grep \.naf$ |awk '{print $5;}')
+time=$(awk 'FNR ==6 {print $2}' naf_times_s4.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+#printf
+#paste file_name_x size_x time_x > Output_naf.csv
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+#Compression
+file_name=$(ls ordered_shuffled_size* -la -ltr | grep \.fasta.gz$ |awk '{print $9;}')
+size=$(ls ordered_shuffled_size* -la -ltr | grep \.fasta.gz$ |awk '{print $5;}')
+time=$(awk 'FNR ==2 {print $2}' gzip_times_s4.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+#compression_percentage=$($size/$original_file_size | dc) 
+#echo $compression_percentage
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+file_name=$(ls ordered_shuffled_size* -la -ltr | grep \.mfc$ |awk '{print $9;}')
+size=$(ls ordered_shuffled_size* -la -ltr | grep \.mfc$ |awk '{print $5;}')
+time=$(awk 'FNR ==2 {print $2}' mf_compresstimes_s4.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+file_name=$(ls ordered_shuffled_size* -la -ltr | grep \.naf$ |awk '{print $9;}')
+size=$(ls ordered_shuffled_size* -la -ltr | grep \.naf$ |awk '{print $5;}')
+time=$(awk 'FNR ==2 {print $2}' naf_times_s4.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+#printf
+#paste file_name_x size_x time_x > Output_naf.csv
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+"File Name","Size","Time"
+.
+wq
+EOF
+}
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+"Stage 4",
+.
+wq
+EOF
+}
+
+
+
+
+#Stage 3
+
+#Decompression CG
+file_name=$(ls ordered_CVDB_CG* -la -ltr | grep \_gz.fasta$ |awk '{print $9;}')
+size=$(ls sordered_CVDB_CG* -la -ltr | grep \._gz.fasta$ |awk '{print $5;}')
+time=$(awk 'FNR ==10 {print $2}' gunzip_times_s3.txt)
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+file_name=$(ls ordered_CVDB_CG* -la -ltr | grep \.mfc.d$ |awk '{print $9;}')
+size=$(ls ordered_CVDB_CG* -la -ltr | grep \.mfc.d$ |awk '{print $5;}')
+time=$(awk 'FNR ==10 {print $2}' mf_decompresstimes_s3.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+file_name=$(ls ordered_CVDB_CG* -la -ltr | grep \._naf.fasta$ |awk '{print $9;}')
+size=$(ls ordered_CVDB_CG* -la -ltr | grep \._naf.fasta$ |awk '{print $5;}')
+time=$(awk 'FNR ==10 {print $2}' unnaf_times_s3.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+#printf
+#paste file_name_x size_x time_x > Output_naf.csv
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+#Decompression AT
+file_name=$(ls ordered_CVDB_AT* -la -ltr | grep \_gz.fasta$ |awk '{print $9;}')
+size=$(ls sordered_CVDB_AT* -la -ltr | grep \._gz.fasta$ |awk '{print $5;}')
+time=$(awk 'FNR ==6 {print $2}' gunzip_times_s3.txt)
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+file_name=$(ls ordered_CVDB_AT* -la -ltr | grep \.mfc.d$ |awk '{print $9;}')
+size=$(ls ordered_CVDB_AT* -la -ltr | grep \.mfc.d$ |awk '{print $5;}')
+time=$(awk 'FNR ==6 {print $2}' mf_decompresstimes_s3.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+file_name=$(ls ordered_CVDB_AT* -la -ltr | grep \._naf.fasta$ |awk '{print $9;}')
+size=$(ls ordered_CVDB_AT* -la -ltr | grep \._naf.fasta$ |awk '{print $5;}')
+time=$(awk 'FNR ==6 {print $2}' unnaf_times_s3.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+#printf
+#paste file_name_x size_x time_x > Output_naf.csv
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+#Decompression
+file_name=$(ls ordered_CVDB_size* -la -ltr | grep \_gz.fasta$ |awk '{print $9;}')
+size=$(ls sordered_CVDB_size* -la -ltr | grep \._gz.fasta$ |awk '{print $5;}')
+time=$(awk 'FNR ==2 {print $2}' gunzip_times_s3.txt)
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+file_name=$(ls ordered_CVDB_size* -la -ltr | grep \.mfc.d$ |awk '{print $9;}')
+size=$(ls ordered_CVDB_size* -la -ltr | grep \.mfc.d$ |awk '{print $5;}')
+time=$(awk 'FNR ==2 {print $2}' mf_decompresstimes_s3.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+file_name=$(ls ordered_CVDB_size* -la -ltr | grep \._naf.fasta$ |awk '{print $9;}')
+size=$(ls ordered_CVDB_size* -la -ltr | grep \._naf.fasta$ |awk '{print $5;}')
+time=$(awk 'FNR ==2 {print $2}' unnaf_times_s3.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+#printf
+#paste file_name_x size_x time_x > Output_naf.csv
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+"File Name","Size","Time"
+.
+wq
+EOF
+}
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+"Decompression Data",
+.
+wq
+EOF
+}
+
+
+#Compression CG
+file_name=$(ls ordered_CVDB_CG* -la -ltr | grep \.fasta.gz$ |awk '{print $9;}')
+size=$(ls ordered_CVDB_CG* -la -ltr | grep \.fasta.gz$ |awk '{print $5;}')
+time=$(awk 'FNR ==10 {print $2}' gzip_times_s3.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+file_name=$(ls ordered_CVDB_CG* -la -ltr | grep \.mfc$ |awk '{print $9;}')
+size=$(ls ordered_CVDB_CG* -la -ltr | grep \.mfc$ |awk '{print $5;}')
+time=$(awk 'FNR ==10 {print $2}' mf_compresstimes_s3.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+file_name=$(ls ordered_CVDB_CG* -la -ltr | grep \.naf$ |awk '{print $9;}')
+size=$(ls ordered_CVDB_CG* -la -ltr | grep \.naf$ |awk '{print $5;}')
+time=$(awk 'FNR ==10 {print $2}' naf_times_s3.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+#printf
+#paste file_name_x size_x time_x > Output_naf.csv
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+#Compression AT
+file_name=$(ls ordered_CVDB_AT* -la -ltr | grep \.fasta.gz$ |awk '{print $9;}')
+size=$(ls ordered_CVDB_AT* -la -ltr | grep \.fasta.gz$ |awk '{print $5;}')
+time=$(awk 'FNR ==6 {print $2}' gzip_times_s3.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+file_name=$(ls ordered_CVDB_AT* -la -ltr | grep \.mfc$ |awk '{print $9;}')
+size=$(ls ordered_CVDB_AT* -la -ltr | grep \.mfc$ |awk '{print $5;}')
+time=$(awk 'FNR ==6 {print $2}' mf_compresstimes_s3.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+file_name=$(ls ordered_CVDB_AT* -la -ltr | grep \.naf$ |awk '{print $9;}')
+size=$(ls ordered_CVDB_AT* -la -ltr | grep \.naf$ |awk '{print $5;}')
+time=$(awk 'FNR ==6 {print $2}' naf_times_s3.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+#printf
+#paste file_name_x size_x time_x > Output_naf.csv
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+#Compression size
+file_name=$(ls ordered_CVDB_size* -la -ltr | grep \.fasta.gz$ |awk '{print $9;}')
+size=$(ls ordered_CVDB_size* -la -ltr | grep \.fasta.gz$ |awk '{print $5;}')
+time=$(awk 'FNR ==2 {print $2}' gzip_times_s3.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+#compression_percentage=$($size/$original_file_size | dc) 
+#echo $compression_percentage
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+file_name=$(ls ordered_CVDB_size* -la -ltr | grep \.mfc$ |awk '{print $9;}')
+size=$(ls ordered_CVDB_size* -la -ltr | grep \.mfc$ |awk '{print $5;}')
+time=$(awk 'FNR ==2 {print $2}' mf_compresstimes_s3.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+file_name=$(ls ordered_CVDB_size* -la -ltr | grep \.naf$ |awk '{print $9;}')
+size=$(ls ordered_CVDB_size* -la -ltr | grep \.naf$ |awk '{print $5;}')
+time=$(awk 'FNR ==2 {print $2}' naf_times_s3.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+#printf
+#paste file_name_x size_x time_x > Output_naf.csv
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+"File Name","Size","Time"
+.
+wq
+EOF
+}
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+"Stage 3",
+.
+wq
+EOF
+}
+
+
+
+
+#Decompression
+file_name=$(ls shuffled* -la -ltr | grep \_gz.fasta$ |awk '{print $9;}')
+size=$(ls shuffled* -la -ltr | grep \._gz.fasta$ |awk '{print $5;}')
+time=$(awk 'FNR ==2 {print $2}' gunzip_times_s2.txt)
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+file_name=$(ls shuffled* -la -ltr | grep \.mfc.d$ |awk '{print $9;}')
+size=$(ls shuffled* -la -ltr | grep \.mfc.d$ |awk '{print $5;}')
+time=$(awk 'FNR ==2 {print $2}' mf_decompresstimes_s2.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+file_name=$(ls shuffled* -la -ltr | grep \._naf.fasta$ |awk '{print $9;}')
+size=$(ls shuffled* -la -ltr | grep \._naf.fasta$ |awk '{print $5;}')
+time=$(awk 'FNR ==2 {print $2}' unnaf_times_s2.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+#printf
+#paste file_name_x size_x time_x > Output_naf.csv
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+"File Name","Size","Time"
+.
+wq
+EOF
+}
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+"Decompression Data",
+.
+wq
+EOF
+}
+
+
+#Compression
+file_name=$(ls shuffled* -la -ltr | grep \.fasta.gz$ |awk '{print $9;}')
+size=$(ls shuffled* -la -ltr | grep \.fasta.gz$ |awk '{print $5;}')
+time=$(awk 'FNR ==2 {print $2}' gzip_times_s2.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+#compression_percentage=$($size/$original_file_size | dc) 
+#echo $compression_percentage
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+file_name=$(ls shuffled* -la -ltr | grep \.mfc$ |awk '{print $9;}')
+size=$(ls shuffled* -la -ltr | grep \.mfc$ |awk '{print $5;}')
+time=$(awk 'FNR ==2 {print $2}' mf_compresstimes_s2.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+file_name=$(ls shuffled* -la -ltr | grep \.naf$ |awk '{print $9;}')
+size=$(ls shuffled* -la -ltr | grep \.naf$ |awk '{print $5;}')
+time=$(awk 'FNR ==2 {print $2}' naf_times_s2.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+#printf
+#paste file_name_x size_x time_x > Output_naf.csv
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+"File Name","Size","Time"
+.
+wq
+EOF
+}
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+"Stage 2",
+.
+wq
+EOF
+}
+
+
+#Stage 1
+original_file_size = $(ls CVDB.fasta -la -ltr |awk '{print $5;}')
+
+#Decompression
+file_name=$(ls CVDB* -la -ltr | grep \_gz.fasta$ |awk '{print $9;}')
+size=$(ls CVDB* -la -ltr | grep \._gz.fasta$ |awk '{print $5;}')
+time=$(awk 'FNR ==2 {print $2}' gunzip_times.txt)
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+file_name=$(ls CVDB* -la -ltr | grep \.mfc.d$ |awk '{print $9;}')
+size=$(ls CVDB* -la -ltr | grep \.mfc.d$ |awk '{print $5;}')
+time=$(awk 'FNR ==2 {print $2}' mf_decompresstimes.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+file_name=$(ls CVDB* -la -ltr | grep \._naf.fasta$ |awk '{print $9;}')
+size=$(ls CVDB* -la -ltr | grep \._naf.fasta$ |awk '{print $5;}')
+time=$(awk 'FNR ==2 {print $2}' unnaf_times.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+#printf
+#paste file_name_x size_x time_x > Output_naf.csv
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+#MFCompress
+
+
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+"File Name","Size","Time"
+.
+wq
+EOF
+}
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+"Decompression Data",
+.
+wq
+EOF
+}
+
+#Compression
+
+#original_file_size=$(ls CVDB.fasta -la -ltr |awk '{print $5;}')
+file_name=$(ls CVDB* -la -ltr | grep \.fasta.gz$ |awk '{print $9;}')
+size=$(ls CVDB* -la -ltr | grep \.fasta.gz$ |awk '{print $5;}')
+time=$(awk 'FNR ==2 {print $2}' gzip_times.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+#compression_percentage=$($size/$original_file_size | dc) 
+#echo $compression_percentage
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+file_name=$(ls CVDB* -la -ltr | grep \.mfc$ |awk '{print $9;}')
+size=$(ls CVDB* -la -ltr | grep \.mfc$ |awk '{print $5;}')
+time=$(awk 'FNR ==2 {print $2}' mf_compresstimes.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+file_name=$(ls CVDB* -la -ltr | grep \.naf$ |awk '{print $9;}')
+size=$(ls CVDB* -la -ltr | grep \.naf$ |awk '{print $5;}')
+time=$(awk 'FNR ==2 {print $2}' naf_times.txt) 
+printf $file_name | tee file_name_x
+printf $size | tee size_x
+printf $time | tee time_x
+#printf
+#paste file_name_x size_x time_x > Output_naf.csv
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$file_name,$size,$time
+.
+wq
+EOF
+}
+
+#MFCompress
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+"File Name","Size","Time"
+.
+wq
+EOF
+}
+
+
+file="Output_naf.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+"Stage 1",
+.
+wq
+EOF
+}
+
+
+
+
+#paste -d, size > Ouput_naf.csv
+
+
+#echo $time
+
+#awk 'BEGIN{ OFS=","; print "File Name;Size;Time,"};' > Output_naf.csv
+#echo $size > Output_naf.csv
+
+#echo $(awk '{print $1}' naf_time_total_s4.txt) 
+
+#}
