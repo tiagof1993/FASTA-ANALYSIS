@@ -535,13 +535,14 @@ std::string c="";
  current_position=0;
  sequence_str="";
  
- ordered_fasta_file << ">";
+ //ordered_fasta_file << ">";
  //cout << items_vec.size() << endl;
  for(long int p=0;p<items_vec.size();p++){
+ ordered_fasta_file << ">";
  // cout << p << ", total size: " << items_vec.size() << endl;
  current_position=items_vec[p].initial_position;
    fseek(pfile,current_position , SEEK_SET);
-   while(current_position < items_vec[p].final_position){
+   while(current_position < items_vec[p].final_position-1){
   // sequence_str="";
   value=fgetc(pfile);
        sequence_str+=value;
