@@ -4,11 +4,15 @@ rm naf_times.txt
 rm mbgctimes.txt
 rm gzip_times.txt
 rm mf_compresstimes.txt
+rm lzma_times.txt
+rm bzip2_times.txt
 rm stage1_time.txt
 rm unnaf_times.txt
 rm mbgcdtimes.txt
 rm mf_decompresstimes.txt
 rm gunzip_times.txt
+rm lzma_decompress_times.txt
+rm bzip2_decompress_times.txt
 #rm sequences_virus.fasta.gz
 #rm sequences_virus.fasta.mfc
 #rm sequences_virus.mbgc
@@ -29,7 +33,9 @@ rm CVDB_mbgc.fasta
 #  BYTES=`ls -la CVDB.naf | awk '{ print $5 }'`;
   
 
-{ /bin/time -f "TIME\t%e\tMEM\t%M" ennaf --strict CVDB.fasta --temp-dir tmp/ ; } 2>>naf_times.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" ennaf --strict CVDB.fasta -o CVDB.naf --temp-dir tmp/ --dna --level 22  ; } 2>>naf_times.txt
+
+#{ /bin/time -f "TIME\t%e\tMEM\t%M" ennaf CVDB.fasta --temp-dir tmp/ --dna --level 22   ; } 2>>naf_times.txt
 
 #/bin/time -f "TIME\t%e\tMEM\t%M" mbgc -i CVDB.fasta CVDB.mbgc \
 #  |& grep "TIME" \
@@ -54,6 +60,11 @@ rm CVDB_mbgc.fasta
 #  BYTES=`ls -la CVDB.fasta.gz | awk '{ print $5 }'`;
 { /bin/time -f "TIME\t%e\tMEM\t%M" gzip -k -9 CVDB.fasta ; } 2>>gzip_times.txt
 
+#LZMA
+{ /bin/time -f "TIME\t%e\tMEM\t%M" lzma -9 -f -k CVDB.fasta ; } 2>> lzma_times.txt;
+
+#Bzip2
+{ /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -9 -f -k CVDB.fasta ; } 2>> bzip2_times.txt;
 
 #/bin/time -f "TIME\t%e\tMEM\t%M" unnaf CVDB.naf -o  CVDB.naf.fasta \
 #  |& grep "TIME" \
@@ -66,6 +77,12 @@ rm CVDB_mbgc.fasta
 
 { /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressD -t 2 -o CVDB.fasta.mfc ; } 2>>mf_decompresstimes.txt
 { /bin/time -f "TIME\t%e\tMEM\t%M" gunzip -c CVDB.fasta.gz >CVDB_gz.fasta  ; } 2>>gunzip_times.txt
+
+#LZMA
+{ /bin/time -f "TIME\t%e\tMEM\t%M" lzma -f -k -d  CVDB.fasta.lzma ; } 2>>lzma_decompress_times.txt
+
+#Bzip2
+{ /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -f -k -d  CVDB.fasta.bz2 ;} 2>>bzip2_decompress_times.txt
 
 #awk 'NR==1, NR==2 {print NR,$2}' naf_times.txt 
 
