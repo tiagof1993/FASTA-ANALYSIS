@@ -23,7 +23,7 @@ rm shuffled_mbgc.fasta
 #{ ./SHUFFLE_FASTA AT 5 shuffled.fasta sequences_virus.fasta ; } 2>>shuffle_times.txt
 { /bin/time -f "TIME\t%e\tMEM\t%M" ./FASTA_ANALY -s CVDB.fasta shuffled.fasta 5 ; } 2>>shuffle_times.txt
 #sed -i '$ s/.$//' shuffled.fasta
-{ /bin/time -f "TIME\t%e\tMEM\t%M" ennaf shuffled.fasta -o shuffled.naf --temp-dir tmp/ --dna --level 22 ; } 2>>naf_times_s2.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" ennaf shuffled.fasta -o shuffled.naf --temp-dir tmp/  ; } 2>>naf_times_s2.txt
 
 { /bin/time -f "TIME\t%e\tMEM\t%M" mbgc -i shuffled.fasta shuffled.mbgc ; } 2>>mbgctimes_s2.txt
 
@@ -43,17 +43,15 @@ rm shuffled_mbgc.fasta
 
 { /bin/time -f "TIME\t%e\tMEM\t%M" mbgc -d shuffled.mbgc shuffled_mbgc.fasta ; } 2>>mbgcdtimes_s2.txt
 
-{ /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressD -t 2 shuffled.fasta.mfc ; } 2>>mf_decompresstimes_s2.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressD -1 -t 2 shuffled.fasta.mfc ; } 2>>mf_decompresstimes_s2.txt
 
 { /bin/time -f "TIME\t%e\tMEM\t%M" gunzip -c shuffled.fasta.gz >shuffled_gz.fasta ; } 2>>gunzip_times_s2.txt
 
 #LZMA
-{ /bin/time -f "TIME\t%e\tMEM\t%M" lzma -f -k -d  shuffled.fasta.lzma ; } 2 >> lzma_decompress_times_s2.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" lzma -f -k -d  shuffled.fasta.lzma ; } 2>> lzma_decompress_times_s2.txt
 
 #Bzip2
-{ /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -f -k -d  shuffled.fasta.bz2 ; } 2 >> bzip2_decompress_times_s2
-
-.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -f -k -d  shuffled.fasta.bz2 ; } 2>> bzip2_decompress_times_s2.txt
 
 #ls -la -ltr | grep \.naf$ |awk '{print $5;}' > naf_files_s2.txt
 #ls -la -ltr | grep \.mbgc$ |awk '{print $5;}' > mbgc_files_s2.txt

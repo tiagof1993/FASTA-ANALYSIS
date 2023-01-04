@@ -33,9 +33,9 @@ rm ordering_times.txt
 { /bin/time -f "TIME\t%e\tMEM\t%M" ./FASTA_ANALY -sort=CG CVDB.fasta ordered_CVDB_CG.fasta 5 ; } 2>>ordering_times.txt
 #sed -i '$ s/.$//' ordered_CVDB_CG.fasta
 
-{ /bin/time -f "TIME\t%e\tMEM\t%M" ennaf --strict  ordered_CVDB_size.fasta -o ordered_CVDB_size.naf --temp-dir tmp/ --dna --level 22 ; } 2>>naf_times_s3.txt
-{ /bin/time -f "TIME\t%e\tMEM\t%M" ennaf --strict  ordered_CVDB_AT.fasta -o ordered_CVDB_AT.naf --temp-dir tmp/ --dna --level 22 ; } 2>>naf_times_s3.txt
-{ /bin/time -f "TIME\t%e\tMEM\t%M" ennaf --strict  ordered_CVDB_CG.fasta -o ordered_CVDB_CG.naf --temp-dir tmp/ --dna --level 22 ; } 2>>naf_times_s3.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" ennaf --strict  ordered_CVDB_size.fasta -o ordered_CVDB_size.naf --temp-dir tmp/  ; } 2>>naf_times_s3.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" ennaf --strict  ordered_CVDB_AT.fasta -o ordered_CVDB_AT.naf --temp-dir tmp/  ; } 2>>naf_times_s3.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" ennaf --strict  ordered_CVDB_CG.fasta -o ordered_CVDB_CG.naf --temp-dir tmp/  ; } 2>>naf_times_s3.txt
 { /bin/time -f "TIME\t%e\tMEM\t%M" mbgc -i ordered_CVDB_size.fasta ordered_CVDB_size.mbgc ; } 2>>mbgctimes_s3.txt
 { /bin/time -f "TIME\t%e\tMEM\t%M" mbgc -i ordered_CVDB_AT.fasta ordered_CVDB_AT.mbgc ; } 2>>mbgctimes_s3.txt
 { /bin/time -f "TIME\t%e\tMEM\t%M" mbgc -i ordered_CVDB_CG.fasta ordered_CVDB_CG.mbgc ; } 2>>mbgctimes_s3.txt
@@ -78,14 +78,14 @@ rm ordering_times.txt
 { /bin/time -f "TIME\t%e\tMEM\t%M" gunzip -c ordered_CVDB_CG.fasta.gz >ordered_CVDB_CG_gz.fasta  ; } 2>>gunzip_times_s3.txt
 
 #LZMA
-{ /bin/time -f "TIME\t%e\tMEM\t%M" lzma -f -k -d  ordered_CVDB_size.fasta.lzma ; } 2 >> lzma_decompress_times_s3.txt
-{ /bin/time -f "TIME\t%e\tMEM\t%M" lzma -f -k -d  ordered_CVDB_AT.fasta.lzma ; } 2 >> lzma_decompress_times_s3.txt
-{ /bin/time -f "TIME\t%e\tMEM\t%M" lzma -f -k -d  ordered_CVDB_CG.fasta.lzma ; } 2 >> lzma_decompress_times_s3.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" lzma -f -k -d  ordered_CVDB_size.fasta.lzma ; } 2>> lzma_decompress_times_s3.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" lzma -f -k -d  ordered_CVDB_AT.fasta.lzma ; } 2>> lzma_decompress_times_s3.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" lzma -f -k -d  ordered_CVDB_CG.fasta.lzma ; } 2>> lzma_decompress_times_s3.txt
 
 #Bzip2
-{ /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -f -k -d  ordered_CVDB_size.fasta.bz2 ; } 2 >> bzip2_decompress_times_s3
-{ /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -f -k -d  ordered_CVDB_AT.fasta.bz2 ; } 2 >> bzip2_decompress_times_s3
-{ /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -f -k -d  ordered_CVDB_CG.fasta.bz2 ; } 2 >> bzip2_decompress_times_s3
+{ /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -f -k -d  ordered_CVDB_size.fasta.bz2 ; } 2>> bzip2_decompress_times_s3
+{ /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -f -k -d  ordered_CVDB_AT.fasta.bz2 ; } 2>> bzip2_decompress_times_s3
+{ /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -f -k -d  ordered_CVDB_CG.fasta.bz2 ; } 2>> bzip2_decompress_times_s3
  
 declare -a times_s3_arr=()
 

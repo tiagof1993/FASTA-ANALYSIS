@@ -33,7 +33,7 @@ rm CVDB_mbgc.fasta
 #  BYTES=`ls -la CVDB.naf | awk '{ print $5 }'`;
   
 
-{ /bin/time -f "TIME\t%e\tMEM\t%M" ennaf --strict CVDB.fasta -o CVDB.naf --temp-dir tmp/ --dna --level 22  ; } 2>>naf_times.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" ennaf --strict CVDB.fasta -o CVDB.naf --temp-dir tmp/  ; } 2>>naf_times.txt
 
 #{ /bin/time -f "TIME\t%e\tMEM\t%M" ennaf CVDB.fasta --temp-dir tmp/ --dna --level 22   ; } 2>>naf_times.txt
 
@@ -61,21 +61,21 @@ rm CVDB_mbgc.fasta
 { /bin/time -f "TIME\t%e\tMEM\t%M" gzip -k -9 CVDB.fasta ; } 2>>gzip_times.txt
 
 #LZMA
-{ /bin/time -f "TIME\t%e\tMEM\t%M" lzma -9 -f -k CVDB.fasta ; } 2>> lzma_times.txt;
+{ /bin/time -f "TIME\t%e\tMEM\t%M" lzma -9 -f -k -z CVDB.fasta ; } 2>> lzma_times.txt;
 
 #Bzip2
-{ /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -9 -f -k CVDB.fasta ; } 2>> bzip2_times.txt;
+{ /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -9 -f -k -z CVDB.fasta ; } 2>> bzip2_times.txt;
 
 #/bin/time -f "TIME\t%e\tMEM\t%M" unnaf CVDB.naf -o  CVDB.naf.fasta \
 #  |& grep "TIME" \
 #  |& tr '.' ',' \
 #  |& awk '{ printf $2/60"\t"$4/1024/1024"\n" }' > unnaf_times.txt;
 #  BYTES=`ls -la CVDB.naf.fasta | awk '{ print $5 }'`;
-{ /bin/time -f "TIME\t%e\tMEM\t%M" unnaf CVDB.fasta.naf -o CVDB_naf.fasta ; } 2>>unnaf_times.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" unnaf CVDB.naf -o CVDB_naf.fasta ; } 2>>unnaf_times.txt
 
 #{ time mbgc -d CVDB.mbgc CVDB_mbgc.fasta ; } 2>>mbgcdtimes.txt
 
-{ /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressD -t 2 -o CVDB.fasta.mfc ; } 2>>mf_decompresstimes.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressD -1 -t 2 -o CVDB.fasta.mfc ; } 2>>mf_decompresstimes.txt
 { /bin/time -f "TIME\t%e\tMEM\t%M" gunzip -c CVDB.fasta.gz >CVDB_gz.fasta  ; } 2>>gunzip_times.txt
 
 #LZMA

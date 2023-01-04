@@ -26,9 +26,9 @@ rm stage4_time.txt
 #sed -i '$ s/.$//' ordered_shuffled_AT.fasta
 { /bin/time -f "TIME\t%e\tMEM\t%M" ./FASTA_ANALY -sort=CG shuffled.fasta ordered_shuffled_CG.fasta 5 ; } 2>>ordering_times_s4.txt
 #sed -i '$ s/.$//' ordered_shuffled_CG.fasta
-{ /bin/time -f "TIME\t%e\tMEM\t%M" ennaf --strict  ordered_shuffled_size.fasta -o ordered_shuffled_size.naf --temp-dir tmp/ --dna --level 22 ; } 2>>naf_times_s4.txt
-{ /bin/time -f "TIME\t%e\tMEM\t%M" ennaf --strict  ordered_shuffled_AT.fasta -o ordered_shuffled_AT.naf --temp-dir tmp/ --dna --level 22 ; } 2>>naf_times_s4.txt
-{ /bin/time -f "TIME\t%e\tMEM\t%M" ennaf --strict  ordered_shuffled_CG.fasta -o ordered_shuffled_CG.naf --temp-dir tmp/ --dna --level 22; } 2>>naf_times_s4.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" ennaf --strict  ordered_shuffled_size.fasta -o ordered_shuffled_size.naf --temp-dir tmp/  ; } 2>>naf_times_s4.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" ennaf --strict  ordered_shuffled_AT.fasta -o ordered_shuffled_AT.naf --temp-dir tmp/  ; } 2>>naf_times_s4.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" ennaf --strict  ordered_shuffled_CG.fasta -o ordered_shuffled_CG.naf --temp-dir tmp/ ; } 2>>naf_times_s4.txt
 { /bin/time -f "TIME\t%e\tMEM\t%M" mbgc -i ordered_shuffled_size.fasta ordered_shuffled_size.mbgc ; } 2>>mbgctimes_s4.txt
 { /bin/time -f "TIME\t%e\tMEM\t%M" mbgc -i ordered_shuffled_AT.fasta ordered_shuffled_AT.mbgc ; } 2>>mbgctimes_s4.txt
 { /bin/time -f "TIME\t%e\tMEM\t%M" mbgc -i ordered_shuffled_CG.fasta ordered_shuffled_CG.mbgc ; } 2>>mbgctimes_s4.txt
@@ -71,14 +71,14 @@ rm stage4_time.txt
 
 
 #LZMA
-{ /bin/time -f "TIME\t%e\tMEM\t%M" lzma -f -k -d  ordered_shuffled_size.fasta.lzma ; } 2 >> lzma_decompress_times_s4.txt
-{ /bin/time -f "TIME\t%e\tMEM\t%M" lzma -f -k -d  ordered_shuffled_AT.fasta.lzma ; } 2 >> lzma_decompress_times_s4.txt
-{ /bin/time -f "TIME\t%e\tMEM\t%M" lzma -f -k -d  ordered_shuffled_CG.fasta.lzma ; } 2 >> lzma_decompress_times_s4.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" lzma -f -k -d  ordered_shuffled_size.fasta.lzma ; } 2>> lzma_decompress_times_s4.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" lzma -f -k -d  ordered_shuffled_AT.fasta.lzma ; } 2>> lzma_decompress_times_s4.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" lzma -f -k -d  ordered_shuffled_CG.fasta.lzma ; } 2>> lzma_decompress_times_s4.txt
 
 #Bzip2
-{ /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -f -k -d  ordered_shuffled_size.fasta.bz2 ; } 2 >> bzip2_decompress_times_s4
-{ /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -f -k -d  ordered_shuffled_AT.fasta.bz2 ; } 2 >> bzip2_decompress_times_s4
-{ /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -f -k -d  ordered_shuffled_CG.fasta.bz2 ; } 2 >> bzip2_decompress_times_s4
+{ /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -f -k -d  ordered_shuffled_size.fasta.bz2 ; } 2>> bzip2_decompress_times_s4
+{ /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -f -k -d  ordered_shuffled_AT.fasta.bz2 ; } 2>> bzip2_decompress_times_s4
+{ /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -f -k -d  ordered_shuffled_CG.fasta.bz2 ; } 2>> bzip2_decompress_times_s4
 
 ls ordered_shuffled_v2* -la -ltr | awk 'BEGIN{ OFS=","; print "File;Size,"}; NR > 1{print $9,$5;}' > Output_s4.csv
 
