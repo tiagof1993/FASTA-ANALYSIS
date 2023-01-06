@@ -66,11 +66,11 @@ void shuffle_items(std::vector<item> item_vec,std::string input_filename, unsign
   long l_size;
   char* buffer;
   assert(item_vec.size()!=0);
-  //pfile = fopen (input_filename.c_str(),"r");
+  pfile = fopen (input_filename.c_str(),"r");
   
- //fseek(pfile,1, SEEK_END);
- //l_size = ftell(pfile);
- //rewind(pfile);
+ fseek(pfile,1, SEEK_END);
+ l_size = ftell(pfile);
+ rewind(pfile);
  long int current_position=0;
  long int l_size_chunk=0;
  long int j=0;
@@ -83,9 +83,13 @@ void shuffle_items(std::vector<item> item_vec,std::string input_filename, unsign
  
  std::string sequence_str="";
  //long int last_char_position = item_vec[item_vec.size()-1].final_position-1; 
- cout << item_vec[item_vec.size()-1].final_position-1 << endl;
-//long int last_char_position=0;
- //last_char_position= item_vec[item_vec.size()-1].final_position-1; 
+ cout << "last element: " << item_vec[item_vec.size()-1].final_position-1 << endl;
+
+long int last_char_position=0;
+ last_char_position= item_vec[item_vec.size()-1].final_position; 
+ //cout << "last_position" << endl;
+
+item_vec.erase(item_vec.begin());
 
   if(seed_numb==(unsigned)0){
     seed = std::chrono::system_clock::now().time_since_epoch().count();
@@ -100,24 +104,25 @@ void shuffle_items(std::vector<item> item_vec,std::string input_filename, unsign
 //  std::string sequence_str ="";
  // long int current_position=0;
  // shuffle_file.close();
+  
   for(long int p=0;p<item_vec.size();p++){
-   /*if(current_position==last_char_position){
-    shuffled_fasta_file << "" << endl;
-    }*/
+  if(p>0 && item_vec[p-1].final_position==last_char_position){
+    shuffled_fasta_file << endl;
+    shuffled_fasta_file << ">";
+   }
+ else{  
  shuffled_fasta_file << ">";
+ }
  // cout << p << ", total size: " << items_vec.size() << endl;
  current_position=item_vec[p].initial_position;
- fseek(pfile,current_position,SEEK_SET);
+   fseek(pfile,current_position,SEEK_SET);
+     
    while(current_position < item_vec[p].final_position-1){
   // sequence_str="";
-       value=fgetc(pfile);
+  value=fgetc(pfile);
        sequence_str+=value;
        //cout << sequence_str << endl;
        current_position++;
-       /*if(current_position==last_char_position){
-        sequence_str+="\n";
-        sequence_str+=value;
-       }*/
   }
  // file_reads.push_back(sequence_str);
   
@@ -164,64 +169,7 @@ void shuffle_items(std::vector<item> item_vec,std::string input_filename, unsign
   }
  
  
- // shuffled_fasta_file << ">";
- /*for(long int p=1;p<item_vec.size()-1;p++){
- // cout << p << ", total size: " << items_vec.size() << endl;
- current_position=item_vec[p].initial_position;
-   fseek(pfile,current_position , SEEK_SET);
-   while(current_position < item_vec[p].final_position){
-  // sequence_str="";
-  value=fgetc(pfile);
-       sequence_str+=value;
-       //cout << sequence_str << endl;
-        current_position++;
-  }
- // file_reads.push_back(sequence_str);
-  
-  
-   
-   //cout << sequence_str << endl;
-   
-   //l_size_chunk=item_vec[p].final_position-item_vec[p].initial_position; 
-
-   j=0;
-     //while(j<items_vec[i].final_position){
-    // while(j<file_reads[0].size()){
-    while(j<sequence_str.size()){
-        //ordered_fasta_file << file_reads[0].at(j);
-        shuffled_fasta_file << sequence_str.at(j);
-        //cout << file_reads[p].at(j);
-      /*  if(j==l_size_chunk){
-          //ordered_fasta_file << file_reads_labels[i].at(j);
-          //ordered_fasta_file << file_reads[0].at(j) << endl;
-        shuffled_fasta_file << sequence_str.at(j) << endl;
-        
-       
-      }*/
-      // j++;
-  
-  // fclose(pfile);
-    //free(buffer);
-    
-    // }
-     //sequence_str="";
-     
-     //file_reads.clear();
-     //items_vec_record.close();
-  //   cout << "buffer" << endl;
-     //fclose(pfile)
-    
-
- 
-   //infile.close();
-  // fasta_file_2.close();
-   
-   
-  
-  
-   
-//  }
-   
+    fclose(pfile);
     shuffled_fasta_file.close(); 
 }
 
