@@ -110,9 +110,9 @@ item_vec.erase(item_vec.begin());
     shuffled_fasta_file << endl;
     shuffled_fasta_file << ">";
    }
- else{  
- shuffled_fasta_file << ">";
- }
+  else{  
+    shuffled_fasta_file << ">";
+   }
  // cout << p << ", total size: " << items_vec.size() << endl;
  current_position=item_vec[p].initial_position;
    fseek(pfile,current_position,SEEK_SET);
@@ -263,10 +263,11 @@ std::vector<item> readFilePositions(std::string file_name){
      }
 
    }
-    item_records << "initial: " << items[items.size()-1].initial_position << ", initial_sequence: " << items[items.size()-1].initial_sequence_position << ", final: " << items[items.size()-1].final_position << endl;
+    item_records << "initial: " << items[items.size()-1].initial_position << ", initial_sequence: " << items[items.size()-1].initial_sequence_position << ", final: " << items[items.size()-1].final_position << ", size: " << (items[items.size()-1].final_position-items[items.size()-1].initial_sequence_position) << endl;
+    //cout << value << endl;
   }catch(std::bad_alloc & exception){
       std::cerr << "Bad Alloc Exception" << exception.what();
-    }
+  }
  
  //deal with <> cenario
     try{
@@ -292,7 +293,7 @@ std::vector<item> readFilePositions(std::string file_name){
                    seq={items[items.size()-1].final_position,line_breaks[0] ,current_position, current_position-items[items.size()-1].final_position,0,0,0};
                    //cout << current_position << endl;
                    items.push_back(seq);
-                   item_records << "initial: " << items[items.size()-1].initial_position << ", initial_sequence: " << items[items.size()-1].initial_sequence_position << ", final: " << items[items.size()-1].final_position << endl;
+                  item_records << "initial: " << items[items.size()-1].initial_position << ", initial_sequence: " << items[items.size()-1].initial_sequence_position << ", final: " << items[items.size()-1].final_position << ", size: " << items[items.size()-1].size << endl;
                    line_breaks.clear();
                   // }
                   }
@@ -308,7 +309,7 @@ std::vector<item> readFilePositions(std::string file_name){
                  } 
                  //cout << line_breaks.size() << endl;
            //if(value==EOF){
-            seq={items[items.size()-1].final_position,line_breaks[0] ,current_position, current_position-items[items.size()-1].final_position,0,0,0};
+            seq={items[items.size()-1].final_position,line_breaks[0],current_position, current_position-items[items.size()-1].final_position,0,0,0};
                    //cout << current_position << endl;
              items.push_back(seq);
        //      cout << items.size() << endl;
@@ -325,7 +326,7 @@ std::vector<item> readFilePositions(std::string file_name){
    
     string item_str="";
 
-    
+fclose(pfile);    
 fclose(ofile);
 item_records.close();
 j_ocurrences.close();
@@ -419,7 +420,7 @@ std::string c="";
    fseek(pfile,current_position , SEEK_SET);
    while(current_position < items_vec[i].final_position){
   // sequence_str="";
-  value=fgetc(pfile);
+   value=fgetc(pfile);
        sequence_str+=value;
        //cout << sequence_str << endl;
        //cout << items_vec.size() << endl;
@@ -513,6 +514,8 @@ std::string c="";
    file_reads_sequences.clear();
   }
   
+  long int last_char_position=0;
+  last_char_position= items_vec[items_vec.size()-1].final_position; 
 
   
     //cout << "Entering ordering function" << endl;
@@ -558,9 +561,15 @@ std::string c="";
  //ordered_fasta_file << ">";
  //cout << items_vec.size() << endl;
  for(long int p=0;p<items_vec.size();p++){
- ordered_fasta_file << ">";
+  if(p>0 && items_vec[p-1].final_position==last_char_position){
+    ordered_fasta_file << endl;
+    ordered_fasta_file << ">";
+  } 
+  else{
+    ordered_fasta_file << ">";
+  }
  // cout << p << ", total size: " << items_vec.size() << endl;
- current_position=items_vec[p].initial_position;
+   current_position=items_vec[p].initial_position;
    fseek(pfile,current_position , SEEK_SET);
    while(current_position < items_vec[p].final_position-1){
   // sequence_str="";
@@ -635,6 +644,7 @@ uint8_t ArgsState(uint8_t d, char *a[], uint32_t n, char *s, char *s2){
     if(getc(F)!='>'){
       return 0;
     }
+    fclose(F);
     return 1;
  }
 
