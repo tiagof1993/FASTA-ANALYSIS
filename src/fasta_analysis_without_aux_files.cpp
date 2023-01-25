@@ -68,8 +68,8 @@ void shuffle_items(std::vector<item> item_vec,std::string input_filename, unsign
   assert(item_vec.size()!=0);
   pfile = fopen (input_filename.c_str(),"r");
   
- fseek(pfile,1, SEEK_END);
- l_size = ftell(pfile);
+ fseeko64(pfile,1, SEEK_END);
+ l_size = ftello64(pfile);
  rewind(pfile);
  long int current_position=0;
  long int l_size_chunk=0;
@@ -115,7 +115,7 @@ item_vec.erase(item_vec.begin());
    }
  // cout << p << ", total size: " << items_vec.size() << endl;
  current_position=item_vec[p].initial_position;
-   fseek(pfile,current_position,SEEK_SET);
+   fseeko64(pfile,current_position,SEEK_SET);
      
    while(current_position < item_vec[p].final_position-1){
   // sequence_str="";
@@ -197,8 +197,8 @@ std::vector<item> readFilePositions(std::string file_name){
 
   //output file
   ofile = fopen(file_name.c_str(),"r");
-  fseek(ofile,1, SEEK_END);
-  l_size = ftell(ofile);
+  fseeko64(ofile,1, SEEK_END);
+  l_size = ftello64(ofile);
   rewind(ofile);
  
  //buffer = (char*) malloc (sizeof(char)*l_size);
@@ -221,12 +221,12 @@ std::vector<item> readFilePositions(std::string file_name){
 //items.reserve(400000000000);
 // cout << "length: " << length << endl;
 
-  std::ifstream infile_stream (file_name, std::ifstream::binary);
+//  std::ifstream infile_stream (file_name, std::ifstream::binary);
   // cout << "file_length: " << infile_stream.gcount() << endl; 
-    infile_stream.seekg (0, infile_stream.end);
+ //   infile_stream.seekg (0, infile_stream.end);
    // cout << "file_length: " << infile_stream.gcount() << endl; 
-    int file_length = -(infile_stream.tellg());
-    infile_stream.seekg (0, infile_stream.beg);
+ //   int file_length = -(infile_stream.tellg());
+  //  infile_stream.seekg (0, infile_stream.beg);
     
     long int chunk_selected=1;
     
@@ -242,7 +242,7 @@ std::vector<item> readFilePositions(std::string file_name){
     
     std::vector<std::string> char_reads={};
     
-    long int initial_read_position =((file_length/chunk_division_factor)*chunk_selected)-1;
+   // long int initial_read_position =((file_length/chunk_division_factor)*chunk_selected)-1;
     long int final_read_position =0;// ((file_length/chunk_division_factor)*chunk_selected+1)-1;
          
  
@@ -417,7 +417,7 @@ std::string c="";
  for(long int i=0;i<items_vec.size();i++){
  //cout << file_reads_sequences.size() << endl;
    current_position = items_vec[i].initial_sequence_position;
-   fseek(pfile,current_position , SEEK_SET);
+   fseeko64(pfile,current_position , SEEK_SET);
    while(current_position < items_vec[i].final_position){
   // sequence_str="";
    value=fgetc(pfile);
@@ -570,7 +570,7 @@ std::string c="";
   }
  // cout << p << ", total size: " << items_vec.size() << endl;
    current_position=items_vec[p].initial_position;
-   fseek(pfile,current_position , SEEK_SET);
+   fseeko64(pfile,current_position , SEEK_SET);
    while(current_position < items_vec[p].final_position-1){
   // sequence_str="";
   value=fgetc(pfile);
@@ -760,21 +760,6 @@ sequence_ordering(recorded_items,Sort_nucleotide_CG,infile,outfile);
        
  }
  
-
-
- //uint32_t verbose    = ArgsState (DEF_VERBOSE, p, argc, "-v", "--verbose");
-  //if(verbose){
-   // fprintf(stderr, "[>] Running FASTA_ANALYSIS v%u.%u ...\n", VERSION, RELEASE);
- //}
- 
-
-   //cout << "seed: " << seed <<endl;
-   
-  // recorded_items = readFilePositions(infile);
-    
-
-   //shuffle_items(recorded_items.first,recorded_items.second,infile,seed,nucleotide);
-  // sequence_ordering(recorded_items.first,recorded_items.second,infile,outfile,nucleotide);
    
   return 0;
 }
