@@ -53,6 +53,7 @@ rm CVDB_mbgc.fasta
 { /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressC -1 -t 2 CVDB.fasta ; } 2>>mf_compresstimes.txt
 
 
+
 #/bin/time -f "TIME\t%e\tMEM\t%M" gzip -k -9 CVDB.fasta \
 #  |& grep "TIME" \
 #  |& tr '.' ',' \
@@ -75,14 +76,14 @@ rm CVDB_mbgc.fasta
 
 #{ time mbgc -d CVDB.mbgc CVDB_mbgc.fasta ; } 2>>mbgcdtimes.txt
 
-{ /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressD -1 -t 2 -o CVDB.fasta.mfc ; } 2>>mf_decompresstimes.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressD -1 -t 2 CVDB.fasta.mfc ; } 2>>mf_decompresstimes.txt
 { /bin/time -f "TIME\t%e\tMEM\t%M" gunzip -c CVDB.fasta.gz >CVDB_gz.fasta  ; } 2>>gunzip_times.txt
 
 #LZMA
 { /bin/time -f "TIME\t%e\tMEM\t%M" lzma -f -k -d  CVDB.fasta.lzma ; } 2>>lzma_decompress_times.txt
 
 #Bzip2
-{ /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -f -k -d  CVDB.fasta.bz2 ;} 2>>bzip2_decompress_times.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -f -k -d CVDB.fasta.bz2 ;} 2>>bzip2_decompress_times.txt
 
 #awk 'NR==1, NR==2 {print NR,$2}' naf_times.txt 
 
@@ -108,7 +109,7 @@ rm CVDB_mbgc.fasta
 #perfis de ordenação
 #cg
 
-declare -a times_arr=()
+#declare -a times_arr=()
 
 #times_arr+=$(awk '{print $2}' OFS="|" naf_files.txt)
 #while read line; do
@@ -134,35 +135,8 @@ awk 'FNR == 2 {print $2}' gunzip_times.txt > gunzip_time_total.txt
 #time=awk 'FNR == 2 {print $2}' naf_times.txt;
 #
 
-while read line; do
-   times_arr+=($line)
-done < naf_time_total.txt
-while read line; do
-   times_arr+=($line)
-done < mbgc_time_total.txt
-while read line; do
-    times_arr+=($line)
-done < mfcompress_time_total.txt
-while read line; do
-    times_arr+=($line)
-done < gzip_time_total.txt
-while read line; do
-   times_arr+=($line)
-done < unnaf_time_total.txt
-while read line; do
-   times_arr+=($line)
-done < mbgcd_time_total.txt
-while read line; do
-    times_arr+=($line)
-done < mfdecompress_time_total.txt
-while read line; do
-    times_arr+=($line)
-done < gunzip_time_total.txt
 
-echo "${#times_arr[@]}"
-
-
-declare -p times_arr
+#declare -p times_arr
 #for i in ${!fasta_arr[@]}; do
     
  #   time echo "$((${fasta_arr[i]}))"

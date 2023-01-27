@@ -21,9 +21,9 @@ rm shuffled_naf.fasta
 rm shuffled_mbgc.fasta
 
 #{ ./SHUFFLE_FASTA AT 5 shuffled.fasta sequences_virus.fasta ; } 2>>shuffle_times.txt
-{ /bin/time -f "TIME\t%e\tMEM\t%M" ./FASTA_ANALY -s CVDB.fasta shuffled.fasta 5 ; } 2>>shuffle_times.txt
+{ valgrind -v /bin/time -f "TIME\t%e\tMEM\t%M" ./FASTA_ANALY -s CVDB.fasta shuffled.fasta 5 ; } 2>>shuffle_times.txt
 #sed -i '$ s/.$//' shuffled.fasta
-{ /bin/time -f "TIME\t%e\tMEM\t%M" ennaf shuffled.fasta -o shuffled.naf --temp-dir tmp/  ; } 2>>naf_times_s2.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" ennaf --strict  shuffled.fasta -o shuffled.naf --temp-dir tmp/ ; } 2>>naf_times_s2.txt
 
 { /bin/time -f "TIME\t%e\tMEM\t%M" mbgc -i shuffled.fasta shuffled.mbgc ; } 2>>mbgctimes_s2.txt
 
