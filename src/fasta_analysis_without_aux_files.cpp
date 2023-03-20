@@ -34,7 +34,7 @@ bool compareByInitialPosition(const item &a, const item &b){
 }
 
 bool compareByATNucleotide(const item &a, const item &b){
-   return a.AT_nucleotides > b.AT_nucleotides;
+   return a.AT_nucleotides < b.AT_nucleotides;
 
 }
 
@@ -110,6 +110,9 @@ item_vec.erase(item_vec.begin());
     shuffled_fasta_file << endl;
     shuffled_fasta_file << ">";
    }
+   else if(item_vec[p].initial_position==0){
+   
+  } 
   else{  
     shuffled_fasta_file << ">";
    }
@@ -277,7 +280,7 @@ std::vector<item> readFilePositions(std::string file_name){
         // switch(value){
         //case '>': //label=1;
        /* if(value=='J' && (current_position>items[items.size()-1].initial_sequence_position && current_position<items[items.size()-1].final_position)){
-        item_records << "j: " << current_position << endl; ;
+        item_records << "j: " << current_position << endl;
         //item_records << endl;
         }*/
        /* if(items.size()==116450){
@@ -292,7 +295,7 @@ std::vector<item> readFilePositions(std::string file_name){
                 //else{
                    seq={items[items.size()-1].final_position,line_breaks[0] ,current_position, current_position-items[items.size()-1].final_position,0,0,0};
                    //cout << current_position << endl;
-                   items.push_back(seq);
+                  items.push_back(seq);
                   item_records << "initial: " << items[items.size()-1].initial_position << ", initial_sequence: " << items[items.size()-1].initial_sequence_position << ", final: " << items[items.size()-1].final_position << ", size: " << items[items.size()-1].size << endl;
                    line_breaks.clear();
                   // }
@@ -313,7 +316,7 @@ std::vector<item> readFilePositions(std::string file_name){
                    //cout << current_position << endl;
              items.push_back(seq);
        //      cout << items.size() << endl;
-             item_records << "initial: " << items[items.size()-1].initial_position << ", initial_sequence: " << items[items.size()-1].initial_sequence_position << ", final: " << items[items.size()-1].final_position << endl;
+             item_records << "initial: " << items[items.size()-1].initial_position << ", initial_sequence: " << items[items.size()-1].initial_sequence_position << ", final: " << items[items.size()-1].final_position << ", size: " << items[items.size()-1].size << endl;
             //cout << value << endl;
       //     }       
        
@@ -400,12 +403,13 @@ cout << "item : " << i << " : " << items_vec[i].final_position-items_vec[i].init
  long int N_count=0;
    //for(long int i=0;i<items_data.size();i++){
     char value;
+    //store initial sequence position
     long int current_position=items_vec[0].initial_sequence_position;
     //cout << current_position << endl;
       rewind(pfile);      
        //fseek(pfile,sequences_vec[l].initial_position , SEEK_SET);
     
-      rewind(pfile);
+     // rewind(pfile);
 std::string c="";
 /*for(long int i=0; i< sizeof(char)*l_size_chunk ;i++){
     cout << buffer[i-1];
@@ -451,8 +455,8 @@ std::string c="";
                   //label_size++; continue;
                   //reads_file << ; 
        case EOF:
-       		file_reads_sequences.push_back(sequence_str);
-        	  // cout << sequence_str << endl;
+       		//file_reads_sequences.push_back(sequence_str);
+        	   //cout << sequence_str << endl;
                    sequence_str="";   
                     
         default: 
@@ -464,16 +468,26 @@ std::string c="";
                //  reads_file << value;
               // }
         }
+       
    }
+    file_reads_sequences.push_back(sequence_str);
+    //cout << sequence_str << endl;
+    sequence_str="";   
    l_size_chunk = items_vec[i].final_position-items_vec[i].initial_sequence_position;
    //cout << "l_size_chunk: " << l_size_chunk << endl;
    //cout << i << ", total size: " << items_vec.size() << endl;
+   //cout << i << endl;
    j=0;
+   //cout << i << endl;
    while(j<l_size_chunk){
+   
    //cout << file_reads_sequences.size() << endl;
     if(file_reads_sequences[0].size()>1){
         c="";
         c=file_reads_sequences[0].at(j);
+        // if(i==1284731){
+        // cout << file_reads_sequences[i].at();
+         //}
         //cout << "i: " << i << ", j: " << j << endl;
         if(c.compare("A") == 0 ){
           AT_count++;
@@ -497,7 +511,7 @@ std::string c="";
    items_vec[i].AT_nucleotides=AT_count;
    items_vec[i].CG_nucleotides=CG_count;
    items_vec[i].N_nucleotides=N_count;
-  //   nucleotides_count << "items_nucleotides: " << items_vec[i].AT_nucleotides << endl;
+     nucleotides_count << "items_nucleotides: " << items_vec[i].AT_nucleotides << endl;
   //if(items_vec[i].initial_position==11089){
   //  cout << i << endl;
  // }
@@ -546,6 +560,7 @@ std::string c="";
   //std::sort(items_vec.begin(), items_vec.end() ,compareAlphabetically);
  }
  
+// cout <<  "initial: " << items_vec[0].initial_position << ", initial_sequence: " << items_vec[0].initial_sequence_position << ", final: " << items_vec[0].final_position << endl;
  //items_vec_record << "initial: " << endl;
   for(long int p=0;p<items_vec.size();p++){
     
@@ -564,6 +579,9 @@ std::string c="";
   if(p>0 && items_vec[p-1].final_position==last_char_position){
     ordered_fasta_file << endl;
     ordered_fasta_file << ">";
+  }
+  else if(items_vec[p].initial_position==0){
+   
   } 
   else{
     ordered_fasta_file << ">";
