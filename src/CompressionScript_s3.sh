@@ -48,9 +48,9 @@ rm ordering_times.txt
 #{ /bin/time -f "TIME\t%e\tMEM\t%M" mbgc -i ordered_CVDB_CG.fasta ordered_CVDB_CG.mbgc ; } 2>>mbgctimes_s3.txt
 
 #MFC
-{ /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressC -v -3 -p 64 -t 8 ordered_CVDB_size.fasta ; } 2>>mf_compresstimes_s3.txt
-{ /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressC -v -3 -p 64 -t 8 ordered_CVDB_AT.fasta ; } 2>>mf_compresstimes_s3.txt
-{ /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressC -v -3 -p 64 -t 8 ordered_CVDB_CG.fasta ; } 2>>mf_compresstimes_s3.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressC -v -3 -p 8 -t 8 ordered_CVDB_size.fasta ; } 2>>mf_compresstimes_s3.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressC -v -3 -p 8 -t 8 ordered_CVDB_AT.fasta ; } 2>>mf_compresstimes_s3.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressC -v -3 -p 8 -t 8 ordered_CVDB_CG.fasta ; } 2>>mf_compresstimes_s3.txt
 
 #gzip
 { /bin/time -f "TIME\t%e\tMEM\t%M" gzip -k -9 ordered_CVDB_size.fasta y ; } 2>>gzip_times_s3.txt

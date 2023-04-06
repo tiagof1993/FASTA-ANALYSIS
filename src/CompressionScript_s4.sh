@@ -37,6 +37,9 @@ rm stage4_time.txt
 { /bin/time -f "TIME\t%e\tMEM\t%M" mbgc -i ordered_shuffled_AT.fasta ordered_shuffled_AT.mbgc ; } 2>>mbgctimes_s4.txt
 { /bin/time -f "TIME\t%e\tMEM\t%M" mbgc -i ordered_shuffled_CG.fasta ordered_shuffled_CG.mbgc ; } 2>>mbgctimes_s4.txt
 
+#sed -i 's/^>.*$/>/g' ordered_shuffled_AT.fasta
+
+
 { /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressC -v -3 -p 64 -t 8 ordered_shuffled_size.fasta ; } 2>>mf_compresstimes_s4.txt
 { /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressC -v -3 -p 64 -t 8 ordered_shuffled_AT.fasta ; } 2>>mf_compresstimes_s4.txt
 { /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressC -v -3 -p 64 -t 8 ordered_shuffled_CG.fasta ; } 2>>mf_compresstimes_s4.txt

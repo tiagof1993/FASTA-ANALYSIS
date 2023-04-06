@@ -1,3 +1,20 @@
+#Generate a set of sequences with seed between 1 and 100 and subs and adds varying between 0.1 and 5%
+#AlcoR simulation -rs 10000:0:4:0:0:0 > sequence.fasta 
+#for x in {1..100}
+#do 
+# for y in {0..50}
+# do
+#  for z in {0..50}
+#  do
+ #   AlcoR simulation -fs 1:10000:0:$x:0.00$y:0.00$z:0:sequence.fasta >> sequence.fasta
+ #      done
+#     done
+#   done
+
+
+
+
+
 
 time {
 rm naf_times.txt
