@@ -82,7 +82,7 @@ void shuffle_items(std::vector<item> item_vec,std::string input_filename, unsign
 
     std::string sequence_str="";
     //long int last_char_position = item_vec[item_vec.size()-1].final_position-1;
-    cout << "last element: " << item_vec[item_vec.size()-1].final_position-1 << endl;
+    cout << "first element: " << item_vec[0].initial_position << endl;
 
     long int last_char_position=0;
     last_char_position= item_vec[item_vec.size()-1].final_position;
@@ -103,27 +103,41 @@ void shuffle_items(std::vector<item> item_vec,std::string input_filename, unsign
 //  std::string sequence_str ="";
     // long int current_position=0;
     // shuffle_file.close();
-
+    long int previous_position=0;
     for(long int p=0;p<item_vec.size();p++){
-        if(p>0 && item_vec[p-1].final_position==last_char_position){
+        if(item_vec[p].initial_position>1){
+           // shuffled_fasta_file << ">";
+           sequence_str+='>';
+        }
+
+       /* if(p>0 && item_vec[p-1].final_position==last_char_position){
             shuffled_fasta_file << endl;
             shuffled_fasta_file << ">";
         }
         else if(item_vec[p].initial_position==0){
 
-        }
-        else{
-            shuffled_fasta_file << ">";
-        }
+        }*/
+        //else{
+        //    shuffled_fasta_file << ">";
+        //}
         // cout << p << ", total size: " << items_vec.size() << endl;
+
         current_position=item_vec[p].initial_position;
+        if(current_position>0){
+            previous_position=current_position-1;
+        }
         fseeko64(pfile,current_position,SEEK_SET);
 
-        while(current_position < item_vec[p].final_position-1){
+        while(current_position < item_vec[p].final_position-1) {
             // sequence_str="";
-            value=fgetc(pfile);
-            sequence_str+=value;
-            //cout << sequence_str << endl;
+            value = fgetc(pfile);
+            if (sequence_str.back() == '>' && value == '>') {
+
+            }
+            else {
+                sequence_str += value;
+            }
+                //cout << sequence_str << endl;
             current_position++;
         }
         // file_reads.push_back(sequence_str);
@@ -133,8 +147,12 @@ void shuffle_items(std::vector<item> item_vec,std::string input_filename, unsign
         //cout << sequence_str << endl;
 
         // l_size_chunk=items_vec[p].final_position-items_vec[p].initial_position;
-
-        j=0;
+      /*if(item_vec[p].initial_position==0) {
+          j = 1;
+      }
+      else{*/
+          j=0;
+      //}
         //while(j<items_vec[i].final_position){
         // while(j<file_reads[0].size()){
         while(j<sequence_str.size()){
@@ -153,10 +171,13 @@ void shuffle_items(std::vector<item> item_vec,std::string input_filename, unsign
             //free(buffer);
         }
         sequence_str="";
+        if(item_vec[p].final_position==last_char_position){
+            shuffled_fasta_file << "\n";
+        }
 
         //file_reads.clear();
         //items_vec_record.close();
-        cout << "buffer" << endl;
+       // cout << "buffer" << endl;
         //fclose(pfile)
 
 
@@ -312,7 +333,7 @@ std::vector<item> readFilePositions(std::string file_name){
 
     }catch(std::bad_alloc & exception){
         std::cerr << "Bad Alloc Exception" << exception.what();
-    }
+   }
 
     cout << "read over" << endl;
 
@@ -473,7 +494,7 @@ void sequence_ordering(std::vector<item> items_vec,Options option,std::string in
     }
 
     long int last_char_position=0;
-    last_char_position= items_vec[items_vec.size()-1].final_position;
+    last_char_position=items_vec[items_vec.size()-1].final_position;
 
 
     //cout << "Entering ordering function" << endl;
@@ -543,19 +564,16 @@ void sequence_ordering(std::vector<item> items_vec,Options option,std::string in
     //cout << items_vec.size() << endl;
     for(long int p=0;p<items_vec.size();p++){
 
-    /*    if(p>0 && p< items_vec[p-1].final_position && items_vec[p-1].final_position==last_char_position)
+       /*if(p>0 && p< items_vec[p-1].final_position && items_vec[p-1].final_position==last_char_position)
         {
             ordered_fasta_file << endl;
             ordered_fasta_file << ">";
         }*/
-        if(items_vec[p].initial_position==0){
+       /* if(items_vec[p].final_position-1==old_position) {
 
-        }
-        else if(items_vec[p].final_position-1==old_position) {
-            ordered_fasta_file << "\n";
             ordered_fasta_file << ">";
-        }
-        else{
+        }*/
+         if(items_vec[p].initial_position>0){
             ordered_fasta_file << ">";
         }
         // cout << p << ", total size: " << items_vec.size() << endl;
@@ -575,8 +593,12 @@ void sequence_ordering(std::vector<item> items_vec,Options option,std::string in
         //cout << sequence_str << endl;
 
         // l_size_chunk=items_vec[p].final_position-items_vec[p].initial_position;
-
-        j=0;
+        if(items_vec[p].initial_position==0){
+            j=1;
+        }
+        else {
+            j = 0;
+        }
         //while(j<items_vec[i].final_position){
         // while(j<file_reads[0].size()){
         while(j<sequence_str.size()){
@@ -606,7 +628,9 @@ void sequence_ordering(std::vector<item> items_vec,Options option,std::string in
         //infile.close();
         // fasta_file_2.close();
         // ordered_fasta_file.close();
-
+        if(items_vec[p].final_position==last_char_position){
+            ordered_fasta_file << "\n";
+        }
 
 
 
