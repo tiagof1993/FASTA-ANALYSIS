@@ -32,6 +32,10 @@
 
 
 
+{ /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -l 2 --block 1MB --fasta -i sequence_model.fasta ; } 2>> Alcor_sequence_1.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -l 2 --block 1MB --fasta -i sort.fa ; } 2>> Alcor_sequence_sort_1.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -l 2 --block 1MB --fasta -i sort_fanalysis.fasta ; } 2>> Alcor_sequence_sort_fa_1.txt
+
 
 
 #ALCOR sequence generator
