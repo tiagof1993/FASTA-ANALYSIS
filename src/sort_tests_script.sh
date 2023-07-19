@@ -51,10 +51,11 @@ rm ordered_shuffled_CG.fasta.gz
 rm sort_fanalysis.fasta.gz
 rm sort.fa.gz
 rm sequence_model.fasta.gz
-
+rm prime_numbers.txt
 
 read -p "Define the seed range: " SEED_RANGE
-echo "The first $SEED_RANGE prime numbers  are: "
+read -p "Define the number of auxiliary sequences used" AUX_SEQ
+#echo "The first $SEED_RANGE prime numbers  are: "
 declare -a seed_arr=()
 
 m=2
@@ -82,14 +83,20 @@ done
 
 for((i=0;i<${#seed_arr[@]}; i++ ))
 do
-  echo ${seed_arr[$i]} > prime_numbers.txt
+  echo ${seed_arr[$i]} >> prime_numbers.txt
 done
 
+ j=$((${#seed_arr[@]}-1))
 
-for x in {1..200}
+#for x in {1..$AUX_SEQ}
+for((x=1;x<=$AUX_SEQ; x++ ))
 do 
-j=$(($x-1)) 
- size=$((1000*$x))
+ if [ $j -eq 0 ];then
+   j=$((${#seed_arr[@]}-1))
+ else
+  j=$(($j-1))
+fi 
+ size=$((100*$x))
  #echo ${seed_arr[x]}
  seed=${seed_arr[$j]}
  #echo $seed
@@ -100,12 +107,19 @@ done
 #for x in {0...$SEED_RANGE}
 for((x=0;x<${#seed_arr[@]}; x++ ))
 do
-j=$(($x-1)) 
+#j=$(($x-1)) 
+
  for y in {0..1}
  do
-   for z in {1..200}
+   #for z in {1..$AUX_SEQ}
+   for((z=1;z<=$AUX_SEQ; z++ ))
    do
-    size=$((1000*$z))
+    if [ $j -eq 0 ];then
+     j=$((${#seed_arr[@]}-1))
+    else
+     j=$(($j-1))
+    fi 
+    size=$((100*$z))
     #echo $size
     #seed=$(${seed_arr[x]})
     AlcoR simulation -fs 1:$size:0:${seed_arr[$j]}:0.0$y:0:0:sequence_$z.fasta >> sequence_model.fasta
