@@ -237,9 +237,9 @@ rm sort_fanalysis_$IN_FILE $IN_FILE_SHORT_NAME.mbgc
 { /bin/time -f "TIME\t%e\tMEM\t%M" mbgc -d sort_fanalysis_$IN_FILE_SHORT_NAME.mbgc sort_fanalysis_mbgc_decompress ; } 2>$IN_FILE_SHORT_NAME-sort_fa_mbgc_d_l$LEVEL.txt 
 
  #mbgc -d $IN_FILE_SHORT_NAME.mbgc mbgc_decompress
- mv mbgc_decompress/$IN_FILE_SHORT_NAME.fasta $IN_FILE_SHORT_NAME-mbgc.fasta 
- mv sort_mbgc_decompress/sort_$IN_FILE_SHORT_NAME.fasta sort_$IN_FILE_SHORT_NAME-mbgc.fasta 
- mv sort_fanalysis_mbgc_decompress/sort_fanalysis_$IN_FILE_SHORT_NAME.fasta sort_fanalysis_$IN_FILE_SHORT_NAME-mbgc.fasta 
+#  mv mbgc_decompress/$IN_FILE_SHORT_NAME.fasta $IN_FILE_SHORT_NAME-mbgc.fasta 
+#  mv sort_mbgc_decompress/sort_$IN_FILE_SHORT_NAME.fasta sort_$IN_FILE_SHORT_NAME-mbgc.fasta 
+#  mv sort_fanalysis_mbgc_decompress/sort_fanalysis_$IN_FILE_SHORT_NAME.fasta sort_fanalysis_$IN_FILE_SHORT_NAME-mbgc.fasta 
 
 
 { ls $IN_FILE_SHORT_NAME* -la -ltr | grep \_mbgc.fasta$ |awk '{print $5;}' ; } >  $IN_FILE_SHORT_NAME-mbgc_d_size_l$LEVEL.txt
