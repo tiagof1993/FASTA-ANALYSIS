@@ -265,40 +265,46 @@ function MFCOMPRESS_COMPRESSION(){
 { ls sort_$IN_FILE* -la -ltr | grep \.mfc$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_mfc_size_l$LEVEL-p$PARTITION-t8.txt
 { ls sort_fanalysis_$IN_FILE* -la -ltr | grep \.mfc$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_mfc_size_l$LEVEL-p$PARTITION-t8.txt
 
-{ /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressD -v -$LEVEL -p $PARTITION -t 8 $IN_FILE ; } 2> $IN_FILE_SHORT_NAME-mfc_d_l$LEVEL-p$PARTITION-t8.txt 
-{ /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressD -v -$LEVEL -p $PARTITION -t 8 sort_$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_mfc_d_l$LEVEL-p$PARTITION-t8.txt
-{ /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressD -v -$LEVEL -p $PARTITION -t 8 sort_fanalysis_$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_fa_mfc_d_l$LEVEL-p$PARTITION-t8.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressD -v -$LEVEL -p $PARTITION -t 8 $IN_FILE.mfc ; } 2> $IN_FILE_SHORT_NAME-mfc_d_l$LEVEL-p$PARTITION-t8.txt 
+{ /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressD -v -$LEVEL -p $PARTITION -t 8 sort_$IN_FILE.mfc ; } 2>$IN_FILE_SHORT_NAME-sort_mfc_d_l$LEVEL-p$PARTITION-t8.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressD -v -$LEVEL -p $PARTITION -t 8 sort_fanalysis_$IN_FILE.mfc ; } 2>$IN_FILE_SHORT_NAME-sort_fa_mfc_d_l$LEVEL-p$PARTITION-t8.txt
 
 { ls $IN_FILE* -la -ltr | grep \.mfc.d$ |awk '{print $5;}' ; } > $IN_FILE_SHORT_NAME-mfc_d_size_l$LEVEL-p$PARTITION-t8.txt
 { ls sort_$IN_FILE* -la -ltr | grep \.mfc.d$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_mfc_d_size_l$LEVEL-p$PARTITION-t8.txt
-{ ls sort_fanalysis_$IN_FILE* -la -ltr | grep \.mfc.d$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_mfc_d_size_l$LEVEL-p$PARTITION-t8.txt
+{ ls sort_fanalysis_$IN_FILE* -la -ltr | grep \.mfc.d$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_mfc_d_size_l$LEVEL-p$PARTITION-t8.txt
   
 }
 
+f
 function GZIP_COMPRESSION(){
   IN_FILE="$1";
   LEVEL="$2";
 
   IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fasta//g')
   echo $IN_FILE_SHORT_NAME
-
-{ /bin/time -f "TIME\t%e\tMEM\t%M"  gzip -k -$LEVEL $IN_FILE y ; } 2>$IN_FILE_SHORT_NAME-gzip_l$LEVEL.txt  
-{ /bin/time -f "TIME\t%e\tMEM\t%M"  gzip -k -$LEVEL sort_$IN_FILE y ; } 2>$IN_FILE_SHORT_NAME-sort_gzip_l$LEVEL.txt 
-{ /bin/time -f "TIME\t%e\tMEM\t%M"  gzip -k -$LEVEL sort_fanalysis_$IN_FILE y ; } 2>$IN_FILE_SHORT_NAME-sort_fa_gzip_l$LEVEL.txt
+rm $IN_FILE.gz
+rm sort_$IN_FILE.gz
+rm sort_fanalysis_$IN_FILE.gz
+{ /bin/time -f "TIME\t%e\tMEM\t%M"  gzip -k -$LEVEL $IN_FILE; } 2>$IN_FILE_SHORT_NAME-gzip_l$LEVEL.txt  
+{ /bin/time -f "TIME\t%e\tMEM\t%M"  gzip -k -$LEVEL sort_$IN_FILE; } 2>$IN_FILE_SHORT_NAME-sort_gzip_l$LEVEL.txt 
+{ /bin/time -f "TIME\t%e\tMEM\t%M"  gzip -k -$LEVEL sort_fanalysis_$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_fa_gzip_l$LEVEL.txt
 
 { ls $IN_FILE* -la -ltr | grep \.gz$ |awk '{print $5;}' ; } > $IN_FILE_SHORT_NAME-gzip_size_l$LEVEL.txt  
 { ls sort_$IN_FILE* -la -ltr | grep \.gz$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_gzip_size_l$LEVEL.txt  
 { ls sort_$IN_FILE* -la -ltr | grep \.gz$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_gzip_size_l$LEVEL.txt  
 
-{ /bin/time -f "TIME\t%e\tMEM\t%M" gunzip -c $IN_FILE.gz >sort_$IN_FILE_SHORT_NAME-gz.fasta ; } 2>$IN_FILE_SHORT_NAME-gunzip_l$LEVEL.txt  
-{ /bin/time -f "TIME\t%e\tMEM\t%M" gunzip -c sort_$IN_FILE.gz >sort_$IN_FILE_SHORT_NAME-gz.fasta ; } 2>$IN_FILE_SHORT_NAME-sort_gunzip_l$LEVEL.txt 
-{ /bin/time -f "TIME\t%e\tMEM\t%M" gunzip -c sort_fa_$IN_FILE.gz >sort_$IN_FILE_SHORT_NAME-gz.fasta ; } 2>$IN_FILE_SHORT_NAME-sort_fa_gunzip_l$LEVEL.txt 
+{ /bin/time -f "TIME\t%e\tMEM\t%M" gunzip -c $IN_FILE.gz >$IN_FILE_SHORT_NAME-gunzip.fasta ; } 2>$IN_FILE_SHORT_NAME-gunzip_l$LEVEL.txt  
+{ /bin/time -f "TIME\t%e\tMEM\t%M" gunzip -c sort_$IN_FILE.gz >sort_$IN_FILE_SHORT_NAME-gunzip.fasta ; } 2>$IN_FILE_SHORT_NAME-sort_gunzip_l$LEVEL.txt 
+{ /bin/time -f "TIME\t%e\tMEM\t%M" gunzip -c sort_fanalysis_$IN_FILE.gz >sort_fanalysis_$IN_FILE_SHORT_NAME-gunzip.fasta ; } 2>$IN_FILE_SHORT_NAME-sort_fa_gunzip_l$LEVEL.txt 
 
-{ ls $IN_FILE_SHORT_NAME* -la -ltr | grep \_gz.fasta$ |awk '{print $5;}' ; } > $IN_FILE_SHORT_NAME-gunzip_size_l$LEVEL.txt 
-{ ls sort_$IN_FILE_SHORT_NAME* -la -ltr | grep \_gz.fasta$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_gunzip_size_l$LEVEL.txt 
-{ ls sort_fanalysis_$IN_FILE_SHORT_NAME* -la -ltr | grep \_gz.fasta$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_gunzip_size_l$LEVEL.txt 
+{ ls $IN_FILE_SHORT_NAME* -la -ltr | grep \unzip.fasta$ |awk '{print $5;}' ; } > $IN_FILE_SHORT_NAME-gunzip_size_l$LEVEL.txt 
+{ ls sort_$IN_FILE_SHORT_NAME* -la -ltr | grep \unzip.fasta$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_gunzip_size_l$LEVEL.txt 
+{ ls sort_fanalysis_$IN_FILE_SHORT_NAME* -la -ltr | grep \unzip.fasta$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_gunzip_size_l$LEVEL.txt 
 
 }
+
+
+
 
 function LZMA_COMPRESSION(){
   IN_FILE="$1";
@@ -315,20 +321,19 @@ function LZMA_COMPRESSION(){
 { ls sort_$IN_FILE* -la -ltr | grep \.lzma$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_lzma_size_l$LEVEL.txt 
 { ls sort_fanalysis_$IN_FILE* -la -ltr | grep \.lzma$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_lzma_size_l$LEVEL.txt 
 
-mv $IN_FILE.lzma $IN_FILE-c_l.lzma
-mv sort_$IN_FILE.lzma sort_$IN_FILE-c_l.lzma
-mv sort_fanalysis_$IN_FILE.lzma sort_fanalysis_$IN_FILE-c_l.lzma
+mv $IN_FILE.lzma $IN_FILE_SHORT_NAME-c_l.fasta.lzma
+mv sort_$IN_FILE.lzma sort_$IN_FILE_SHORT_NAME-c_l.fasta.lzma
+mv sort_fanalysis_$IN_FILE.lzma sort_fanalysis_$IN_FILE_SHORT_NAME-c_l.fasta.lzma
 
-{ /bin/time -f "TIME\t%e\tMEM\t%M" lzma -f -k -d  $IN_FILE.lzma ; } 2>$IN_FILE_SHORT_NAME-lzma_d_l$LEVEL.txt   
-{ /bin/time -f "TIME\t%e\tMEM\t%M" lzma -f -k -d sort_$IN_FILE.lzma ; } 2>$IN_FILE_SHORT_NAME-sort_lzma_d_l$LEVEL.txt    
-{ /bin/time -f "TIME\t%e\tMEM\t%M" lzma -f -k -d sort_fanalysis_$IN_FILE.lzma ; } 2>$IN_FILE_SHORT_NAME-sort_fa_lzma_d_l$LEVEL.txt   
+{ /bin/time -f "TIME\t%e\tMEM\t%M" lzma -f -k -d $IN_FILE_SHORT_NAME-c_l.fasta.lzma ; } 2>$IN_FILE_SHORT_NAME-lzma_d_l$LEVEL.txt   
+{ /bin/time -f "TIME\t%e\tMEM\t%M" lzma -f -k -d sort_$IN_FILE_SHORT_NAME-c_l.fasta.lzma ; } 2>$IN_FILE_SHORT_NAME-sort_lzma_d_l$LEVEL.txt    
+{ /bin/time -f "TIME\t%e\tMEM\t%M" lzma -f -k -d sort_fanalysis_$IN_FILE_SHORT_NAME-c_l.fasta.lzma ; } 2>$IN_FILE_SHORT_NAME-sort_fa_lzma_d_l$LEVEL.txt   
 
-{ ls $IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}' ; } > $IN_FILE_SHORT_NAME-lzma_d_size_l$LEVEL.txt
-{ ls sort_$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}'; } > _$IN_FILE_SHORT_NAME-sort_lzma_d_size_l$LEVEL.txt
-{ ls sort_fanalysis_$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_lzma_d_size_l$LEVEL.txt
+{ ls $IN_FILE_SHORT_NAME-c_l* -la -ltr | grep \.fasta$ |awk '{print $5;}' ; } > $IN_FILE_SHORT_NAME-lzma_d_size_l$LEVEL.txt
+{ ls sort_$IN_FILE_SHORT_NAME-c_l* -la -ltr | grep \.fasta$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_lzma_d_size_l$LEVEL.txt
+{ ls sort_fanalysis_$IN_FILE_SHORT_NAME-c_l* -la -ltr | grep \.fasta$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_lzma_d_size_l$LEVEL.txt
  
 }
-
 function BZIP2_COMPRESSION(){
   IN_FILE="$1";
   LEVEL="$2";
@@ -340,21 +345,21 @@ function BZIP2_COMPRESSION(){
 { /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -$LEVEL -f -k sort_$IN_FILE ; } 2> $IN_FILE_SHORT_NAME-sort_bzip2_l$LEVEL.txt  
 { /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -$LEVEL -f -k sort_fanalysis_$IN_FILE ; } 2> $IN_FILE_SHORT_NAME-sort_fa_bzip2_l$LEVEL.txt  
 
-{ ls $IN_FILE* -la -ltr | grep \.bz2$ |awk '{print $5;}' ; } > $IN_FILE_SHORT_NAME-bzip2_size_l$LEVEL.txt  
-{ ls sort_$IN_FILE* -la -ltr | grep \.bz2$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_bzip2_size_l$LEVEL.txt  
-{ ls sort_fanalysis_$IN_FILE* -la -ltr | grep \.bz2$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_bzip2_size_l$LEVEL.txt 
+mv $IN_FILE.bz2 $IN_FILE_SHORT_NAME-c_b.fasta.bz2
+mv sort_$IN_FILE.bz2 sort_$IN_FILE_SHORT_NAME-c_b.fasta.bz2
+mv sort_fanalysis_$IN_FILE.bz2 sort_fanalysis_$IN_FILE_SHORT_NAME-c_b.fasta.bz2
 
-mv $IN_FILE.bz2 $IN_FILE-c_b.bz2
-mv sort_$IN_FILE.bz2 sort_$IN_FILE-c_b.bz2
-mv sort_fanalysis_$IN_FILE.bz2 sort_fanalysis_$IN_FILE-c_b.bz2
+{ ls $IN_FILE_SHORT_NAME-c_b* -la -ltr | grep \.bz2$ |awk '{print $5;}' ; } > $IN_FILE_SHORT_NAME-bzip2_size_l$LEVEL.txt  
+{ ls sort_$IN_FILE_SHORT_NAME-c_b* -la -ltr | grep \.bz2$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_bzip2_size_l$LEVEL.txt  
+{ ls sort_fanalysis_$IN_FILE_SHORT_NAME-c_b* -la -ltr | grep \.bz2$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_bzip2_size_l$LEVEL.txt 
 
-{ /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -f -k -d $IN_FILE.bz2 ; } 2>$IN_FILE_SHORT_NAME-bzip2_d_l$LEVEL.txt   
-{ /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -f -k -d sort_$IN_FILE.bz2 ; } 2>$IN_FILE_SHORT_NAME-sort_bzip2_d_l$LEVEL.txt   
-{ /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -f -k -d sort_fanalysis_$IN_FILE.bz2 ; } 2>$IN_FILE_SHORT_NAME-sort_fa_bzip2_d_l$LEVEL.txt  
+{ /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -f -k -d $IN_FILE_SHORT_NAME-c_b.fasta.bz2 ; } 2>$IN_FILE_SHORT_NAME-bzip2_d_l$LEVEL.txt   
+{ /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -f -k -d sort_$IN_FILE_SHORT_NAME-c_b.fasta.bz2 ; } 2>$IN_FILE_SHORT_NAME-sort_bzip2_d_l$LEVEL.txt   
+{ /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -f -k -d sort_fanalysis_$IN_FILE_SHORT_NAME-c_b.fasta.bz2 ; } 2>$IN_FILE_SHORT_NAME-sort_fa_bzip2_d_l$LEVEL.txt  
 
-{ ls $IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}' ; } >  $IN_FILE_SHORT_NAME-bzip2_d_size_l$LEVEL.txt 
-{ ls sort_$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}'; } >  $IN_FILE_SHORT_NAME-sort_bzip2_d_size_l$LEVEL.txt 
-{ ls sort_fanalysis_$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}'; } >  $IN_FILE_SHORT_NAME-sort_fa_bzip2_size_l$LEVEL.txt 
+{ ls $IN_FILE_SHORT_NAME-c_b* -la -ltr | grep \.fasta$ |awk '{print $5;}' ; } >  $IN_FILE_SHORT_NAME-bzip2_d_size_l$LEVEL.txt 
+{ ls sort_$IN_FILE_SHORT_NAME-c_b* -la -ltr | grep \.fasta$ |awk '{print $5;}'; } >  $IN_FILE_SHORT_NAME-sort_bzip2_d_size_l$LEVEL.txt 
+{ ls sort_fanalysis_$IN_FILE_SHORT_NAME-c_b* -la -ltr | grep \.fasta$ |awk '{print $5;}'; } >  $IN_FILE_SHORT_NAME-sort_fa_bzip2_d_size_l$LEVEL.txt 
 
 }
 
@@ -554,7 +559,7 @@ program="NAF_$IN_FILE_SHORT_NAME-fasta_analysis"
 level=$LEVEL
 bytes=$(ls sort_fanalysis_$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
 c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_naf_size_l$LEVEL.txt)
-original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_naf_size_l$LEVEL.txt)
+original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-naf_size_l$LEVEL.txt)
 bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
 bps_final=$(echo "scale=3; ($c_bytes * 8) / $bytes" | bc)
 #gain=$(echo "scale=3; ($c_bytes / $original_c_bytes)*100" | bc)
@@ -607,7 +612,7 @@ program="NAF_$IN_FILE_SHORT_NAME-sortmf"
 level=$LEVEL
 bytes=$(ls sort_$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
 c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_naf_size_l$LEVEL.txt)
-original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_naf_size_l$LEVEL.txt)
+original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-naf_size_l$LEVEL.txt)
 bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
 bps_final=$(echo "scale=3; ($c_bytes * 8) / $bytes" | bc)
 #gain=$(echo "scale=3; ($c_bytes / $original_c_bytes)*100" | bc)
@@ -726,7 +731,7 @@ program="MBGC_$IN_FILE_SHORT_NAME-fasta_analysis"
 level=$LEVEL
 bytes=$(ls sort_fanalysis_$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
 c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_mbgc_size-_l$LEVEL.txt)
-original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_mbgc_size-l$LEVEL.txt)
+original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-mbgc_size-l$LEVEL.txt)
 bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
 bps_final=$(echo "scale=3; ($c_bytes * 8) / $bytes" | bc)
 #gain=$(echo "scale=3; ($c_bytes / $original_c_bytes)*100" | bc)
@@ -779,7 +784,7 @@ program="MBGC_$IN_FILE_SHORT_NAME-sortmf"
 level=$LEVEL
 bytes=$(ls sort_$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
 c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_mbgc_size_l$LEVEL.txt)
-original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_mbgc_size_l$LEVEL.txt)
+original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-mbgc_size_l$LEVEL.txt)
 bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
 bps_final=$(echo "scale=3; ($c_bytes * 8) / $bytes" | bc)
 #gain=$(echo "scale=3; ($c_bytes / $original_c_bytes)*100" | bc)
@@ -827,7 +832,7 @@ EOF
 
 else
 
-program="MBGC_$IN_FILE_SHORT_NAME-sortmf"
+program="MBGC_$IN_FILE_SHORT_NAME"
 level=$LEVEL
 bytes=$(ls $IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
 c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-mbgc_size_l$LEVEL.txt)
@@ -894,21 +899,22 @@ function CSV_BUILDER_MFCOMPRESS(){
 
 if [[ $SORTING_ALGORITHM == "fasta_analysis" ]]; then  
 
-program="MFCOMPRESS_$INPUT_FILE_SHORT_NAME-fasta_analysis"
+program="MFCOMPRESS_$IN_FILE_SHORT_NAME-fasta_analysis"
 level=$LEVEL
 partition="$PARTITION"
-bytes=$(ls sort_fanalysis_$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
-c_bytes=$(awk 'FNR ==3 {print $1}' $IN_FILE_SHORT_NAME-size_$PARTITION-l$LEVEL-t8.txt)
-original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-size_$PARTITION-l$LEVEL-t8.txt)
+#bytes=$(ls sort_fanalysis_$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
+bytes=$(ls -la sort_fanalysis_$IN_FILE_SHORT_NAME.fasta |awk '{print $5;}')
+c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_mfc_size_l$LEVEL-p$PARTITION-t8.txt)
+original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-mfc_size_l$LEVEL-p$PARTITION-t8.txt)
 bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
 bps_final=$(echo "scale=3; ($c_bytes * 8) / $bytes" | bc)
 #gain=$(echo "scale=3; ($c_bytes / $original_c_bytes)*100" | bc)
 gain=$(echo "scale=3; (1-($c_bytes / $original_c_bytes))*100" | bc)
-c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_fa_$PARTITION_l$LEVEL-t8.txt)
-c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_$PARTITION_l$LEVEL-t8.txt)
-d_bytes=$(awk 'FNR ==3 {print $1}' $IN_FILE_SHORT_NAME-size_d_$PARTITION_l$LEVEL-t8.txt)
-d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_fa_d_$PARTITION_l$LEVEL-t8.txt)
-d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_d_$PARTITION_l$LEVEL-t8.txt)
+c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_fa_mfc_l$LEVEL-p$PARTITION-t8.txt)
+c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_mfc_l$LEVEL-p$PARTITION-t8.txt)
+d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_mfc_d_size_l$LEVEL-p$PARTITION-t8.txt)
+d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_fa_mfc_d_l$LEVEL-p$PARTITION-t8.txt)
+d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_mfc_d_l$LEVEL-p$PARTITION-t8.txt)
 diff=0
 if [ $bytes -eq $d_bytes ] 
  then
@@ -951,18 +957,19 @@ elif [[ $SORTING_ALGORITHM == "sortmf" ]]; then
 program="MFCOMPRESS_$IN_FILE_SHORT_NAME-sortmf"
 level=$LEVEL
 partition="$PARTITION"
-bytes=$(ls sort_$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
-c_bytes=$(awk 'FNR ==2 {print $1}' $IN_FILE_SHORT_NAME-size_$PARTITION-l$LEVEL-t8.txt)
-original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-size_$PARTITION-l$LEVEL-t8.txt)
+#bytes=$(ls sort_$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
+bytes=$(ls -la sort_$IN_FILE_SHORT_NAME.fasta |awk '{print $5;}')
+c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_mfc_size_l$LEVEL-p$PARTITION-t8.txt)
+original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-mfc_size_l$LEVEL-p$PARTITION-t8.txt)
 bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
 bps_final=$(echo "scale=3; ($c_bytes * 8) / $bytes" | bc)
 #gain=$(echo "scale=3; ($c_bytes / $original_c_bytes)*100" | bc)
 gain=$(echo "scale=3; (1-($c_bytes / $original_c_bytes))*100" | bc)
-c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_$PARTITION-l$LEVEL-t8.txt)
-c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_$PARTITION_MB-l$LEVEL-t8.txt)
-d_bytes=$(awk 'FNR ==2 {print $1}' $IN_FILE_SHORT_NAME-size_d_$PARTITION_MB-l$LEVEL-t8.txt)
-d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_d_$PARTITION_MB-l$LEVEL-t8.txt)
-d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_d_$PARTITION_MB-l$LEVEL-t8.txt)
+c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_mfc_l$LEVEL-p$PARTITION-t8.txt)
+c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_mfc_l$LEVEL-p$PARTITION-t8.txt)
+d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_mfc_d_size_l$LEVEL-p$PARTITION-t8.txt)
+d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_mfc_d_l$LEVEL-p$PARTITION-t8.txt)
+d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_mfc_d_l$LEVEL-p$PARTITION-t8.txt)
 diff=0
 if [ $bytes -eq $d_bytes ] 
  then
@@ -1005,18 +1012,19 @@ else
 program="MFCOMPRESS_$IN_FILE_SHORT_NAME"
 level=$LEVEL
 partition="$PARTITION"
-bytes=$(ls $IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
-c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-size_$PARTITION-l$LEVEL.txt)
-original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-size_$PARTITION-l$LEVEL.txt)
+#bytes=$(ls $IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
+bytes=$(ls -la $IN_FILE_SHORT_NAME.fasta |awk '{print $5;}')
+c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-mfc_size_l$LEVEL-p$PARTITION-t8.txt)
+original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-mfc_size_l$LEVEL-p$PARTITION-t8.txt)
 bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
 bps_final=$(echo "scale=3; ($c_bytes * 8) / $bytes" | bc)
 #gain=$(echo "scale=3; ($c_bytes / $original_c_bytes)*100" | bc)
 gain=$(echo "scale=3; (1-($c_bytes / $original_c_bytes))*100" | bc)
-c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-$PARTITION-l$LEVEL-t8.txt)
-c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-$PARTITION-l$LEVEL-t8.txt)
-d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-size_d_$PARTITION-l$LEVEL-t8.txt)
-d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-d_$PARTITION-l$LEVEL-t8.txt)
-d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-d_$PARTITION-l$LEVEL-t8.txt)
+c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-mfc_l$LEVEL-p$PARTITION-t8.txt)
+c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-mfc_l$LEVEL-p$PARTITION-t8.txt)
+d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-mfc_d_size_l$LEVEL-p$PARTITION-t8.txt)
+d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-mfc_d_l$LEVEL-p$PARTITION-t8.txt)
+d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-mfc_d_l$LEVEL-p$PARTITION-t8.txt)
 diff=0
 if [ $bytes -eq $d_bytes ] 
  then
@@ -1057,7 +1065,6 @@ EOF
 fi
 
 }
-
 function CSV_BUILDER_GZIP(){
 
 IN_FILE="$1";
@@ -1071,20 +1078,21 @@ SORTING_ALGORITHM="$3";
 
 if [[ $SORTING_ALGORITHM == "fasta_analysis" ]]; then  
 
-program="GZIP_$IN_FILE_SHORT_NAME-fasta_analysis"
+program="gzip_$IN_FILE_SHORT_NAME-fasta_analysis"
 level=$LEVEL
-bytes=$(ls sort_fanalysis_$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
-c_bytes=$(awk 'FNR ==3 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_size_gzip-l$LEVEL.txt)
-original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_size_gzip-l$LEVEL.txt)
+#bytes=$(ls sort_fanalysis_$IN_FILE_SHORT_NAME* -la -ltr | grep \.fasta$ |awk '{print $5;}')
+bytes=$(ls -la sort_fanalysis_$IN_FILE_SHORT_NAME.fasta |awk '{print $5;}')
+c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_gzip_size_l$LEVEL.txt)
+original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-gzip_size_l$LEVEL.txt)
 bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
 bps_final=$(echo "scale=3; ($c_bytes * 8) / $bytes" | bc)
 #gain=$(echo "scale=3; ($c_bytes / $original_c_bytes)*100" | bc)
 gain=$(echo "scale=3; (1-($c_bytes / $original_c_bytes))*100" | bc)
-c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_fa_gzip-l$LEVEL.txt)
-c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_gzip-l$LEVEL.txt)
-d_bytes=$(awk 'FNR ==3 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_size_d_gzip-l$LEVEL.txt)
-d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_fa_d_gzip-l$LEVEL.txt)
-d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_d_gzip-l$LEVEL.txt)
+c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_fa_gzip_l$LEVEL.txt)
+c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_gzip_l$LEVEL.txt)
+d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_gunzip_size_l$LEVEL.txt)
+d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_fa_gunzip_l$LEVEL.txt)
+d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_gunzip_l$LEVEL.txt)
 diff=0
 if [ $bytes -eq $d_bytes ] 
  then
@@ -1126,18 +1134,19 @@ elif [[ $SORTING_ALGORITHM == "sortmf" ]]; then
 
 program="gzip_$IN_FILE_SHORT_NAME-sortmf"
 level=$LEVEL
-bytes=$(ls sort_$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
-c_bytes=$(awk 'FNR ==2 {print $1}' $IN_FILE_SHORT_NAME-sort_size_gzip-l$LEVEL.txt)
-original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_size_gzip-l$LEVEL.txt)
+#bytes=$(ls sort_$IN_FILE_SHORT_NAME* -la -ltr | grep \.fasta$ |awk '{print $5;}')
+bytes=$(ls -la sort_$IN_FILE_SHORT_NAME.fasta |awk '{print $5;}')
+c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_gzip_size_l$LEVEL.txt)
+original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-gzip_size_l$LEVEL.txt)
 bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
 bps_final=$(echo "scale=3; ($c_bytes * 8) / $bytes" | bc)
 #gain=$(echo "scale=3; ($c_bytes / $original_c_bytes)*100" | bc)
 gain=$(echo "scale=3; (1-($c_bytes / $original_c_bytes))*100" | bc)
-c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_gzip-l$LEVEL.txt)
-c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_gzip-l$LEVEL.txt)
-d_bytes=$(awk 'FNR ==2 {print $1}' $IN_FILE_SHORT_NAME-sort_size_d_gzip-l$LEVEL.txt)
-d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_d_gzip-l$LEVEL.txt)
-d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_d_gzip-l$LEVEL.txt)
+c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_gzip_l$LEVEL.txt)
+c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_gzip_l$LEVEL.txt)
+d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_gunzip_size_l$LEVEL.txt)
+d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_gunzip_l$LEVEL.txt)
+d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_gunzip_l$LEVEL.txt)
 diff=0
 if [ $bytes -eq $d_bytes ] 
  then
@@ -1176,20 +1185,21 @@ EOF
 
 else
 
-program="gzip_$IN_FILE_SHORT_NAME-sortmf"
+program="gzip_$IN_FILE_SHORT_NAME"
 level=$LEVEL
-bytes=$(ls $IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
-c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-size_gzip-l$LEVEL.txt)
-original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-size_gzip-l$LEVEL.txt)
+#bytes=$(ls $IN_FILE_SHORT_NAME* -la -ltr | grep \.fasta$ |awk '{print $5;}')
+bytes=$(ls -la $IN_FILE_SHORT_NAME.fasta |awk '{print $5;}')
+c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-gzip_size_l$LEVEL.txt)
+original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-gzip_size_l$LEVEL.txt)
 bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
 bps_final=$(echo "scale=3; ($c_bytes * 8) / $bytes" | bc)
 #gain=$(echo "scale=3; ($c_bytes / $original_c_bytes)*100" | bc)
 gain=$(echo "scale=3; (1-($c_bytes / $original_c_bytes))*100" | bc)
-c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-gzip-l$LEVEL.txt)
-c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-gzip-l$LEVEL.txt)
-d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-size_d_gzip-l$LEVEL.txt)
-d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-d_gzip-l$LEVEL.txt)
-d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-d_gzip-l$LEVEL.txt)
+c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-gzip_l$LEVEL.txt)
+c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-gzip_l$LEVEL.txt)
+d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-gunzip_size_l$LEVEL.txt)
+d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-gunzip_l$LEVEL.txt)
+d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-gunzip_l$LEVEL.txt)
 diff=0
 if [ $bytes -eq $d_bytes ] 
  then
@@ -1230,6 +1240,7 @@ fi
 
 }
 
+
 function CSV_BUILDER_LZMA(){
 
 IN_FILE="$1";
@@ -1247,17 +1258,17 @@ if [[ $SORTING_ALGORITHM == "fasta_analysis" ]]; then
 program="lzma_$IN_FILE_SHORT_NAME-fasta_analysis"
 level=$LEVEL
 bytes=$(ls sort_fanalysis_$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
-c_bytes=$(awk 'FNR ==3 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_size_lzma-l$LEVEL.txt)
-original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_size_lzma-l$LEVEL.txt)
+c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_lzma_size_l$LEVEL.txt)
+original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-lzma_size_l$LEVEL.txt)
 bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
 bps_final=$(echo "scale=3; ($c_bytes * 8) / $bytes" | bc)
 #gain=$(echo "scale=3; ($c_bytes / $original_c_bytes)*100" | bc)
 gain=$(echo "scale=3; (1-($c_bytes / $original_c_bytes))*100" | bc)
-c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_fa_lzma-l$LEVEL.txt)
-c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_lzma-l$LEVEL.txt)
-d_bytes=$(awk 'FNR ==3 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_size_d_lzma-l$LEVEL.txt)
-d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_fa_d_lzma-l$LEVEL.txt)
-d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_d_lzma-l$LEVEL.txt)
+c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_fa_lzma_l$LEVEL.txt)
+c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_lzma_l$LEVEL.txt)
+d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_lzma_d_size_l$LEVEL.txt)
+d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_fa_lzma_d_l$LEVEL.txt)
+d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_lzma_d_l$LEVEL.txt)
 diff=0
 if [ $bytes -eq $d_bytes ] 
  then
@@ -1300,17 +1311,17 @@ elif [[ $SORTING_ALGORITHM == "sortmf" ]]; then
 program="lzma_$IN_FILE_SHORT_NAME-sortmf"
 level=$LEVEL
 bytes=$(ls sort_$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
-c_bytes=$(awk 'FNR ==2 {print $1}' $IN_FILE_SHORT_NAME-sort_size_lzma-l$LEVEL.txt)
-original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_size_lzma-l$LEVEL.txt)
+c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_lzma_size_l$LEVEL.txt)
+original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-lzma_size_l$LEVEL.txt)
 bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
 bps_final=$(echo "scale=3; ($c_bytes * 8) / $bytes" | bc)
 #gain=$(echo "scale=3; ($c_bytes / $original_c_bytes)*100" | bc)
 gain=$(echo "scale=3; (1-($c_bytes / $original_c_bytes))*100" | bc)
-c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_lzma-l$LEVEL.txt)
-c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_lzma-l$LEVEL.txt)
-d_bytes=$(awk 'FNR ==2 {print $1}' $IN_FILE_SHORT_NAME-sort_size_d_lzma-l$LEVEL.txt)
-d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_d_lzma-l$LEVEL.txt)
-d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_d_lzma-l$LEVEL.txt)
+c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_lzma_l$LEVEL.txt)
+c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_lzma_l$LEVEL.txt)
+d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_lzma_d_size_l$LEVEL.txt)
+d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_lzma_d_l$LEVEL.txt)
+d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_lzma_d_l$LEVEL.txt)
 diff=0
 if [ $bytes -eq $d_bytes ] 
  then
@@ -1349,20 +1360,20 @@ EOF
 
 else
 
-program="lzma_$IN_FILE_SHORT_NAME-sortmf"
+program="lzma_$IN_FILE_SHORT_NAME"
 level=$LEVEL
 bytes=$(ls $IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
-c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-size_lzma-l$LEVEL.txt)
-original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-size_lzma-l$LEVEL.txt)
+c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-lzma_size_l$LEVEL.txt)
+original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-lzma_size_l$LEVEL.txt)
 bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
 bps_final=$(echo "scale=3; ($c_bytes * 8) / $bytes" | bc)
 #gain=$(echo "scale=3; ($c_bytes / $original_c_bytes)*100" | bc)
 gain=$(echo "scale=3; (1-($c_bytes / $original_c_bytes))*100" | bc)
-c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-lzma-l$LEVEL.txt)
-c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-lzma-l$LEVEL.txt)
-d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-size_d_lzma-l$LEVEL.txt)
-d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-d_lzma-l$LEVEL.txt)
-d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-d_lzma-l$LEVEL.txt)
+c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-lzma_l$LEVEL.txt)
+c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-lzma_l$LEVEL.txt)
+d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-lzma_d_size_l$LEVEL.txt)
+d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-lzma_d_l$LEVEL.txt)
+d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-lzma_d_l$LEVEL.txt)
 diff=0
 if [ $bytes -eq $d_bytes ] 
  then
@@ -1404,179 +1415,7 @@ fi
 
 }
 
-function CSV_BUILDER_BZIP2(){
 
-IN_FILE="$1";
-LEVEL="$2";
-SORTING_ALGORITHM="$3";
-
-  IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fasta//g')
-  echo $IN_FILE_SHORT_NAME
-
-  # $IN_FILE_SHORT_NAME-naf_l$LEVEL.txt
-  # $IN_FILE_SHORT_NAME-naf_size_l$LEVEL.txt
-
-
-if [[ $SORTING_ALGORITHM == "fasta_analysis" ]]; then  
-
-program="bzip2_$IN_FILE_SHORT_NAME-fasta_analysis"
-level=$LEVEL
-bytes=$(ls sort_fanalysis_$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
-c_bytes=$(awk 'FNR ==3 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_size_bzip2-l$LEVEL.txt)
-original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_size_bzip2-l$LEVEL.txt)
-bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
-bps_final=$(echo "scale=3; ($c_bytes * 8) / $bytes" | bc)
-#gain=$(echo "scale=3; ($c_bytes / $original_c_bytes)*100" | bc)
-gain=$(echo "scale=3; (1-($c_bytes / $original_c_bytes))*100" | bc)
-c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_fa_bzip2-l$LEVEL.txt)
-c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_bzip2-l$LEVEL.txt)
-d_bytes=$(awk 'FNR ==3 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_size_d_bzip2-l$LEVEL.txt)
-d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_fa_d_bzip2-l$LEVEL.txt)
-d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_d_bzip2-l$LEVEL.txt)
-diff=0
-if [ $bytes -eq $d_bytes ] 
- then
-  diff=0
-else
-  diff=1
-fi
-run=0
-
-printf $program | tee program_x
-printf $bytes | tee bytes_x
-printf $level | tee level_x
-printf $c_bytes | tee c_bytes_x
-printf $bps_original | tee bps_original_x
-printf $bps_final | tee bps_final_x
-printf $gain | tee gain_x
-printf $c_time | tee c_time_x
-printf $c_mem | tee c_mem_x
-printf $d_time | tee d_time_x
-printf $d_mem | tee d_mem_x
-printf $diff | tee diff_x
-printf $run | tee run_x
- 
-
-file="data_bzip2.csv"
-
-{
-ed -s "$file" <<EOF
-1
-i
-$program,$level,$bytes,$c_bytes,$bps_original,$bps_final,$gain,$c_time,$c_mem,$d_time,$d_mem,$diff,$run
-.
-wq
-EOF
-}
-
-
-elif [[ $SORTING_ALGORITHM == "sortmf" ]]; then  
-
-program="bzip2_$IN_FILE_SHORT_NAME-sortmf"
-level=$LEVEL
-bytes=$(ls sort_$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
-c_bytes=$(awk 'FNR ==2 {print $1}' $IN_FILE_SHORT_NAME-sort_size_bzip2-l$LEVEL.txt)
-original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_size_bzip2-l$LEVEL.txt)
-bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
-bps_final=$(echo "scale=3; ($c_bytes * 8) / $bytes" | bc)
-#gain=$(echo "scale=3; ($c_bytes / $original_c_bytes)*100" | bc)
-gain=$(echo "scale=3; (1-($c_bytes / $original_c_bytes))*100" | bc)
-c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_bzip2-l$LEVEL.txt)
-c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_bzip2-l$LEVEL.txt)
-d_bytes=$(awk 'FNR ==2 {print $1}' $IN_FILE_SHORT_NAME-sort_size_d_bzip2-l$LEVEL.txt)
-d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_d_bzip2-l$LEVEL.txt)
-d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_d_bzip2-l$LEVEL.txt)
-diff=0
-if [ $bytes -eq $d_bytes ] 
- then
-  diff=0
-else
-  diff=1
-fi
-run=0
-
-printf $program | tee program_x
-printf $bytes | tee bytes_x
-printf $level | tee level_x
-printf $c_bytes | tee c_bytes_x
-printf $bps_original | tee bps_original_x
-printf $bps_final | tee bps_final_x
-printf $gain | tee gain_x
-printf $c_time | tee c_time_x
-printf $c_mem | tee c_mem_x
-printf $d_time | tee d_time_x
-printf $d_mem | tee d_mem_x
-printf $diff | tee diff_x
-printf $run | tee run_x
- 
-
-file="data_bzip2.csv"
-
-{
-ed -s "$file" <<EOF
-1
-i
-$program,$level,$bytes,$c_bytes,$bps_original,$bps_final,$gain,$c_time,$c_mem,$d_time,$d_mem,$diff,$run
-.
-wq
-EOF
-}
-
-else
-
-program="bzip2_$IN_FILE_SHORT_NAME-sortmf"
-level=$LEVEL
-bytes=$(ls $IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
-c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-size_bzip2-l$LEVEL.txt)
-original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-size_bzip2-l$LEVEL.txt)
-bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
-bps_final=$(echo "scale=3; ($c_bytes * 8) / $bytes" | bc)
-#gain=$(echo "scale=3; ($c_bytes / $original_c_bytes)*100" | bc)
-gain=$(echo "scale=3; (1-($c_bytes / $original_c_bytes))*100" | bc)
-c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-bzip2-l$LEVEL.txt)
-c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-bzip2-l$LEVEL.txt)
-d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-size_d_bzip2-l$LEVEL.txt)
-d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-d_bzip2-l$LEVEL.txt)
-d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-d_bzip2-l$LEVEL.txt)
-diff=0
-if [ $bytes -eq $d_bytes ] 
- then
-  diff=0
-else
-  diff=1
-fi
-run=0
-
-printf $program | tee program_x
-printf $bytes | tee bytes_x
-printf $level | tee level_x
-printf $c_bytes | tee c_bytes_x
-printf $bps_original | tee bps_original_x
-printf $bps_final | tee bps_final_x
-printf $gain | tee gain_x
-printf $c_time | tee c_time_x
-printf $c_mem | tee c_mem_x
-printf $d_time | tee d_time_x
-printf $d_mem | tee d_mem_x
-printf $diff | tee diff_x
-printf $run | tee run_x
- 
-
-file="data_bzip2.csv"
-
-{
-ed -s "$file" <<EOF
-1
-i
-$program,$level,$bytes,$c_bytes,$bps_original,$bps_final,$gain,$c_time,$c_mem,$d_time,$d_mem,$diff,$run
-.
-wq
-EOF
-}
-
-fi
-
-}
 
 function PLOT_JARVIS3(){
 #rm *.csv
@@ -1585,6 +1424,7 @@ JARVIS_CSV="data_jarvis3"
 
   # IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fasta//g')
   # echo $IN_FILE_SHORT_NAME
+echo "$(sort -t$',' -k9 $JARVIS_CSV.csv)" > "$JARVIS_CSV.csv"
 
 #Build CSV for each partition
  cat $JARVIS_CSV.csv | grep -w "10MB" > $JARVIS_CSV-10mb.csv
@@ -1600,17 +1440,17 @@ cat $JARVIS_CSV.csv | grep -v -e "fasta_analysis" | grep -v -e "sortmf" | grep -
 #Build CSV combining partition with sorting algorithm
 #JARVIS_CSV="data_jarvis3"
  cat $JARVIS_CSV-10mb.csv | grep -e "sortmf" > $JARVIS_CSV-10mb_sortmf.csv
-  echo "$(sort -t$',' -k2 $JARVIS_CSV-10mb_sortmf.csv)" > "$JARVIS_CSV-10mb_sortmf.csv"
+  #echo "$(sort -t$',' -k9 $JARVIS_CSV-10mb_sortmf.csv)" > "$JARVIS_CSV-10mb_sortmf.csv"
  cat $JARVIS_CSV-100mb.csv | grep -e "sortmf" > $JARVIS_CSV-100mb_sortmf.csv
-  echo "$(sort -t$',' -k2 $JARVIS_CSV-100mb_sortmf.csv)" > "$JARVIS_CSV-100mb_sortmf.csv"
+  #echo "$(sort -t$',' -k9 $JARVIS_CSV-100mb_sortmf.csv)" > "$JARVIS_CSV-100mb_sortmf.csv"
  cat $JARVIS_CSV-1gb.csv | grep -e "sortmf" > $JARVIS_CSV-1gb_sortmf.csv
-  echo "$(sort -t$',' -k2 $JARVIS_CSV-1gb_sortmf.csv)" > "$JARVIS_CSV-1gb_sortmf.csv"
+  #echo "$(sort -t$',' -k9 $JARVIS_CSV-1gb_sortmf.csv)" > "$JARVIS_CSV-1gb_sortmf.csv"
  cat $JARVIS_CSV-10mb.csv | grep -e "fasta_analysis" > $JARVIS_CSV-10mb_fasta_analysis.csv
-  echo "$(sort -t$',' -k2 $JARVIS_CSV-10mb_fasta_analysis.csv)" > "$JARVIS_CSV-10mb_fasta_analysis.csv"
+  #echo "$(sort -t$',' -k9 $JARVIS_CSV-10mb_fasta_analysis.csv)" > "$JARVIS_CSV-10mb_fasta_analysis.csv"
  cat $JARVIS_CSV-100mb.csv | grep -e "fasta_analysis" > $JARVIS_CSV-100mb_fasta_analysis.csv
-   echo "$(sort -t$',' -k2 $JARVIS_CSV-100mb_fasta_analysis.csv)" > "$JARVIS_CSV-100mb_fasta_analysis.csv"
+  # echo "$(sort -t$',' -k9 $JARVIS_CSV-100mb_fasta_analysis.csv)" > "$JARVIS_CSV-100mb_fasta_analysis.csv"
  cat $JARVIS_CSV-1gb.csv | grep -e "fasta_analysis" > $JARVIS_CSV-1gb_fasta_analysis.csv
-   echo "$(sort -t$',' -k2 $JARVIS_CSV-1gb_fasta_analysis.csv)" > "$JARVIS_CSV-1gb_fasta_analysis.csv"
+  # echo "$(sort -t$',' -k9 $JARVIS_CSV-1gb_fasta_analysis.csv)" > "$JARVIS_CSV-1gb_fasta_analysis.csv"
 
 
 
@@ -1639,7 +1479,7 @@ cat $JARVIS_CSV.csv | grep -v -e "fasta_analysis" | grep -v -e "sortmf" | grep -
         set style histogram clustered gap 1 title textcolor lt -1
         set xtics border in scale 0,0 nomirror #rotate by -60  autojustify
         set yrange [-50:70]
-        set xrange [0:1000]
+        set xrange [0:6000]
         set xtics auto
         set ytics auto # set ytics auto
         set key top right
@@ -1710,7 +1550,7 @@ INPUT_FILE="test.fasta"
 #echo $INPUT_FILE_SHORT_NAME
 
 #{  /bin/time -f "TIME\t%e\tMEM\t%M" ./FASTA_ANALY -sort=S $INPUT_FILE sort_fanalysis_$INPUT_FILE 5 ;  } 2>>ordering_times.txt 
-#{  /bin/time -f "TIME\t%e\tMEM\t%M" ./a.out $INPUT_FILE sort_$INPUT_FILE ;  } 2>> sortmf_times.txt
+#{  /bin/time -f "TIME\t%e\tMEM\t%M" ./sortmf $INPUT_FILE sort_$INPUT_FILE ;  } 2>> sortmf_times.txt
 
 #Tests performed by
 #JARVIS3 
@@ -1735,20 +1575,22 @@ levels_array=("1")
 #  done
 # done
 
-# #CSV_BUILDER JARVIS3
-# for ((i=${#levels_array[@]}-1; i>=0; i--))
-#  do
-#   for ((j=${#partitions_array[@]}-1; j>=0; j--))
-#    do
-#     for ((k=${#program[@]}-1; k>=0; k--))
-#      do
-#       CSV_BUILDER_JARVIS3 $INPUT_FILE ${levels_array[i]} ${partitions_array[j]} ${partitions_in_mb[j]} ${program[k]}
+#CSV_BUILDER JARVIS3
+for ((i=${#levels_array[@]}-1; i>=0; i--))
+ do
+  for ((j=${#partitions_array[@]}-1; j>=0; j--))
+   do
+    for ((k=${#program[@]}-1; k>=0; k--))
+     do
+      CSV_BUILDER_JARVIS3 $INPUT_FILE ${levels_array[i]} ${partitions_array[j]} ${partitions_in_mb[j]} ${program[k]}
 
-#      done
-#     done
-#    done
+     done
+    done
+   done
 
-#       PLOT_JARVIS3 "data_jarvis3.csv" $partitions_array
+      
+     BUILD_CSV_HEADER_1 "jarvis3" 
+      PLOT_JARVIS3 "data_jarvis3.csv" $partitions_array
 
 
 #NAF
@@ -1798,6 +1640,7 @@ done
 BUILD_CSV_HEADER_1 "mbgc"
 
 
+rm "data_mfcompress.csv"
 #MFC
 #levels_array=("0" "1" "2" "3")
 partitions_array=("1" "4" "8")
@@ -1825,11 +1668,13 @@ done
     done
    done
 
+   BUILD_CSV_HEADER_2 "mfcompress"
+
 #General Use Compressors
 #levels_array=("1" "4" "7" "9")
 levels_array=("1")
 #gzip
-
+rm "data_gzip.csv"
 #execution mode
 for((i=0; i<${#levels_array[@]}; i++)); do
 
@@ -1837,18 +1682,25 @@ for((i=0; i<${#levels_array[@]}; i++)); do
 done
 
   #CSV_BUILDER_GZIP
+   #CSV_BUILDER_GZIP
    for ((i=${#levels_array[@]}-1; i>=0; i--))
    do
-   for ((k=${#program[@]}-1; k>=0; k--))
+   for ((j=${#program[@]}-1; j>=0; j--))
      do
       CSV_BUILDER_GZIP $INPUT_FILE ${levels_array[i]} ${program[j]}
    done
   done
 
 
+BUILD_CSV_HEADER_1 "gzip"
+
 #lzma
 #levels_array=("1" "4" "7" "9")
+
+
+rm "data_lzma.csv"
 levels=("1")
+#program=("" "sortmf" "fasta_analysis")
 #execution mode
 for((i=0; i<${#levels_array[@]}; i++)); do
 
@@ -1858,15 +1710,17 @@ done
   #CSV_BUILDER_LZMA
    for ((i=${#levels_array[@]}-1; i>=0; i--))
    do
-   for ((k=${#program[@]}-1; k>=0; k--))
+   for ((j=${#program[@]}-1; j>=0; j--))
      do
       CSV_BUILDER_LZMA $INPUT_FILE ${levels_array[i]} ${program[j]}
    done
   done
 
+  BUILD_CSV_HEADER_1 "lzma"
 
 #bzip2
 #levels_array=("1" "4" "7" "9")
+rm "data_bzip2.csv"
 levels_array=("1")
 #execution mode
 for((i=0; i<${#levels_array[@]}; i++)); do
@@ -1877,12 +1731,13 @@ done
 #CSV_BUILDER_BZIP2
   for ((i=${#levels_array[@]}-1; i>=0; i--))
    do
-   for ((k=${#program[@]}-1; k>=0; k--))
+   for ((j=${#program[@]}-1; >=0; j--))
      do
       CSV_BUILDER_BZIP2 $INPUT_FILE ${levels_array[i]} ${program[j]}
    done
   done
 
+   BUILD_CSV_HEADER_1 "bzip2"
 
   #PLOT CREATION
 
