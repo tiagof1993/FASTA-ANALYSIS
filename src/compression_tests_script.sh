@@ -125,7 +125,8 @@ EOF
 
 
 function BUILD_CSV_HEADER_2(){
-  COMPRESSOR="$1";
+
+COMPRESSOR="$1";
 file="data_$COMPRESSOR.csv"
 
 {
@@ -168,24 +169,25 @@ function JARVIS3_COMPRESSION(){
   #   PARTITION_MB="1000"
   # fi
 
-  { /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -l $LEVEL --block $PARTITION --fasta -i $IN_FILE ; } 2> $IN_FILE_SHORT_NAME-$PARTITION_MB-l$LEVEL.txt
-  { /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -l $LEVEL --block $PARTITION --fasta -i sort_$IN_FILE ; } 2> $IN_FILE_SHORT_NAME-sort_$PARTITION_MB-l$LEVEL.txt
-  { /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -l $LEVEL --block $PARTITION --fasta -i sort_fanalysis_$IN_FILE ; } 2> $IN_FILE_SHORT_NAME-sort_fa_$PARTITION_MB-l$LEVEL.txt
+  { /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -l $LEVEL --block $PARTITION --fasta -i $IN_FILE ; } 2>$IN_FILE_SHORT_NAME-$PARTITION_MB-l$LEVEL.txt
+  { /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -l $LEVEL --block $PARTITION --fasta -i sort_$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_$PARTITION_MB-l$LEVEL.txt
+  { /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -l $LEVEL --block $PARTITION --fasta -i sort_fanalysis_$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_fa_$PARTITION_MB-l$LEVEL.txt
 
   { ls $IN_FILE* -la -ltr | grep \.tar$ | awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-size_$PARTITION_MB-l$LEVEL.txt
   { ls sort_$IN_FILE* -la -ltr | grep \.tar$ | awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_size_$PARTITION_MB-l$LEVEL.txt
   { ls sort_fanalysis_$IN_FILE* -la -ltr | grep \.tar$ | awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_size_$PARTITION_MB-l$LEVEL.txt
 
-  { /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -d -l $LEVEL --fasta -i $IN_FILE.tar ;  } 2> $IN_FILE_SHORT_NAME-d_$PARTITION_MB-l$LEVEL.txt
-  { /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -d -l $LEVEL --fasta -i sort_$IN_FILE.tar ;  } 2> $IN_FILE_SHORT_NAME-sort_d_$PARTITION-l$LEVEL.txt
-  { /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -d -l $LEVEL --fasta -i sort_fanalysis_$IN_FILE.tar ;  } 2>> $IN_FILE_SHORT_NAME-sort_fa_d_$PARTITION-l$LEVEL.txt
+  { /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -d -l $LEVEL --fasta -i $IN_FILE.tar ;  } 2>$IN_FILE_SHORT_NAME-d_$PARTITION_MB-l$LEVEL.txt
+  { /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -d -l $LEVEL --fasta -i sort_$IN_FILE.tar ;  } 2>$IN_FILE_SHORT_NAME-sort_d_$PARTITION_MB-l$LEVEL.txt
+  { /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -d -l $LEVEL --fasta -i sort_fanalysis_$IN_FILE.tar ;  } 2>$IN_FILE_SHORT_NAME-sort_fa_d_$PARTITION_MB-l$LEVEL.txt
 
-  { ls $IN_FILE* -la -ltr | grep \.tar.out$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-size_d_$PARTITION-l$LEVEL.txt
-  { ls sort_$IN_FILE* -la -ltr | grep \.tar.out$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_size_d_$PARTITION-l$LEVEL.txt
-  { ls sort_fanalysis_$IN_FILE* -la -ltr | grep \.tar.out$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_size_d_$PARTITION-l$LEVEL.txt
+  { ls $IN_FILE* -la -ltr | grep \.tar.out$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-size_d_$PARTITION_MB-l$LEVEL.txt
+  { ls sort_$IN_FILE* -la -ltr | grep \.tar.out$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_size_d_$PARTITION_MB-l$LEVEL.txt
+  { ls sort_fanalysis_$IN_FILE* -la -ltr | grep \.tar.out$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_size_d_$PARTITION_MB-l$LEVEL.txt
 
 
 }
+
 
 
 function NAF_COMPRESSION() {
@@ -195,6 +197,8 @@ function NAF_COMPRESSION() {
   IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fasta//g')
   echo $IN_FILE_SHORT_NAME
 
+  echo "NAF Level" $LEVEL "compression"
+
 { /bin/time -f "TIME\t%e\tMEM\t%M"  ennaf --strict --temp-dir tmp/ --dna --level $LEVEL $IN_FILE ; } 2>$IN_FILE_SHORT_NAME-naf_l$LEVEL.txt
 { /bin/time -f "TIME\t%e\tMEM\t%M"  ennaf --strict --temp-dir tmp/ --dna --level $LEVEL sort_$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_naf_l$LEVEL.txt
 { /bin/time -f "TIME\t%e\tMEM\t%M"  ennaf --strict --temp-dir tmp/ --dna --level $LEVEL sort_fanalysis_$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_fa_naf_l$LEVEL.txt
@@ -203,13 +207,15 @@ function NAF_COMPRESSION() {
 { ls sort_$IN_FILE* -la -ltr | grep \.naf$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_naf_size_l$LEVEL.txt
 { ls sort_fanalysis_$IN_FILE* -la -ltr | grep \.naf$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_naf_size_l$LEVEL.txt
 
+echo "NAF Level" $LEVEL "decompression" 
+
 { /bin/time -f "TIME\t%e\tMEM\t%M" unnaf  $IN_FILE.naf -o $IN_FILE_SHORT_NAME-naf.fasta ; } 2>$IN_FILE_SHORT_NAME-unnaf_l$LEVEL.txt
 { /bin/time -f "TIME\t%e\tMEM\t%M" unnaf  sort_$IN_FILE.naf -o sort_$IN_FILE_SHORT_NAME-naf.fasta ; } 2>$IN_FILE_SHORT_NAME-sort_unnaf_l$LEVEL.txt
 { /bin/time -f "TIME\t%e\tMEM\t%M" unnaf  sort_fanalysis_$IN_FILE.naf -o sort_fanalysis_$IN_FILE_SHORT_NAME-naf.fasta ; } 2>$IN_FILE_SHORT_NAME-sort_fa_unnaf_l$LEVEL.txt
 
-{ ls $IN_FILE* -la -ltr | grep \._naf.fasta$ |awk '{print $5;}' ; } > $IN_FILE_SHORT_NAME-unnaf_size_l$LEVEL.txt
-{ ls sort_$IN_FILE* -la -ltr | grep \._naf.fasta$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_unnaf_size_l$LEVEL.txt
-{ ls sort_fanalysis_$IN_FILE* -la -ltr | grep \._naf.fasta$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_unnaf_size_l$LEVEL.txt
+{ ls $IN_FILE_SHORT_NAME* -la -ltr | grep \naf.fasta$ |awk '{print $5;}' ; } > $IN_FILE_SHORT_NAME-unnaf_size_l$LEVEL.txt
+{ ls sort_$IN_FILE_SHORT_NAME* -la -ltr | grep \naf.fasta$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_unnaf_size_l$LEVEL.txt
+{ ls sort_fanalysis_$IN_FILE_SHORT_NAME* -la -ltr | grep \naf.fasta$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_unnaf_size_l$LEVEL.txt
 
 }
 
@@ -220,9 +226,9 @@ function MBGC_COMPRESSION() {
   IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fasta//g')
   echo $IN_FILE_SHORT_NAME
 
-rm $IN_FILE $IN_FILE_SHORT_NAME.mbgc
-rm sort_$IN_FILE $IN_FILE_SHORT_NAME.mbgc
-rm sort_fanalysis_$IN_FILE $IN_FILE_SHORT_NAME.mbgc
+rm $IN_FILE_SHORT_NAME.mbgc
+rm sort_$IN_FILE_SHORT_NAME.mbgc
+rm sort_fanalysis_$IN_FILE_SHORT_NAME.mbgc
 
 { /bin/time -f "TIME\t%e\tMEM\t%M" mbgc -c=$LEVEL -i $IN_FILE $IN_FILE_SHORT_NAME.mbgc ; } 2>$IN_FILE_SHORT_NAME-mbgc_l$LEVEL.txt 
 { /bin/time -f "TIME\t%e\tMEM\t%M" mbgc -c=$LEVEL -i sort_$IN_FILE sort_$IN_FILE_SHORT_NAME.mbgc ; } 2>$IN_FILE_SHORT_NAME-sort_mbgc_l$LEVEL.txt
@@ -232,19 +238,27 @@ rm sort_fanalysis_$IN_FILE $IN_FILE_SHORT_NAME.mbgc
 { ls sort_$IN_FILE_SHORT_NAME* -la -ltr | grep \.mbgc$ |awk '{print $5;}'; } >  $IN_FILE_SHORT_NAME-sort_mbgc_size_l$LEVEL.txt
 { ls sort_fanalysis_$IN_FILE_SHORT_NAME* -la -ltr | grep \.mbgc$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_mbgc_size_l$LEVEL.txt
 
-{ /bin/time -f "TIME\t%e\tMEM\t%M" mbgc -d $IN_FILE_SHORT_NAME.mbgc mbgc_decompress ; } 2>$IN_FILE_SHORT_NAME-mbgc_d_l$LEVEL.txt 
-{ /bin/time -f "TIME\t%e\tMEM\t%M" mbgc -d sort_$IN_FILE_SHORT_NAME.mbgc sort_mbgc_decompress ; } 2>$IN_FILE_SHORT_NAME-sort_mbgc_d_l$LEVEL.txt 
-{ /bin/time -f "TIME\t%e\tMEM\t%M" mbgc -d sort_fanalysis_$IN_FILE_SHORT_NAME.mbgc sort_fanalysis_mbgc_decompress ; } 2>$IN_FILE_SHORT_NAME-sort_fa_mbgc_d_l$LEVEL.txt 
+{ /bin/time -f "TIME\t%e\tMEM\t%M" mbgc -d $IN_FILE_SHORT_NAME.mbgc mbgc_decompress_l$LEVEL ; } 2>$IN_FILE_SHORT_NAME-mbgc_d_l$LEVEL.txt 
+{ /bin/time -f "TIME\t%e\tMEM\t%M" mbgc -d sort_$IN_FILE_SHORT_NAME.mbgc sort_mbgc_decompress_l$LEVEL ; } 2>$IN_FILE_SHORT_NAME-sort_mbgc_d_l$LEVEL.txt 
+{ /bin/time -f "TIME\t%e\tMEM\t%M" mbgc -d sort_fanalysis_$IN_FILE_SHORT_NAME.mbgc sort_fanalysis_mbgc_decompress_l$LEVEL ; } 2>$IN_FILE_SHORT_NAME-sort_fa_mbgc_d_l$LEVEL.txt 
 
- #mbgc -d $IN_FILE_SHORT_NAME.mbgc mbgc_decompress
+#  mbgc -d $IN_FILE_SHORT_NAME.mbgc mbgc_decompress
 #  mv mbgc_decompress/$IN_FILE_SHORT_NAME.fasta $IN_FILE_SHORT_NAME-mbgc.fasta 
 #  mv sort_mbgc_decompress/sort_$IN_FILE_SHORT_NAME.fasta sort_$IN_FILE_SHORT_NAME-mbgc.fasta 
 #  mv sort_fanalysis_mbgc_decompress/sort_fanalysis_$IN_FILE_SHORT_NAME.fasta sort_fanalysis_$IN_FILE_SHORT_NAME-mbgc.fasta 
 
-
-{ ls $IN_FILE_SHORT_NAME* -la -ltr | grep \_mbgc.fasta$ |awk '{print $5;}' ; } >  $IN_FILE_SHORT_NAME-mbgc_d_size_l$LEVEL.txt
-{ ls sort_$IN_FILE_SHORT_NAME* -la -ltr | grep \_mbgc.fasta$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_mbgc_d_size_l$LEVEL.txt
-{ ls sort_fanalysis_$IN_FILE_SHORT_NAME* -la -ltr | grep \_mbgc.fasta$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_mbgc_d_size_l$LEVEL.txt
+cd mbgc_decompress_l$LEVEL
+{ ls $IN_FILE_SHORT_NAME* -la -ltr | grep \.fasta$ |awk '{print $5;}' ; } >  $IN_FILE_SHORT_NAME-mbgc_d_size_l$LEVEL.txt
+cd ..
+mv mbgc_decompress_l$LEVEL/$IN_FILE_SHORT_NAME-mbgc_d_size_l$LEVEL.txt $IN_FILE_SHORT_NAME-mbgc_d_size_l$LEVEL.txt
+cd sort_mbgc_decompress_l$LEVEL
+{ ls sort_$IN_FILE_SHORT_NAME* -la -ltr | grep \fasta$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_mbgc_d_size_l$LEVEL.txt
+cd ..
+mv sort_mbgc_decompress_l$LEVEL/$IN_FILE_SHORT_NAME-sort_mbgc_d_size_l$LEVEL.txt $IN_FILE_SHORT_NAME-sort_mbgc_d_size_l$LEVEL.txt
+cd sort_fanalysis_mbgc_decompress_l$LEVEL
+{ ls sort_fanalysis_$IN_FILE_SHORT_NAME* -la -ltr | grep \fasta$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_mbgc_d_size_l$LEVEL.txt
+cd ..
+mv sort_fanalysis_mbgc_decompress_l$LEVEL/$IN_FILE_SHORT_NAME-sort_fa_mbgc_d_size_l$LEVEL.txt $IN_FILE_SHORT_NAME-sort_fa_mbgc_d_size_l$LEVEL.txt
   
 }
 
@@ -275,7 +289,7 @@ function MFCOMPRESS_COMPRESSION(){
   
 }
 
-f
+
 function GZIP_COMPRESSION(){
   IN_FILE="$1";
   LEVEL="$2";
@@ -362,6 +376,8 @@ mv sort_fanalysis_$IN_FILE.bz2 sort_fanalysis_$IN_FILE_SHORT_NAME-c_b.fasta.bz2
 { ls sort_fanalysis_$IN_FILE_SHORT_NAME-c_b* -la -ltr | grep \.fasta$ |awk '{print $5;}'; } >  $IN_FILE_SHORT_NAME-sort_fa_bzip2_d_size_l$LEVEL.txt 
 
 }
+
+
 function CSV_BUILDER_JARVIS3(){
 
   IN_FILE="$1";
@@ -433,7 +449,6 @@ program="JARVIS3_$IN_FILE_SHORT_NAME-sortmf"
 level=$LEVEL
 partition="$PARTITION"
 bytes=$(ls sort_$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
-bytes=$(ls sort_fanalysis_$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
 c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_size_$PARTITION_MB-l$LEVEL.txt)
 original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-size_$PARTITION_MB-l$LEVEL.txt)
 bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
@@ -488,7 +503,6 @@ program="JARVIS3_$IN_FILE_SHORT_NAME"
 level=$LEVEL
 partition="$PARTITION"
 bytes=$(ls $IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
-bytes=$(ls sort_fanalysis_$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
 c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-size_$PARTITION_MB-l$LEVEL.txt)
 original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-size_$PARTITION_MB-l$LEVEL.txt)
 bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
@@ -730,8 +744,8 @@ if [[ $SORTING_ALGORITHM == "fasta_analysis" ]]; then
 program="MBGC_$IN_FILE_SHORT_NAME-fasta_analysis"
 level=$LEVEL
 bytes=$(ls sort_fanalysis_$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
-c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_mbgc_size-_l$LEVEL.txt)
-original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-mbgc_size-l$LEVEL.txt)
+c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_mbgc_size_l$LEVEL.txt)
+original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-mbgc_size_l$LEVEL.txt)
 bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
 bps_final=$(echo "scale=3; ($c_bytes * 8) / $bytes" | bc)
 #gain=$(echo "scale=3; ($c_bytes / $original_c_bytes)*100" | bc)
@@ -845,7 +859,7 @@ c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-mbgc_l$LEVEL.txt)
 c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-mbgc_l$LEVEL.txt)
 d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-mbgc_d_size-l$LEVEL.txt)
 d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-mbgc_d_l$LEVEL.txt)
-d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-d_mbgc_l$LEVEL.txt)
+d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-mbgc_d_l$LEVEL.txt)
 diff=0
 if [ $bytes -eq $d_bytes ] 
  then
@@ -1417,6 +1431,182 @@ fi
 
 
 
+function CSV_BUILDER_BZIP2(){
+
+IN_FILE="$1";
+LEVEL="$2";
+SORTING_ALGORITHM="$3";
+
+  IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fasta//g')
+  echo $IN_FILE_SHORT_NAME
+  # $IN_FILE_SHORT_NAME-naf_l$LEVEL.txt
+  # $IN_FILE_SHORT_NAME-naf_size_l$LEVEL.txt
+
+
+if [[ $SORTING_ALGORITHM == "fasta_analysis" ]]; then  
+
+program="bzip2_$IN_FILE_SHORT_NAME-fasta_analysis"
+level=$LEVEL
+bytes=$(ls sort_fanalysis_$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
+c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_bzip2_size_l$LEVEL.txt)
+original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-bzip2_size_l$LEVEL.txt)
+bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
+bps_final=$(echo "scale=3; ($c_bytes * 8) / $bytes" | bc)
+#gain=$(echo "scale=3; ($c_bytes / $original_c_bytes)*100" | bc)
+gain=$(echo "scale=3; (1-($c_bytes / $original_c_bytes))*100" | bc)
+c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_fa_bzip2_l$LEVEL.txt)
+c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_bzip2_l$LEVEL.txt)
+d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_bzip2_d_size_l$LEVEL.txt)
+d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_fa_bzip2_d_l$LEVEL.txt)
+d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_bzip2_d_l$LEVEL.txt)
+diff=0
+if [ $bytes -eq $d_bytes ] 
+ then
+  diff=0
+else
+  diff=1
+fi
+run=0
+
+printf $program | tee program_x
+printf $bytes | tee bytes_x
+printf $level | tee level_x
+printf $c_bytes | tee c_bytes_x
+printf $bps_original | tee bps_original_x
+printf $bps_final | tee bps_final_x
+printf $gain | tee gain_x
+printf $c_time | tee c_time_x
+printf $c_mem | tee c_mem_x
+printf $d_time | tee d_time_x
+printf $d_mem | tee d_mem_x
+printf $diff | tee diff_x
+printf $run | tee run_x
+ 
+
+file="data_bzip2.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$program,$level,$bytes,$c_bytes,$bps_original,$bps_final,$gain,$c_time,$c_mem,$d_time,$d_mem,$diff,$run
+.
+wq
+EOF
+}
+
+
+elif [[ $SORTING_ALGORITHM == "sortmf" ]]; then  
+
+program="bzip2_$IN_FILE_SHORT_NAME-sortmf"
+level=$LEVEL
+bytes=$(ls sort_$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
+c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_bzip2_size_l$LEVEL.txt)
+original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-bzip2_size_l$LEVEL.txt)
+bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
+bps_final=$(echo "scale=3; ($c_bytes * 8) / $bytes" | bc)
+#gain=$(echo "scale=3; ($c_bytes / $original_c_bytes)*100" | bc)
+gain=$(echo "scale=3; (1-($c_bytes / $original_c_bytes))*100" | bc)
+c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_bzip2_l$LEVEL.txt)
+c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_bzip2_l$LEVEL.txt)
+d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_bzip2_d_size_l$LEVEL.txt)
+d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_bzip2_d_l$LEVEL.txt)
+d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_bzip2_d_l$LEVEL.txt)
+diff=0
+if [ $bytes -eq $d_bytes ] 
+ then
+  diff=0
+else
+  diff=1
+fi
+run=0
+
+printf $program | tee program_x
+printf $bytes | tee bytes_x
+printf $level | tee level_x
+printf $c_bytes | tee c_bytes_x
+printf $bps_original | tee bps_original_x
+printf $bps_final | tee bps_final_x
+printf $gain | tee gain_x
+printf $c_time | tee c_time_x
+printf $c_mem | tee c_mem_x
+printf $d_time | tee d_time_x
+printf $d_mem | tee d_mem_x
+printf $diff | tee diff_x
+printf $run | tee run_x
+ 
+
+file="data_bzip2.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$program,$level,$bytes,$c_bytes,$bps_original,$bps_final,$gain,$c_time,$c_mem,$d_time,$d_mem,$diff,$run
+.
+wq
+EOF
+}
+
+else
+
+program="bzip2_$IN_FILE_SHORT_NAME"
+level=$LEVEL
+bytes=$(ls $IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
+c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-bzip2_size_l$LEVEL.txt)
+original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-bzip2_size_l$LEVEL.txt)
+bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
+bps_final=$(echo "scale=3; ($c_bytes * 8) / $bytes" | bc)
+#gain=$(echo "scale=3; ($c_bytes / $original_c_bytes)*100" | bc)
+gain=$(echo "scale=3; (1-($c_bytes / $original_c_bytes))*100" | bc)
+c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-bzip2_l$LEVEL.txt)
+c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-bzip2_l$LEVEL.txt)
+d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-bzip2_d_size_l$LEVEL.txt)
+d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-bzip2_d_l$LEVEL.txt)
+d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-bzip2_d_l$LEVEL.txt)
+diff=0
+if [ $bytes -eq $d_bytes ] 
+ then
+  diff=0
+else
+  diff=1
+fi
+run=0
+
+printf $program | tee program_x
+printf $bytes | tee bytes_x
+printf $level | tee level_x
+printf $c_bytes | tee c_bytes_x
+printf $bps_original | tee bps_original_x
+printf $bps_final | tee bps_final_x
+printf $gain | tee gain_x
+printf $c_time | tee c_time_x
+printf $c_mem | tee c_mem_x
+printf $d_time | tee d_time_x
+printf $d_mem | tee d_mem_x
+printf $diff | tee diff_x
+printf $run | tee run_x
+ 
+
+file="data_bzip2.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+$program,$level,$bytes,$c_bytes,$bps_original,$bps_final,$gain,$c_time,$c_mem,$d_time,$d_mem,$diff,$run
+.
+wq
+EOF
+}
+
+fi
+
+
+}
+
+
+
 function PLOT_JARVIS3(){
 #rm *.csv
 partitions_array=("10mb" "100mb" "1gb")
@@ -1501,7 +1691,7 @@ cat $JARVIS_CSV.csv | grep -v -e "fasta_analysis" | grep -v -e "sortmf" | grep -
         set multiplot layout 1,2
         count=12
       #  plot sorting_points u 7:8 w points ls count notitle
-        plot "$JARVIS_CSV-${partitions_array[j]}_sortmf.csv" u 9:8 title "fasta_analysis plot" with linespoints linestyle count
+        plot "$JARVIS_CSV-${partitions_array[j]}_fasta_analysis.csv" u 9:8 title "fasta_analysis plot" with linespoints linestyle count
         count=count + 1
         plot "$JARVIS_CSV-${partitions_array[j]}_sortmf.csv" u 9:8 title "sortmf plot" with linespoints linestyle count
         count=count + 1
@@ -1515,56 +1705,518 @@ done
 
 }
 
-# function PLOT_NAF(){
-  
-# }
+ function PLOT_NAF(){
+   #rm *.csv
+#partitions_array=("10mb" "100mb" "1gb")
+NAF_CSV=$1
 
-# function PLOT_MBGC(){
-  
-# }
+  # IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fasta//g')
+  # echo $IN_FILE_SHORT_NAME
+#echo "$(sort -t$',' -k8 $NAF_CSV.csv)" > "$NAF_CSV.csv"
 
-# function PLOT_MFCOMPRESS(){
-  
-# }
 
-# function PLOT_GZIP(){
-  
-# }
+#Build CSV for each sorting algorithm
+cat $NAF_CSV.csv | grep -e "fasta_analysis" > $NAF_CSV-fasta_analysis.csv
+echo "$(sort -t$',' -n -k 8 $NAF_CSV-fasta_analysis.csv)" > "$NAF_CSV-fasta_analysis.csv"
+cat $NAF_CSV.csv| grep -e "sortmf" > $NAF_CSV-sortmf.csv
+echo "$(sort -t$',' -n -k 8 $NAF_CSV-sortmf.csv)" > "$NAF_CSV-sortmf.csv"
+cat $NAF_CSV.csv | grep -v -e "fasta_analysis" | grep -v -e "sortmf" > $NAF_CSV-not_sorted.csv
+echo "$(sort -t$',' -n -k 8 $NAF_CSV-not_sorted.csv)" > "$NAF_CSV-not_sorted.csv"
 
-# function PLOT_LZMA(){
-  
-# }
 
-# function PLOT_BZIP2(){
-  
-# }
+
+
+
+ #for j in "${!partitions_array[@]}"; do
+
+  #for l in "${!sorting_method[@]}"; do
+  #partition=${partitions_array[j]}
+  plot_file="data-plot_naf.pdf"
+  #echo $plot_file
+  title="Compression Gains using naf"
+  #gain_x=$(awk -F "\"*,\"*" '{print $8}' data_level_${levels_array[j]}.csv) 
+  #cat ${level_input_file[j]}
+  #point=0
+   #while (($point < ${#sorting_method_points_l1[@]})); do
+   #C:/gnuplot/bin/gnuplot.exe << EOF
+  gnuplot << EOF
+        reset
+        set terminal pdfcairo enhanced color font 'Verdade,12'
+        set datafile separator "," 
+        set title "$title"
+        set output "$plot_file"
+        set style line 101 lc rgb '#000000' lt 1 lw 2 
+        set border 3 front ls 101
+        set tics nomirror out scale 0.01
+        set key fixed right top vertical Right noreverse noenhanced autotitle nobox
+        set style histogram clustered gap 1 title textcolor lt -1
+        set xtics border in scale 0,0 nomirror #rotate by -60  autojustify
+        set yrange [-20:100]
+        set xrange [-10:1000]
+        set xtics auto
+        set ytics auto # set ytics auto
+        set key top right
+        set style line 1 lc rgb '#990099'  pt 1 ps 0.6  # circle
+        set style line 2 lc rgb '#004C99'  pt 2 ps 0.6  # circle
+        set style line 3 lc rgb '#CCCC00'  pt 3 ps 0.6  # circle
+        #set style line 4 lc rgb '#CC0000' lt 2 dashtype '---' lw 4 pt 5 ps 0.4 # --- red
+        set style line 4 lc rgb 'red'  pt 7 ps 0.6  # circle 
+        set style line 5 lc rgb '#009900'  pt 5 ps 0.6  # circle
+        set style line 6 lc rgb '#990000'  pt 6 ps 0.6  # circle
+        set style line 7 lc rgb '#009999'  pt 4 ps 0.6  # circle
+        set style line 8 lc rgb '#99004C'  pt 8 ps 0.6  # circle
+        set style line 9 lc rgb '#CC6600'  pt 9 ps 0.6  # circle
+        set style line 10 lc rgb '#322152' pt 10 ps 0.6  # circle    
+        set style line 11 lc rgb '#425152' pt 11 ps 0.6  # circle    
+        set grid
+        set ylabel "Gain"
+        set xlabel "Compression Time(s)"
+        set multiplot 
+        count=12
+      #  plot sorting_points u 7:8 w points ls count notitle
+        plot "$NAF_CSV-fasta_analysis.csv" u 8:7 title "fasta_analysis plot" with linespoints linestyle count
+        count=count + 1
+        plot "$NAF_CSV-sortmf.csv" u 8:7 title "sortmf plot" with linespoints linestyle count
+        count=count + 1
+         
+EOF
+   #point=$((point+1))
+   #echo $point
+ #done
+
+
+ }
+
+ function PLOT_MBGC(){
+   MBGC_CSV="data_mbgc"
+
+  # IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fasta//g')
+  # echo $IN_FILE_SHORT_NAME
+#echo "$(sort -t$',' -k 8 $MBGC_CSV.csv)" > "$MBGC_CSV.csv"
+
+
+#Build CSV for each sorting algorithm
+cat $MBGC_CSV.csv | grep -e "fasta_analysis" > $MBGC_CSV-fasta_analysis.csv
+echo "$(sort -t$',' -k 8 $MBGC_CSV-fasta_analysis.csv)" > "$MBGC_CSV-fasta_analysis.csv"
+cat $MBGC_CSV.csv| grep -e "sortmf" > $MBGC_CSV-sortmf.csv
+echo "$(sort -t$',' -k 8 $MBGC_CSV-sortmf.csv)" > "$MBGC_CSV-sortmf.csv"
+cat $MBGC_CSV.csv | grep -v -e "fasta_analysis" | grep -v -e "sortmf" > $MBGC_CSV-not_sorted.csv
+echo "$(sort -t$',' -k 8 $MBGC_CSV-not_sorted.csv)" > "$MBGC_CSV-not_sorted.csv"
+
+
+
+ #for j in "${!partitions_array[@]}"; do
+
+  #for l in "${!sorting_method[@]}"; do
+ # partition=${partitions_array[j]}
+  plot_file="data-plot_mbgc.pdf"
+  #echo $plot_file
+  title="Compression Gains using MBGC"
+  #gain_x=$(awk -F "\"*,\"*" '{print $8}' data_level_${levels_array[j]}.csv) 
+  #cat ${level_input_file[j]}
+  #point=0
+   #while (($point < ${#sorting_method_points_l1[@]})); do
+   #C:/gnuplot/bin/gnuplot.exe << EOF
+  gnuplot << EOF
+        reset
+        set terminal pdfcairo enhanced color font 'Verdade,12'
+        set datafile separator "," 
+        set title "$title"
+        set output "$plot_file"
+        set style line 101 lc rgb '#000000' lt 1 lw 2 
+        set border 3 front ls 101
+        set tics nomirror out scale 0.01
+        set key fixed right top vertical Right noreverse noenhanced autotitle nobox
+        set style histogram clustered gap 1 title textcolor lt -1
+        set xtics border in scale 0,0 nomirror #rotate by -60  autojustify
+        set yrange [12:14]
+        set xrange [4.9:6.60]
+        set xtics auto
+        set ytics auto # set ytics auto
+        set key top right
+        set style line 1 lc rgb '#990099'  pt 1 ps 0.6  # circle
+        set style line 2 lc rgb '#004C99'  pt 2 ps 0.6  # circle
+        set style line 3 lc rgb '#CCCC00'  pt 3 ps 0.6  # circle
+        #set style line 4 lc rgb '#CC0000' lt 2 dashtype '---' lw 4 pt 5 ps 0.4 # --- red
+        set style line 4 lc rgb 'red'  pt 7 ps 0.6  # circle 
+        set style line 5 lc rgb '#009900'  pt 5 ps 0.6  # circle
+        set style line 6 lc rgb '#990000'  pt 6 ps 0.6  # circle
+        set style line 7 lc rgb '#009999'  pt 4 ps 0.6  # circle
+        set style line 8 lc rgb '#99004C'  pt 8 ps 0.6  # circle
+        set style line 9 lc rgb '#CC6600'  pt 9 ps 0.6  # circle
+        set style line 10 lc rgb '#322152' pt 10 ps 0.6  # circle    
+        set style line 11 lc rgb '#425152' pt 11 ps 0.6  # circle    
+        set grid
+        set ylabel "Gain"
+        set xlabel "Compression Time(s)"
+        set multiplot
+        count=12
+      #  plot sorting_points u 7:8 w points ls count notitle
+        plot "$MBGC_CSV-fasta_analysis.csv" u 8:7 title "fasta_analysis plot" with linespoints linestyle count
+        count=count + 1
+        plot "$MBGC_CSV-sortmf.csv" u 8:7 title "sortmf plot" with linespoints linestyle count
+        count=count + 1
+         
+EOF
+   #point=$((point+1))
+   #echo $point
+ #done
+
+
+
+ }
+
+ function PLOT_MFCOMPRESS(){
+  #rm *.csv
+partitions_array=("1" "4" "8")
+MFCOMPRESS_CSV="data_mfcompress"
+
+  # IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fasta//g')
+  # echo $IN_FILE_SHORT_NAME
+# echo "$(sort -t$',' -k 9 $MFCOMPRESS_CSV.csv)" > "$MFCOMPRESS_CSV.csv"
+
+#Build CSV for each partition
+ cat $MFCOMPRESS_CSV.csv | grep -w "1" > $MFCOMPRESS_CSV-1.csv
+ cat $MFCOMPRESS_CSV.csv| grep -w "4" > $MFCOMPRESS_CSV-4.csv
+ cat $MFCOMPRESS_CSV.csv | grep -w "8" > $MFCOMPRESS_CSV-8.csv
+
+#Build CSV for each sorting algorithm
+cat $MFCOMPRESS_CSV.csv | grep -e "fasta_analysis" > $MFCOMPRESS_CSV-fasta_analysis.csv
+cat $MFCOMPRESS_CSV.csv| grep -e "sortmf" > $MFCOMPRESS_CSV-sortmf.csv
+cat $MFCOMPRESS_CSV.csv | grep -v -e "fasta_analysis" | grep -v -e "sortmf" | grep -e "mfcompress" > $MFCOMPRESS_CSV-not_sorted.csv
+
+
+#Build CSV combining partition with sorting algorithm
+#MFCOMPRESS_CSV="data_jarvis3"
+ cat $MFCOMPRESS_CSV-1.csv | grep -e "sortmf" > $MFCOMPRESS_CSV-1_sortmf.csv
+ echo "$(sort -t$',' -n -k 9 $MFCOMPRESS_CSV-1_sortmf.csv)" > "$MFCOMPRESS_CSV-1_sortmf.csv"
+ cat $MFCOMPRESS_CSV-4.csv | grep -e "sortmf" > $MFCOMPRESS_CSV-4_sortmf.csv
+  echo "$(sort -t$',' -n -k 9 $MFCOMPRESS_CSV-4_sortmf.csv)" > "$MFCOMPRESS_CSV-4_sortmf.csv"
+ cat $MFCOMPRESS_CSV-8.csv | grep -e "sortmf" > $MFCOMPRESS_CSV-8_sortmf.csv
+  echo "$(sort -t$',' -n -k 9 $MFCOMPRESS_CSV-8_sortmf.csv)" > "$MFCOMPRESS_CSV-8_sortmf.csv"
+ cat $MFCOMPRESS_CSV-1.csv | grep -e "fasta_analysis" > $MFCOMPRESS_CSV-1_fasta_analysis.csv
+ echo "$(sort -t$',' -n -k 9 $MFCOMPRESS_CSV-1_fasta_analysis.csv)" > "$MFCOMPRESS_CSV-1_fasta_analysis.csv"
+ cat $MFCOMPRESS_CSV-4.csv | grep -e "fasta_analysis" > $MFCOMPRESS_CSV-4_fasta_analysis.csv
+ echo "$(sort -t$',' -n -k 9 $MFCOMPRESS_CSV-4_fasta_analysis.csv)" > "$MFCOMPRESS_CSV-4_fasta_analysis.csv"
+ cat $MFCOMPRESS_CSV-8.csv | grep -e "fasta_analysis" > $MFCOMPRESS_CSV-8_fasta_analysis.csv
+ echo "$(sort -t$',' -n -k 9 $MFCOMPRESS_CSV-8_fasta_analysis.csv)" > "$MFCOMPRESS_CSV-8_fasta_analysis.csv"
+
+
+
+ for j in "${!partitions_array[@]}"; do
+
+  #for l in "${!sorting_method[@]}"; do
+  partition=${partitions_array[j]}
+  plot_file="data-plot_mfcompress_${partitions_array[j]}.pdf"
+  #echo $plot_file
+  title="Compression Gains using MFCOMPRESS with partition ${partitions_array[j]}"
+  #gain_x=$(awk -F "\"*,\"*" '{print $8}' data_level_${levels_array[j]}.csv) 
+  #cat ${level_input_file[j]}
+  #point=0
+   #while (($point < ${#sorting_method_points_l1[@]})); do
+   #C:/gnuplot/bin/gnuplot.exe << EOF
+  gnuplot << EOF
+        reset
+        set terminal pdfcairo enhanced color font 'Verdade,12'
+        set datafile separator "," 
+        set title "$title"
+        set output "$plot_file"
+        set style line 101 lc rgb '#000000' lt 1 lw 2 
+        set border 3 front ls 101
+        set tics nomirror out scale 0.01
+        set key fixed right top vertical Right noreverse noenhanced autotitle nobox
+        set style histogram clustered gap 1 title textcolor lt -1
+        set xtics border in scale 0,0 nomirror #rotate by -60  autojustify
+        set yrange [-4:4]
+        set xrange [0:500]
+        set xtics auto
+        set ytics auto # set ytics auto
+        set key top right
+        set style line 1 lc rgb '#990099'  pt 1 ps 0.6  # circle
+        set style line 2 lc rgb '#004C99'  pt 2 ps 0.6  # circle
+        set style line 3 lc rgb '#CCCC00'  pt 3 ps 0.6  # circle
+        #set style line 4 lc rgb '#CC0000' lt 2 dashtype '---' lw 4 pt 5 ps 0.4 # --- red
+        set style line 4 lc rgb 'red'  pt 7 ps 0.6  # circle 
+        set style line 5 lc rgb '#009900'  pt 5 ps 0.6  # circle
+        set style line 6 lc rgb '#990000'  pt 6 ps 0.6  # circle
+        set style line 7 lc rgb '#009999'  pt 4 ps 0.6  # circle
+        set style line 8 lc rgb '#99004C'  pt 8 ps 0.6  # circle
+        set style line 9 lc rgb '#CC6600'  pt 9 ps 0.6  # circle
+        set style line 10 lc rgb '#322152' pt 10 ps 0.6  # circle    
+        set style line 11 lc rgb '#425152' pt 11 ps 0.6  # circle    
+        set grid
+        set ylabel "Gain"
+        set xlabel "Compression Time(s)"
+        set multiplot
+        count=12
+      #  plot sorting_points u 7:8 w points ls count notitle
+        plot "$MFCOMPRESS_CSV-${partitions_array[j]}_fasta_analysis.csv" u 9:8 title "fasta_analysis plot" with linespoints linestyle count
+        count=count + 1
+        plot "$MFCOMPRESS_CSV-${partitions_array[j]}_sortmf.csv" u 9:8 title "sortmf plot" with linespoints linestyle count
+        count=count + 1
+         
+EOF
+   #point=$((point+1))
+   #echo $point
+ #done
+done
+
+ }
+
+ function PLOT_GZIP(){
+  GZIP_CSV="data_gzip"
+
+  # IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fasta//g')
+  # echo $IN_FILE_SHORT_NAME
+#echo "$(sort -t$',' -k 8 $GZIP_CSV.csv)" > "$GZIP_CSV.csv"
+
+
+#Build CSV for each sorting algorithm
+cat $GZIP_CSV.csv | grep -e "fasta_analysis" > $GZIP_CSV-fasta_analysis.csv
+echo "$(sort -t$',' -n -k 8 $GZIP_CSV-fasta_analysis.csv)" > "$GZIP_CSV-fasta_analysis.csv"
+cat $GZIP_CSV.csv| grep -e "sortmf" > $GZIP_CSV-sortmf.csv
+echo "$(sort -t$',' -n -k 8 $GZIP_CSV-sortmf.csv)" > "$GZIP_CSV-sortmf.csv"
+cat $GZIP_CSV.csv | grep -v -e "fasta_analysis" | grep -v -e "sortmf" > $GZIP_CSV-not_sorted.csv
+echo "$(sort -t$',' -n -k 8 $GZIP_CSV-not_sorted.csv)" > "$GZIP_CSV-not_sorted.csv"
+
+
+ #for j in "${!partitions_array[@]}"; do
+
+  #for l in "${!sorting_method[@]}"; do
+ # partition=${partitions_array[j]}
+  plot_file="data-plot_gzip.pdf"
+  #echo $plot_file
+  title="Compression Gains using GZIP"
+  #gain_x=$(awk -F "\"*,\"*" '{print $8}' data_level_${levels_array[j]}.csv) 
+  #cat ${level_input_file[j]}
+  #point=0
+   #while (($point < ${#sorting_method_points_l1[@]})); do
+   #C:/gnuplot/bin/gnuplot.exe << EOF
+  gnuplot << EOF
+        reset
+        set terminal pdfcairo enhanced color font 'Verdade,12'
+        set datafile separator "," 
+        set title "$title"
+        set output "$plot_file"
+        set style line 101 lc rgb '#000000' lt 1 lw 2 
+        set border 3 front ls 101
+        set tics nomirror out scale 0.01
+        set key fixed right top vertical Right noreverse noenhanced autotitle nobox
+        set style histogram clustered gap 1 title textcolor lt -1
+        set xtics border in scale 0,0 nomirror #rotate by -60  autojustify
+        set yrange [0:10]
+        set xrange [0:800]
+        set xtics auto
+        set ytics auto # set ytics auto
+        set key top right
+        set style line 1 lc rgb '#990099'  pt 1 ps 0.6  # circle
+        set style line 2 lc rgb '#004C99'  pt 2 ps 0.6  # circle
+        set style line 3 lc rgb '#CCCC00'  pt 3 ps 0.6  # circle
+        #set style line 4 lc rgb '#CC0000' lt 2 dashtype '---' lw 4 pt 5 ps 0.4 # --- red
+        set style line 4 lc rgb 'red'  pt 7 ps 0.6  # circle 
+        set style line 5 lc rgb '#009900'  pt 5 ps 0.6  # circle
+        set style line 6 lc rgb '#990000'  pt 6 ps 0.6  # circle
+        set style line 7 lc rgb '#009999'  pt 4 ps 0.6  # circle
+        set style line 8 lc rgb '#99004C'  pt 8 ps 0.6  # circle
+        set style line 9 lc rgb '#CC6600'  pt 9 ps 0.6  # circle
+        set style line 10 lc rgb '#322152' pt 10 ps 0.6  # circle    
+        set style line 11 lc rgb '#425152' pt 11 ps 0.6  # circle    
+        set grid
+        set ylabel "Gain"
+        set xlabel "Compression Time(s)"
+        set multiplot
+        count=12
+      #  plot sorting_points u 7:8 w points ls count notitle
+        plot "$GZIP_CSV-fasta_analysis.csv" u 8:7 title "fasta_analysis plot" with linespoints linestyle count
+        count=count + 1
+        plot "$GZIP_CSV-sortmf.csv" u 8:7 title "sortmf plot" with linespoints linestyle count
+        count=count + 1
+         
+EOF
+   #point=$((point+1))
+   #echo $point
+ #done
+
+ }
+
+ function PLOT_LZMA(){
+  LZMA_CSV="data_lzma"
+
+  # IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fasta//g')
+  # echo $IN_FILE_SHORT_NAME
+
+
+
+#Build CSV for each sorting algorithm
+cat $LZMA_CSV.csv | grep -e "fasta_analysis" > $LZMA_CSV-fasta_analysis.csv
+echo "$(sort -t$',' -n -k 8 $LZMA_CSV-fasta_analysis.csv)" > "$LZMA_CSV-fasta_analysis.csv"
+cat $LZMA_CSV.csv| grep -e "sortmf" > $LZMA_CSV-sortmf.csv
+echo "$(sort -t$',' -n -k 8 $LZMA_CSV-sortmf.csv)" > "$LZMA_CSV-sortmf.csv"
+cat $LZMA_CSV.csv | grep -v -e "fasta_analysis" | grep -v -e "sortmf" > $LZMA_CSV-not_sorted.csv
+echo "$(sort -t$',' -n -k 8 $LZMA_CSV-not_sorted.csv)" > "$LZMA_CSV-not_sorted.csv"
+
+
+
+ #for j in "${!partitions_array[@]}"; do
+
+  #for l in "${!sorting_method[@]}"; do
+ # partition=${partitions_array[j]}
+  plot_file="data-plot_lzma.pdf"
+  #echo $plot_file
+  title="Compression Gains using LZMA"
+  #gain_x=$(awk -F "\"*,\"*" '{print $8}' data_level_${levels_array[j]}.csv) 
+  #cat ${level_input_file[j]}
+  #point=0
+   #while (($point < ${#sorting_method_points_l1[@]})); do
+   #C:/gnuplot/bin/gnuplot.exe << EOF
+  gnuplot << EOF
+        reset
+        set terminal pdfcairo enhanced color font 'Verdade,12'
+        set datafile separator "," 
+        set title "$title"
+        set output "$plot_file"
+        set style line 101 lc rgb '#000000' lt 1 lw 2 
+        set border 3 front ls 101
+        set tics nomirror out scale 0.01
+        set key fixed right top vertical Right noreverse noenhanced autotitle nobox
+        set style histogram clustered gap 1 title textcolor lt -1
+        set xtics border in scale 0,0 nomirror #rotate by -60  autojustify
+        set yrange [-40:100]
+        set xrange [0:500]
+        set xtics auto
+        set ytics auto # set ytics auto
+        set key top right
+        set style line 1 lc rgb '#990099'  pt 1 ps 0.6  # circle
+        set style line 2 lc rgb '#004C99'  pt 2 ps 0.6  # circle
+        set style line 3 lc rgb '#CCCC00'  pt 3 ps 0.6  # circle
+        #set style line 4 lc rgb '#CC0000' lt 2 dashtype '---' lw 4 pt 5 ps 0.4 # --- red
+        set style line 4 lc rgb 'red'  pt 7 ps 0.6  # circle 
+        set style line 5 lc rgb '#009900'  pt 5 ps 0.6  # circle
+        set style line 6 lc rgb '#990000'  pt 6 ps 0.6  # circle
+        set style line 7 lc rgb '#009999'  pt 4 ps 0.6  # circle
+        set style line 8 lc rgb '#99004C'  pt 8 ps 0.6  # circle
+        set style line 9 lc rgb '#CC6600'  pt 9 ps 0.6  # circle
+        set style line 10 lc rgb '#322152' pt 10 ps 0.6  # circle    
+        set style line 11 lc rgb '#425152' pt 11 ps 0.6  # circle    
+        set grid
+        set ylabel "Gain"
+        set xlabel "Compression Time(s)"
+        set multiplot
+        count=12
+      #  plot sorting_points u 7:8 w points ls count notitle
+        plot "$LZMA_CSV-fasta_analysis.csv" u 8:7 title "fasta_analysis plot" with linespoints linestyle count
+        count=count + 1
+        plot "$LZMA_CSV-sortmf.csv" u 8:7 title "sortmf plot" with linespoints linestyle count
+        count=count + 1
+         
+EOF
+   #point=$((point+1))
+   #echo $point
+ #done
+ }
+
+ function PLOT_BZIP2(){
+  BZIP2_CSV="data_bzip2"
+
+  # IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fasta//g')
+  # echo $IN_FILE_SHORT_NAME
+# echo "$(sort -t$',' -k 8 $BZIP2_CSV.csv)" > "$BZIP2_CSV.csv"
+
+
+#Build CSV for each sorting algorithm
+cat $BZIP2_CSV.csv | grep -e "fasta_analysis" > $BZIP2_CSV-fasta_analysis.csv
+echo "$(sort -t$',' -n -k 8 $BZIP2_CSV-fasta_analysis.csv)" > "$BZIP2_CSV-fasta_analysis.csv"
+cat $BZIP2_CSV.csv| grep -e "sortmf" > $BZIP2_CSV-sortmf.csv
+echo "$(sort -t$',' -n -k 8 $BZIP2_CSV-sortmf.csv)" > "$BZIP2_CSV-sortmf.csv"
+cat $BZIP2_CSV.csv | grep -v -e "fasta_analysis" | grep -v -e "sortmf" > $BZIP2_CSV-not_sorted.csv
+echo "$(sort -t$',' -n -k 8 $BZIP2_CSV-not_sorted.csv)" > "$BZIP2_CSV-not_sorted.csv"
+
+
+
+ #for j in "${!partitions_array[@]}"; do
+
+  #for l in "${!sorting_method[@]}"; do
+ # partition=${partitions_array[j]}
+  plot_file="data-plot_bzip2.pdf"
+  #echo $plot_file
+  title="Compression Gains using BZIP2"
+  #gain_x=$(awk -F "\"*,\"*" '{print $8}' data_level_${levels_array[j]}.csv) 
+  #cat ${level_input_file[j]}
+  #point=0
+   #while (($point < ${#sorting_method_points_l1[@]})); do
+   #C:/gnuplot/bin/gnuplot.exe << EOF
+  gnuplot << EOF
+        reset
+        set terminal pdfcairo enhanced color font 'Verdade,12'
+        set datafile separator "," 
+        set title "$title"
+        set output "$plot_file"
+        set style line 101 lc rgb '#000000' lt 1 lw 2 
+        set border 3 front ls 101
+        set tics nomirror out scale 0.01
+        set key fixed right top vertical Right noreverse noenhanced autotitle nobox
+        set style histogram clustered gap 1 title textcolor lt -1
+        set xtics border in scale 0,0 nomirror #rotate by -60  autojustify
+        set yrange [10:80]
+        set xrange [80:150]
+        set xtics auto
+        set ytics auto # set ytics auto
+        set key top right
+        set style line 1 lc rgb '#990099'  pt 1 ps 0.6  # circle
+        set style line 2 lc rgb '#004C99'  pt 2 ps 0.6  # circle
+        set style line 3 lc rgb '#CCCC00'  pt 3 ps 0.6  # circle
+        #set style line 4 lc rgb '#CC0000' lt 2 dashtype '---' lw 4 pt 5 ps 0.4 # --- red
+        set style line 4 lc rgb 'red'  pt 7 ps 0.6  # circle 
+        set style line 5 lc rgb '#009900'  pt 5 ps 0.6  # circle
+        set style line 6 lc rgb '#990000'  pt 6 ps 0.6  # circle
+        set style line 7 lc rgb '#009999'  pt 4 ps 0.6  # circle
+        set style line 8 lc rgb '#99004C'  pt 8 ps 0.6  # circle
+        set style line 9 lc rgb '#CC6600'  pt 9 ps 0.6  # circle
+        set style line 10 lc rgb '#322152' pt 10 ps 0.6  # circle    
+        set style line 11 lc rgb '#425152' pt 11 ps 0.6  # circle    
+        set grid
+        set ylabel "Gain"
+        set xlabel "Compression Time(s)"
+        set multiplot
+        count=12
+      #  plot sorting_points u 7:8 w points ls count notitle
+        plot "$BZIP2_CSV-fasta_analysis.csv" u 8:7 title "fasta_analysis plot" with linespoints linestyle count
+        count=count + 1
+        plot "$BZIP2_CSV-sortmf.csv" u 8:7 title "sortmf plot" with linespoints linestyle count
+        count=count + 1
+         
+EOF
+   #point=$((point+1))
+   #echo $point
+ #done
+ }
 #--------MAIN---------------------------------------------------#
 
 #testes com CVDB.fasta
 #sorting CVDB.fasta file
 #INPUT_FILE=$(GENERATE_ALCOR_FILE)
-INPUT_FILE="test.fasta"
+INPUT_FILE="CVDB.fasta"
 
 
 #INPUT_FILE_SHORT_NAME=$(ls -1 $INPUT_FILE | sed 's/.fasta//g')
 #echo $INPUT_FILE_SHORT_NAME
 
-#{  /bin/time -f "TIME\t%e\tMEM\t%M" ./FASTA_ANALY -sort=S $INPUT_FILE sort_fanalysis_$INPUT_FILE 5 ;  } 2>>ordering_times.txt 
-#{  /bin/time -f "TIME\t%e\tMEM\t%M" ./sortmf $INPUT_FILE sort_$INPUT_FILE ;  } 2>> sortmf_times.txt
+ {  /bin/time -f "TIME\t%e\tMEM\t%M" ./FASTA_ANALY -sort=S $INPUT_FILE sort_fanalysis_$INPUT_FILE 5 ;  } 2>>ordering_times.txt 
+ {  /bin/time -f "TIME\t%e\tMEM\t%M" ./sortmf $INPUT_FILE sort_$INPUT_FILE ;  } 2>> sortmf_times.txt
 
 #Tests performed by
 #JARVIS3 
 #rm *.txt
 
-#levels_array=("1","2","3","4","5","6","7","8","9","10","11","12","13","14","15")
 partitions_array=("10MB" "100MB" "1GB")
 partitions_in_mb=("10" "100" "1000")
 program=("" "sortmf" "fasta_analysis")
 filename=("" "sort" "sort_fa")
 sequence_type=("" "Alcor")
-#levels_array=("1" "5" "10" "15" "20" "25" "30")
-levels_array=("1")
+levels_array=("1" "5" "10" "15" "20" "25" "30")
+#levels_array=("1")
 
+# rm *.tar
 # j=0
 # for ((i=0; i<${#levels_array[@]}; i++)); do
 # j=0
@@ -1574,37 +2226,40 @@ levels_array=("1")
 #   j=$((j+1))
 #  done
 # done
+# rm data_jarvis3.csv
+# #CSV_BUILDER JARVIS3
+# for ((i=${#levels_array[@]}-1; i>=0; i--))
+#  do
+#   for ((j=${#partitions_array[@]}-1; j>=0; j--))
+#    do
+#     for ((k=${#program[@]}-1; k>=0; k--))
+#      do
+#       CSV_BUILDER_JARVIS3 $INPUT_FILE ${levels_array[i]} ${partitions_array[j]} ${partitions_in_mb[j]} ${program[k]}
 
-#CSV_BUILDER JARVIS3
-for ((i=${#levels_array[@]}-1; i>=0; i--))
- do
-  for ((j=${#partitions_array[@]}-1; j>=0; j--))
-   do
-    for ((k=${#program[@]}-1; k>=0; k--))
-     do
-      CSV_BUILDER_JARVIS3 $INPUT_FILE ${levels_array[i]} ${partitions_array[j]} ${partitions_in_mb[j]} ${program[k]}
-
-     done
-    done
-   done
+#      done
+#     done
+#    done
 
       
-     BUILD_CSV_HEADER_1 "jarvis3" 
-      PLOT_JARVIS3 "data_jarvis3.csv" $partitions_array
+#      BUILD_CSV_HEADER_2 "jarvis3" 
+#     #  PLOT_JARVIS3 "data_jarvis3.csv" $partitions_array
 
 
-#NAF
-#levels_array=("1" "8" "15" "22")
-levels_array=("1")
+# #NAF
+ levels_array=("1" "8" "15" "22")
+#levels_array=("1")
+rm *.naf
 
 for ((i=0; i<${#levels_array[@]}; i++)); do
 
 NAF_COMPRESSION $INPUT_FILE ${levels_array[i]} ;
+echo "level" ${levels_array[i]} "completed"
 
 done
 
 #CSV_BUILDER NAF
 rm data_naf.csv
+
 
 for ((i=${#levels_array[@]}-1; i>=0; i--))
  do
@@ -1615,22 +2270,24 @@ for ((i=${#levels_array[@]}-1; i>=0; i--))
    done
   done
 
-BUILD_CSV_HEADER_1 "naf"
+ BUILD_CSV_HEADER_1 "naf"
+PLOT_NAF "data_naf"
 
-#MBGC
-#levels_array=("0" "1" "2" "3")
-levels_array=("0")
+# #MBGC
+levels_array=("0" "1" "2" "3")
+#levels_array=("0")
 
 rm data_mbgc.csv
+ rm *.mbgc
 
-for ((i=0; i<${#levels_array[@]}; i++)); do
-MBGC_COMPRESSION $INPUT_FILE ${levels_array[i]};
-done
+ for ((i=0; i<${#levels_array[@]}; i++)); do
+ MBGC_COMPRESSION $INPUT_FILE ${levels_array[i]};
+ done
 
 #CSV_BUILDER_MBGC
   for ((i=${#levels_array[@]}-1; i>=0; i--))
   do
-   for ((k=${#program[@]}-1; k>=0; k--))
+   for ((j=${#program[@]}-1; j>=0; j--))
      do
       CSV_BUILDER_MBGC $INPUT_FILE ${levels_array[i]} ${program[j]}
    done
@@ -1638,14 +2295,16 @@ done
 
 
 BUILD_CSV_HEADER_1 "mbgc"
+PLOT_MBGC "data_mbgc"
 
 
 rm "data_mfcompress.csv"
 #MFC
-#levels_array=("0" "1" "2" "3")
+levels_array=("0" "1" "2" "3")
 partitions_array=("1" "4" "8")
-levels_array=("0")
-
+rm *.mfc
+#levels_array=("0")
+#partitions_array=("1")
 #Levels for
 for ((i=0; i<${#levels_array[@]}; i++)); do
 
@@ -1669,12 +2328,14 @@ done
    done
 
    BUILD_CSV_HEADER_2 "mfcompress"
+   PLOT_MFCOMPRESS "data_mfcompress"
 
 #General Use Compressors
-#levels_array=("1" "4" "7" "9")
-levels_array=("1")
+levels_array=("1" "4" "7" "9")
+#levels_array=("1")
 #gzip
 rm "data_gzip.csv"
+rm *.gz
 #execution mode
 for((i=0; i<${#levels_array[@]}; i++)); do
 
@@ -1693,13 +2354,15 @@ done
 
 
 BUILD_CSV_HEADER_1 "gzip"
+PLOT_GZIP "data_gzip"
 
-#lzma
-#levels_array=("1" "4" "7" "9")
 
+# #lzma
+ levels_array=("1" "4" "7" "9")
 
 rm "data_lzma.csv"
-levels=("1")
+rm *.lzma
+#levels_array=("1")
 #program=("" "sortmf" "fasta_analysis")
 #execution mode
 for((i=0; i<${#levels_array[@]}; i++)); do
@@ -1717,11 +2380,13 @@ done
   done
 
   BUILD_CSV_HEADER_1 "lzma"
+PLOT_LZMA "data_lzma"
 
 #bzip2
-#levels_array=("1" "4" "7" "9")
-rm "data_bzip2.csv"
-levels_array=("1")
+levels_array=("1" "4" "7" "9")
+ rm "data_bzip2.csv"
+rm *.bz2
+ #levels_array=("1")
 #execution mode
 for((i=0; i<${#levels_array[@]}; i++)); do
 
@@ -1731,15 +2396,16 @@ done
 #CSV_BUILDER_BZIP2
   for ((i=${#levels_array[@]}-1; i>=0; i--))
    do
-   for ((j=${#program[@]}-1; >=0; j--))
+   for ((j=${#program[@]}-1; j>=0; j--))
      do
       CSV_BUILDER_BZIP2 $INPUT_FILE ${levels_array[i]} ${program[j]}
    done
   done
 
    BUILD_CSV_HEADER_1 "bzip2"
+ PLOT_BZIP2 "data_bzip2"
 
-  #PLOT CREATION
+  # PLOT CREATION
 
   #  PLOT_NAF "data_naf.csv"
   #  PLOT_MBGC "data_mbgc.csv"
@@ -1748,6 +2414,10 @@ done
   #  PLOT_LZMA "data_lzma.csv"
   #  PLOT_BZIP2 "data_bzip2.csv"
      
+
+    #  mail -s " Att test" data_naf.csv tiagorfonseca@ua.pt 
+
+    #  mutt -s "Subject" -a data_naf.csv -- tiagorfonseca@ua.pt < test-sort_fa_gunzip_l1.txt
 #rm data.csv
 
 
