@@ -202,7 +202,6 @@ function JARVIS3_COMPRESSION(){
 }
 
 
-
 function NAF_COMPRESSION() {
   IN_FILE="$1";
   LEVEL="$2";
@@ -211,10 +210,15 @@ function NAF_COMPRESSION() {
   echo $IN_FILE_SHORT_NAME
 
   echo "NAF Level" $LEVEL "compression"
-
+if [[ $LEVEL -gt 17 ]]; then
+{ /bin/time -f "TIME\t%e\tMEM\t%M"  ennaf --strict --temp-dir tmp/ --dna -$LEVEL --level $LEVEL $IN_FILE ; } 2>$IN_FILE_SHORT_NAME-naf_l$LEVEL.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M"  ennaf --strict --temp-dir tmp/ --dna -$LEVEL --level $LEVEL sort_$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_naf_l$LEVEL.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M"  ennaf --strict --temp-dir tmp/ --dna -$LEVEL --level $LEVEL sort_fanalysis_$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_fa_naf_l$LEVEL.txt
+else
 { /bin/time -f "TIME\t%e\tMEM\t%M"  ennaf --strict --temp-dir tmp/ --dna --level $LEVEL $IN_FILE ; } 2>$IN_FILE_SHORT_NAME-naf_l$LEVEL.txt
 { /bin/time -f "TIME\t%e\tMEM\t%M"  ennaf --strict --temp-dir tmp/ --dna --level $LEVEL sort_$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_naf_l$LEVEL.txt
 { /bin/time -f "TIME\t%e\tMEM\t%M"  ennaf --strict --temp-dir tmp/ --dna --level $LEVEL sort_fanalysis_$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_fa_naf_l$LEVEL.txt
+fi
 
 { ls $IN_FILE* -la -ltr | grep \.naf$ |awk '{print $5;}' ; } > $IN_FILE_SHORT_NAME-naf_size_l$LEVEL.txt
 { ls sort_$IN_FILE* -la -ltr | grep \.naf$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_naf_size_l$LEVEL.txt
@@ -2228,7 +2232,7 @@ EOF
 #testes com CVDB.fasta
 #sorting CVDB.fasta file
 #INPUT_FILE=$(GENERATE_ALCOR_FILE)
-INPUT_FILE=("synthetic.fasta")
+INPUT_FILE=("CVDB.fasta" "synthetic.fasta")
 
 
 #INPUT_FILE_SHORT_NAME=$(ls -1 $INPUT_FILE | sed 's/.fasta//g')
@@ -2245,77 +2249,52 @@ sequence_type=("" "Alcor")
 
 for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
 
- #{  /bin/time -f "TIME\t%e\tMEM\t%M" ./FASTA_ANALY -sort=S ${INPUT_FILE[m]} sort_fanalysis_${INPUT_FILE[m]} 5 ;  } 2>>ordering_times.txt 
- #{  /bin/time -f "TIME\t%e\tMEM\t%M" ./sortmf ${INPUT_FILE[m]} sort_${INPUT_FILE[m]} ;  } 2>> sortmf_times.txt
+ {  /bin/time -f "TIME\t%e\tMEM\t%M" ./FASTA_ANALY -sort=S synthetic.fasta sort_fanalysis_synthetic.fasta 5 ;  } 2>>ordering_times.txt 
+ {  /bin/time -f "TIME\t%e\tMEM\t%M" ./sortmf ${INPUT_FILE[m]} sort_${INPUT_FILE[m]} ;  } 2>> sortmf_times.txt
 
-# #NAF
+#NAF
  levels_array=("1" "8" "15" "22")
-#levels_array=("1")
+#levels_array=("8")
 rm *.naf
 
  for ((i=0; i<${#levels_array[@]}; i++)); do
-INPUT_FILE_SHORT_NAME=$(ls -1 ${INPUT_FILE[m]} | sed 's/.fasta//g')
-NAF_COMPRESSION ${INPUT_FILE[m]} ${levels_array[i]} ;
+#INPUT_FILE_SHORT_NAME=$(ls -1 ${INPUT_FILE[m]} | sed 's/.fasta//g')
+#NAF_COMPRESSION ${INPUT_FILE[m]} ${levels_array[i]} ;
+INPUT_FILE_SHORT_NAME$(ls -1 synthetic.fasta | sed 's/.fasta//g')
+NAF_COMPRESSION "synthetic.fasta" ${levels_array[i]} ;
 echo "level" ${levels_array[i]} "completed"
 
 done
 
 #CSV_BUILDER NAF
-rm data_naf-${INPUT_FILE[m]}.csv
-
+#rm data_naf-${INPUT_FILE[m]}.csv
+rm data_naf-synthetic-fasta.csv
 
 for ((i=${#levels_array[@]}-1; i>=0; i--))
  do
    for ((j=${#program[@]}-1; j>=0; j--))
      do
-      CSV_BUILDER_NAF ${INPUT_FILE[m]} ${levels_array[i]} ${program[j]}
-
+     # CSV_BUILDER_NAF ${INPUT_FILE[m]} ${levels_array[i]} ${program[j]}
+      CSV_BUILDER_NAF "synthetic.fasta" ${levels_array[i]} ${program[j]}
    done
   done
 
-  BUILD_CSV_HEADER_1 "naf" ${INPUT_FILE[m]} 
- #PLOT_NAF "data_naf-$INPUT_FILE_SHORT_NAME"
+ # BUILD_CSV_HEADER_1 "naf" ${INPUT_FILE[m]} 
+ BUILD_CSV_HEADER_1 "naf" "synthetic.fasta" 
+ PLOT_NAF "data_naf-$INPUT_FILE_SHORT_NAME"
 
-#  rm *naf.fasta;
+ rm *naf.fasta;
+done
 
-
-# #MBGC
-levels_array=("0" "1" "2" "3")
-#levels_array=("0")
-
-rm data_mbgc.csv
- rm *.mbgc
-
- for ((i=0; i<${#levels_array[@]}; i++)); do
-  MBGC_COMPRESSION ${INPUT_FILE[m]} ${levels_array[i]};
- done
-
-#CSV_BUILDER_MBGC
-  for ((i=${#levels_array[@]}-1; i>=0; i--))
-  do
-   for ((j=${#program[@]}-1; j>=0; j--))
-     do
-      CSV_BUILDER_MBGC ${INPUT_FILE[m]} ${levels_array[i]} ${program[j]}
-   done
-  done
-
-
-BUILD_CSV_HEADER_1 "mbgc" ${INPUT_FILE[m]} 
- # PLOT_MBGC "data_mbgc-$INPUT_FILE_SHORT_NAME"
-
-# rm -d mbgc_decompress_*
-# rm -d sort_mbgc_decompress_*
-# rm -d sort_fa_mbgc_decompress_*
-
-
+for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
 
  rm "data_mfcompress.csv"
 # #MFC
  levels_array=("0" "1" "2" "3")
- partitions_array=("1" "4" "8")
+# partitions_array=("1" "4" "8")
 rm *.mfc
 #levels_array=("0")
-#partitions_array=("1")
+partitions_array=("1")
 #Levels for
 for ((i=0; i<${#levels_array[@]}; i++)); do
 
@@ -2343,87 +2322,18 @@ done
 
   #rm *mfc.d
 
-#General Use Compressors
-levels_array=("1" "4" "7" "9")
-#levels_array=("1")
-#gzip
-rm "data_gzip.csv"
-rm *.gz
-#execution mode
-for((i=0; i<${#levels_array[@]}; i++)); do
-
-  GZIP_COMPRESSION ${INPUT_FILE[m]} ${levels_array[i]};
 done
 
-  #CSV_BUILDER_GZIP
-   #CSV_BUILDER_GZIP
-   for ((i=${#levels_array[@]}-1; i>=0; i--))
-   do
-   for ((j=${#program[@]}-1; j>=0; j--))
-     do
-      CSV_BUILDER_GZIP ${INPUT_FILE[m]} ${levels_array[i]} ${program[j]}
-   done
-  done
-
-
-BUILD_CSV_HEADER_1 "gzip" ${INPUT_FILE[m]}
-# PLOT_GZIP "data_gzip-$INPUT_FILE_SHORT_NAME"
-
-
-# #lzma
- levels_array=("1" "4" "7" "9")
-
-rm "data_lzma.csv"
-rm *.lzma
-#levels_array=("1")
-#program=("" "sortmf" "fasta_analysis")
-#execution mode
-for((i=0; i<${#levels_array[@]}; i++)); do
-
-  LZMA_COMPRESSION ${INPUT_FILE[m]} ${levels_array[i]};
-done
-
-  #CSV_BUILDER_LZMA
-   for ((i=${#levels_array[@]}-1; i>=0; i--))
-   do
-   for ((j=${#program[@]}-1; j>=0; j--))
-     do
-      CSV_BUILDER_LZMA ${INPUT_FILE[m]} ${levels_array[i]} ${program[j]}
-   done
-  done
-
-  BUILD_CSV_HEADER_1 "lzma" ${INPUT_FILE[m]}
- # PLOT_LZMA "data_lzma-$INPUT_FILE_SHORT_NAME"
-
-# bzip2
-levels_array=("1" "4" "7" "9")
-rm "data_bzip2.csv"
-rm *.bz2
- #levels_array=("1")
-#execution mode
-for((i=0; i<${#levels_array[@]}; i++)); do
-
-  BZIP2_COMPRESSION ${INPUT_FILE[m]} ${levels_array[i]};
-done
-
-#CSV_BUILDER_BZIP2
-  for ((i=${#levels_array[@]}-1; i>=0; i--))
-   do
-   for ((j=${#program[@]}-1; j>=0; j--))
-     do
-      CSV_BUILDER_BZIP2 ${INPUT_FILE[m]} ${levels_array[i]} ${program[j]}
-   done
-  done
-
-   BUILD_CSV_HEADER_1 "bzip2" ${INPUT_FILE[m]}
- # PLOT_BZIP2 "data_bzip2-$INPUT_FILE_SHORT_NAME"
+for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
 
 #JARVIS3
 
 levels_array=("1" "2" "5" "8" )
 #levels_array=("15" "20" "25" "30")
-partitions_array=("10MB" "100MB" "1GB")
-partitions_in_mb=("10" "100" "1000")
+#partitions_array=("10MB" "100MB" "1GB")
+#partitions_in_mb=("10" "100" "1000")
+partitions_array=("10MB")
+partitions_in_mb=("10")
 
 rm *.tar
 j=0
@@ -2454,6 +2364,127 @@ for ((i=${#levels_array[@]}-1; i>=0; i--))
       
      BUILD_CSV_HEADER_2 "jarvis3" ${INPUT_FILE[m]}
    #  PLOT_JARVIS3 "data_jarvis3-$INPUT_FILE_SHORT_NAME" $partitions_array
+
+done
+
+for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
+#General Use Compressors
+levels_array=("1" "4" "7" "9")
+#levels_array=("1")
+#gzip
+rm "data_gzip.csv"
+rm *.gz
+#execution mode
+for((i=0; i<${#levels_array[@]}; i++)); do
+
+  GZIP_COMPRESSION ${INPUT_FILE[m]} ${levels_array[i]};
+done
+
+  #CSV_BUILDER_GZIP
+   #CSV_BUILDER_GZIP
+   for ((i=${#levels_array[@]}-1; i>=0; i--))
+   do
+   for ((j=${#program[@]}-1; j>=0; j--))
+     do
+      CSV_BUILDER_GZIP ${INPUT_FILE[m]} ${levels_array[i]} ${program[j]}
+   done
+  done
+
+
+BUILD_CSV_HEADER_1 "gzip" ${INPUT_FILE[m]}
+# PLOT_GZIP "data_gzip-$INPUT_FILE_SHORT_NAME"
+
+#rm *unzip.fasta
+
+done
+
+for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
+# #lzma
+ levels_array=("1" "4" "7" "9")
+
+rm "data_lzma.csv"
+rm *.lzma
+#levels_array=("1")
+#program=("" "sortmf" "fasta_analysis")
+#execution mode
+for((i=0; i<${#levels_array[@]}; i++)); do
+
+  LZMA_COMPRESSION ${INPUT_FILE[m]} ${levels_array[i]};
+done
+
+  #CSV_BUILDER_LZMA
+   for ((i=${#levels_array[@]}-1; i>=0; i--))
+   do
+   for ((j=${#program[@]}-1; j>=0; j--))
+     do
+      CSV_BUILDER_LZMA ${INPUT_FILE[m]} ${levels_array[i]} ${program[j]}
+   done
+  done
+
+  BUILD_CSV_HEADER_1 "lzma" ${INPUT_FILE[m]}
+ # PLOT_LZMA "data_lzma-$INPUT_FILE_SHORT_NAME"
+
+done
+
+for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
+
+# bzip2
+levels_array=("1" "4" "7" "9")
+rm "data_bzip2.csv"
+rm *.bz2
+ #levels_array=("1")
+#execution mode
+for((i=0; i<${#levels_array[@]}; i++)); do
+
+  BZIP2_COMPRESSION ${INPUT_FILE[m]} ${levels_array[i]};
+done
+
+#CSV_BUILDER_BZIP2
+  for ((i=${#levels_array[@]}-1; i>=0; i--))
+   do
+   for ((j=${#program[@]}-1; j>=0; j--))
+     do
+      CSV_BUILDER_BZIP2 ${INPUT_FILE[m]} ${levels_array[i]} ${program[j]}
+   done
+  done
+
+   BUILD_CSV_HEADER_1 "bzip2" ${INPUT_FILE[m]}
+ # PLOT_BZIP2 "data_bzip2-$INPUT_FILE_SHORT_NAME"
+
+done
+
+
+
+for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
+
+   # #MBGC
+levels_array=("0" "1" "2" "3")
+#levels_array=("0")
+
+rm data_mbgc.csv
+ rm *.mbgc
+
+ for ((i=0; i<${#levels_array[@]}; i++)); do
+  MBGC_COMPRESSION ${INPUT_FILE[m]} ${levels_array[i]};
+ done
+
+#CSV_BUILDER_MBGC
+  for ((i=${#levels_array[@]}-1; i>=0; i--))
+  do
+   for ((j=${#program[@]}-1; j>=0; j--))
+     do
+      CSV_BUILDER_MBGC ${INPUT_FILE[m]} ${levels_array[i]} ${program[j]}
+   done
+  done
+
+
+BUILD_CSV_HEADER_1 "mbgc" ${INPUT_FILE[m]} 
+ # PLOT_MBGC "data_mbgc-$INPUT_FILE_SHORT_NAME"
+
+# rm -d mbgc_decompress_*
+# rm -d sort_mbgc_decompress_*
+# rm -d sort_fa_mbgc_decompress_*
+
 done
   # PLOT CREATION
 
