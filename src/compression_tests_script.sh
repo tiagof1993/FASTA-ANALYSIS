@@ -38,7 +38,7 @@ do
  if [ $j -eq 0 ];then
    #j=$((${#seed_arr[@]}-1))
    j=$(($SEED_RANGE-1))
-   echo "j:"$j
+   #echo "j:"$j
  else
    j=$(($j-1))
 fi 
@@ -97,11 +97,12 @@ echo $OUT_FILE
 function BUILD_CSV_HEADER_1(){
   COMPRESSOR="$1";
   IN_FILE="$2";
+  SORTING_TYPE="$3";
 
     IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fasta//g')
   echo $IN_FILE_SHORT_NAME
 
-file="data_$COMPRESSOR-$IN_FILE_SHORT_NAME.csv"
+file="data_$COMPRESSOR-$IN_FILE_SHORT_NAME-$SORTING_TYPE.csv"
 
 {
 ed -s "$file" <<EOF
@@ -114,7 +115,7 @@ EOF
 }
 
 
-file="data_$COMPRESSOR-$IN_FILE_SHORT_NAME.csv"
+file="data_$COMPRESSOR-$IN_FILE_SHORT_NAME-$SORTING_TYPE.csv"
 
 {
 ed -s "$file" <<EOF
@@ -133,12 +134,13 @@ function BUILD_CSV_HEADER_2(){
 
 COMPRESSOR="$1";
  IN_FILE="$2";
+ SORTING_TYPE="$3";
 
     IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fasta//g')
   echo $IN_FILE_SHORT_NAME
 
 
-file="data_$COMPRESSOR-$IN_FILE_SHORT_NAME.csv"
+file="data_$COMPRESSOR-$IN_FILE_SHORT_NAME-$SORTING_TYPE.csv"
 
 {
 ed -s "$file" <<EOF
@@ -151,7 +153,7 @@ EOF
 }
 
 
-file="data_$COMPRESSOR-$IN_FILE_SHORT_NAME.csv"
+file="data_$COMPRESSOR-$IN_FILE_SHORT_NAME-$SORTING_TYPE.csv"
 
 {
 ed -s "$file" <<EOF
@@ -172,6 +174,7 @@ function JARVIS3_COMPRESSION(){
   LEVEL="$2";
   PARTITION="$3";
   PARTITION_MB="$4"
+  # SORTING_TYPE="$5"
 
   IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fasta//g')
   echo $IN_FILE_SHORT_NAME
@@ -463,7 +466,7 @@ printf $diff | tee diff_x
 printf $run | tee run_x
  
 
-file="data_jarvis3-$IN_FILE_SHORT_NAME.csv"
+file="data_jarvis3-$IN_FILE_SHORT_NAME-$SORTING_TYPE.csv"
 
 {
 ed -s "$file" <<EOF
@@ -517,7 +520,7 @@ printf $diff | tee diff_x
 printf $run | tee run_x
  
 
-file="data_jarvis3-$IN_FILE_SHORT_NAME.csv"
+file="data_jarvis3-$IN_FILE_SHORT_NAME-$SORTING_TYPE.csv"
 
 {
 ed -s "$file" <<EOF
@@ -571,7 +574,7 @@ printf $diff | tee diff_x
 printf $run | tee run_x
  
 
-file="data_jarvis3-$IN_FILE_SHORT_NAME.csv"
+file="data_jarvis3-$IN_FILE_SHORT_NAME-$SORTING_TYPE.csv"
 
 {
 ed -s "$file" <<EOF
@@ -592,6 +595,7 @@ function CSV_BUILDER_NAF(){
 IN_FILE="$1";
 LEVEL="$2";
 SORTING_ALGORITHM="$3";
+SORTING_TYPE="$4";
   # $IN_FILE_SHORT_NAME-naf_l$LEVEL.txt
   # $IN_FILE_SHORT_NAME-naf_size_l$LEVEL.txt
   #rm data_naf.csv
@@ -639,7 +643,7 @@ printf $diff | tee diff_x
 printf $run | tee run_x
  
 
-file="data_naf-$IN_FILE_SHORT_NAME.csv"
+file="data_naf-$IN_FILE_SHORT_NAME-$SORTING_TYPE.csv"
 
 {
 ed -s "$file" <<EOF
@@ -692,7 +696,7 @@ printf $diff | tee diff_x
 printf $run | tee run_x
  
 
-file="data_naf-$IN_FILE_SHORT_NAME.csv"
+file="data_naf-$IN_FILE_SHORT_NAME-$SORTING_TYPE.csv"
 
 {
 ed -s "$file" <<EOF
@@ -744,7 +748,7 @@ printf $diff | tee diff_x
 printf $run | tee run_x
  
 
-file="data_naf-$IN_FILE_SHORT_NAME.csv"
+file="data_naf-$IN_FILE_SHORT_NAME-$SORTING_TYPE.csv"
 
 {
 ed -s "$file" <<EOF
@@ -765,6 +769,7 @@ function CSV_BUILDER_MBGC(){
 IN_FILE="$1";
 LEVEL="$2";
 SORTING_ALGORITHM="$3";
+SORTING_TYPE="$4";
   # $IN_FILE_SHORT_NAME-naf_l$LEVEL.txt
   # $IN_FILE_SHORT_NAME-naf_size_l$LEVEL.txt
 
@@ -811,7 +816,7 @@ printf $diff | tee diff_x
 printf $run | tee run_x
  
 
-file="data_mbgc-$IN_FILE_SHORT_NAME.csv"
+file="data_mbgc-$IN_FILE_SHORT_NAME-$SORTING_TYPE.csv"
 
 {
 ed -s "$file" <<EOF
@@ -864,7 +869,7 @@ printf $diff | tee diff_x
 printf $run | tee run_x
  
 
-file="data_mbgc-$IN_FILE_SHORT_NAME.csv"
+file="data_mbgc-$IN_FILE_SHORT_NAME-$SORTING_TYPE.csv"
 
 {
 ed -s "$file" <<EOF
@@ -916,7 +921,7 @@ printf $diff | tee diff_x
 printf $run | tee run_x
  
 
-file="data_mbgc-$IN_FILE_SHORT_NAME.csv"
+file="data_mbgc-$IN_FILE_SHORT_NAME-$SORTING_TYPE.csv"
 
 {
 ed -s "$file" <<EOF
@@ -939,6 +944,7 @@ function CSV_BUILDER_MFCOMPRESS(){
   LEVEL="$2";
   PARTITION="$3";
   SORTING_ALGORITHM="$4";
+  SORTING_TYPE="$5";
 
   IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fasta//g')
   echo $IN_FILE_SHORT_NAME
@@ -986,7 +992,7 @@ printf $diff | tee diff_x
 printf $run | tee run_x
  
 
-file="data_mfcompress-$IN_FILE_SHORT_NAME.csv"
+file="data_mfcompress-$IN_FILE_SHORT_NAME-$SORTING_TYPE.csv"
 
 {
 ed -s "$file" <<EOF
@@ -1041,7 +1047,7 @@ printf $diff | tee diff_x
 printf $run | tee run_x
  
 
-file="data_mfcompress-$IN_FILE_SHORT_NAME.csv"
+file="data_mfcompress-$IN_FILE_SHORT_NAME-$SORTING_TYPE.csv"
 
 {
 ed -s "$file" <<EOF
@@ -1096,7 +1102,7 @@ printf $diff | tee diff_x
 printf $run | tee run_x
  
 
-file="data_mfcompress-$IN_FILE_SHORT_NAME.csv"
+file="data_mfcompress-$IN_FILE_SHORT_NAME-$SORTING_TYPE.csv"
 
 {
 ed -s "$file" <<EOF
@@ -1116,6 +1122,7 @@ function CSV_BUILDER_GZIP(){
 IN_FILE="$1";
 LEVEL="$2";
 SORTING_ALGORITHM="$3";
+SORTING_TYPE="$4";
   # $IN_FILE_SHORT_NAME-naf_l$LEVEL.txt
   # $IN_FILE_SHORT_NAME-naf_size_l$LEVEL.txt
 
@@ -1163,7 +1170,7 @@ printf $diff | tee diff_x
 printf $run | tee run_x
  
 
-file="data_gzip-$IN_FILE_SHORT_NAME.csv"
+file="data_gzip-$IN_FILE_SHORT_NAME-$SORTING_TYPE.csv"
 
 {
 ed -s "$file" <<EOF
@@ -1217,7 +1224,7 @@ printf $diff | tee diff_x
 printf $run | tee run_x
  IN_FILE
 
-file="data_gzip-$IN_FILE_SHORT_NAME.csv"
+file="data_gzip-$IN_FILE_SHORT_NAME-$SORTING_TYPE.csv"
 
 {
 ed -s "$file" <<EOF
@@ -1270,7 +1277,7 @@ printf $diff | tee diff_x
 printf $run | tee run_x
  
 
-file="data_gzip-$IN_FILE_SHORT_NAME.csv"
+file="data_gzip-$IN_FILE_SHORT_NAME-$SORTING_TYPE.csv"
 
 {
 ed -s "$file" <<EOF
@@ -1292,6 +1299,7 @@ function CSV_BUILDER_LZMA(){
 IN_FILE="$1";
 LEVEL="$2";
 SORTING_ALGORITHM="$3";
+SORTING_TYPE="$4";
 
   IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fasta//g')
   echo $IN_FILE_SHORT_NAME
@@ -1339,7 +1347,7 @@ printf $diff | tee diff_x
 printf $run | tee run_x
  
 
-file="data_lzma-$IN_FILE_SHORT_NAME.csv"
+file="data_lzma-$IN_FILE_SHORT_NAME-$SORTING_TYPE.csv"
 
 {
 ed -s "$file" <<EOF
@@ -1392,7 +1400,7 @@ printf $diff | tee diff_x
 printf $run | tee run_x
  
 
-file="data_lzma-$IN_FILE_SHORT_NAME.csv"
+file="data_lzma-$IN_FILE_SHORT_NAME-$SORTING_TYPE.csv"
 
 {
 ed -s "$file" <<EOF
@@ -1444,7 +1452,7 @@ printf $diff | tee diff_x
 printf $run | tee run_x
  
 
-file="data_lzma-$IN_FILE_SHORT_NAME.csv"
+file="data_lzma-$IN_FILE_SHORT_NAME-$SORTING_TYPE.csv"
 
 {
 ed -s "$file" <<EOF
@@ -1468,6 +1476,7 @@ function CSV_BUILDER_BZIP2(){
 IN_FILE="$1";
 LEVEL="$2";
 SORTING_ALGORITHM="$3";
+SORTING_TYPE="$4";
 
   IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fasta//g')
   echo $IN_FILE_SHORT_NAME
@@ -1515,7 +1524,7 @@ printf $diff | tee diff_x
 printf $run | tee run_x
  
 
-file="data_bzip2-$IN_FILE_SHORT_NAME.csv"
+file="data_bzip2-$IN_FILE_SHORT_NAME-$SORTING_TYPE.csv"
 
 {
 ed -s "$file" <<EOF
@@ -1568,7 +1577,7 @@ printf $diff | tee diff_x
 printf $run | tee run_x
  
 
-file="data_bzip2-$IN_FILE_SHORT_NAME.csv"
+file="data_bzip2-$IN_FILE_SHORT_NAME-$SORTING_TYPE.csv"
 
 {
 ed -s "$file" <<EOF
@@ -1620,7 +1629,7 @@ printf $diff | tee diff_x
 printf $run | tee run_x
  
 
-file="data_bzip2-$IN_FILE_SHORT_NAME.csv"
+file="data_bzip2-$IN_FILE_SHORT_NAME-$SORTING_TYPE.csv"
 
 {
 ed -s "$file" <<EOF
@@ -1642,7 +1651,9 @@ fi
 function PLOT_JARVIS3(){
 #rm *.csv
 partitions_array=("10mb" "100mb" "1gb")
-JARVIS_CSV=$1
+JARVIS_CSV="$1";
+SORTING_TYPE="$2";
+
 
   # IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fasta//g')
   # echo $IN_FILE_SHORT_NAME
@@ -1650,30 +1661,30 @@ JARVIS_CSV=$1
 
 #Build CSV for each partition
 for ((i=0; i<${#JARVIS_CSV[@]}; i++)); do
- cat ${JARVIS_CSV[i]}.csv | grep -w "10MB" > ${JARVIS_CSV[i]}-10mb.csv
- cat ${JARVIS_CSV[i]}.csv| grep -w "100MB" > ${JARVIS_CSV[i]}-100mb.csv
- cat ${JARVIS_CSV[i]}.csv | grep -w "1GB" > ${JARVIS_CSV[i]}-1gb.csv
+ cat data_jarvis3-${JARVIS_CSV[i]}-$SORTING_TYPE.csv | grep -w "10MB" > ${JARVIS_CSV[i]}-$SORTING_TYPE-10mb.csv
+ cat data_jarvis3-${JARVIS_CSV[i]}-$SORTING_TYPE.csv | grep -w "100MB" > ${JARVIS_CSV[i]}-$SORTING_TYPE-100mb.csv
+ cat $data_jarvis3-${JARVIS_CSV[i]}-$SORTING_TYPE.csv | grep -w "1GB" > ${JARVIS_CSV[i]}-$SORTING_TYPE-1gb.csv
 
 #Build CSV for each sorting algorithm
-cat ${JARVIS_CSV[i]}.csv | grep -e "fasta_analysis" > ${JARVIS_CSV[i]}-fasta_analysis.csv
-cat ${JARVIS_CSV[i]}.csv | grep -e "sortmf" > ${JARVIS_CSV[i]}-sortmf.csv
-cat ${JARVIS_CSV[i]}.csv | grep -v -e "fasta_analysis" | grep -v -e "sortmf" | grep -e "JARVIS3" > ${JARVIS_CSV[i]}-not_sorted.csv
+cat data_jarvis3-${JARVIS_CSV[i]}-$SORTING_TYPE.csv | grep -e "fasta_analysis" > ${JARVIS_CSV[i]}-$SORTING_TYPE-fasta_analysis.csv
+cat data_jarvis3-${JARVIS_CSV[i]}-$SORTING_TYPE.csv | grep -e "sortmf" > ${JARVIS_CSV[i]}-$SORTING_TYPE-sortmf.csv
+cat data_jarvis3-${JARVIS_CSV[i]}-$SORTING_TYPE.csv | grep -v -e "fasta_analysis" | grep -v -e "sortmf" | grep -e "JARVIS3" > ${JARVIS_CSV[i]}-$SORTING_TYPE-not_sorted.csv
 
 
 #Build CSV combining partition with sorting algorithm
 #JARVIS_CSV="data_jarvis3"
- cat ${JARVIS_CSV[i]}-10mb.csv | grep -e "sortmf" > ${JARVIS_CSV[i]}-10mb_sortmf.csv
-  echo "$(sort -t$',' -n -k9 ${JARVIS_CSV[i]}-10mb_sortmf.csv)" > "${JARVIS_CSV[i]}-10mb_sortmf.csv"
- cat ${JARVIS_CSV[i]}-100mb.csv | grep -e "sortmf" > ${JARVIS_CSV[i]}-100mb_sortmf.csv
-  echo "$(sort -t$',' -n -k9 ${JARVIS_CSV[i]}-100mb_sortmf.csv)" > "${JARVIS_CSV[i]}-100mb_sortmf.csv"
- cat ${JARVIS_CSV[i]}-1gb.csv | grep -e "sortmf" > ${JARVIS_CSV[i]}-1gb_sortmf.csv
-  echo "$(sort -t$',' -n -k9 ${JARVIS_CSV[i]}-1gb_sortmf.csv)" > "${JARVIS_CSV[i]}-1gb_sortmf.csv"
- cat ${JARVIS_CSV[i]}-10mb.csv | grep -e "fasta_analysis" > ${JARVIS_CSV[i]}-10mb_fasta_analysis.csv
-  echo "$(sort -t$',' -n -k9 ${JARVIS_CSV[i]}-10mb_fasta_analysis.csv)" > "${JARVIS_CSV[i]}-10mb_fasta_analysis.csv"
- cat ${JARVIS_CSV[i]}-100mb.csv | grep -e "fasta_analysis" > ${JARVIS_CSV[i]}-100mb_fasta_analysis.csv
-   echo "$(sort -t$',' -n -k9 ${JARVIS_CSV[i]}-100mb_fasta_analysis.csv)" > "${JARVIS_CSV[i]}-100mb_fasta_analysis.csv"
- cat ${JARVIS_CSV[i]}-1gb.csv | grep -e "fasta_analysis" > ${JARVIS_CSV[i]}-1gb_fasta_analysis.csv
-  echo "$(sort -t$',' -n -k9 ${JARVIS_CSV[i]}-1gb_fasta_analysis.csv)" > "${JARVIS_CSV[i]}-1gb_fasta_analysis.csv"
+ cat ${JARVIS_CSV[i]}-$SORTING_TYPE-10mb.csv | grep -e "sortmf" > ${JARVIS_CSV[i]}-$SORTING_TYPE-10mb_sortmf.csv
+  echo "$(sort -t$',' -n -k9 ${JARVIS_CSV[i]}-$SORTING_TYPE-10mb_sortmf.csv)" > "${JARVIS_CSV[i]}-$SORTING_TYPE-10mb_sortmf.csv"
+ cat ${JARVIS_CSV[i]}-$SORTING_TYPE-100mb.csv | grep -e "sortmf" > ${JARVIS_CSV[i]}-$SORTING_TYPE-100mb_sortmf.csv
+  echo "$(sort -t$',' -n -k9 ${JARVIS_CSV[i]}-$SORTING_TYPE-100mb_sortmf.csv)" > "${JARVIS_CSV[i]}-$SORTING_TYPE-100mb_sortmf.csv"
+ cat ${JARVIS_CSV[i]}-$SORTING_TYPE-1gb.csv | grep -e "sortmf" > ${JARVIS_CSV[i]}-$SORTING_TYPE-1gb_sortmf.csv
+  echo "$(sort -t$',' -n -k9 ${JARVIS_CSV[i]}-$SORTING_TYPE-1gb_sortmf.csv)" > "${JARVIS_CSV[i]}-$SORTING_TYPE-1gb_sortmf.csv"
+ cat ${JARVIS_CSV[i]}-$SORTING_TYPE-10mb.csv | grep -e "fasta_analysis" > ${JARVIS_CSV[i]}-$SORTING_TYPE-10mb_fasta_analysis.csv
+  echo "$(sort -t$',' -n -k9 ${JARVIS_CSV[i]}-$SORTING_TYPE-10mb_fasta_analysis.csv)" > "${JARVIS_CSV[i]}-$SORTING_TYPE-10mb_fasta_analysis.csv"
+ cat ${JARVIS_CSV[i]}-$SORTING_TYPE-100mb.csv | grep -e "fasta_analysis" > ${JARVIS_CSV[i]}-$SORTING_TYPE-100mb_fasta_analysis.csv
+   echo "$(sort -t$',' -n -k9 ${JARVIS_CSV[i]}-$SORTING_TYPE-100mb_fasta_analysis.csv)" > "${JARVIS_CSV[i]}-$SORTING_TYPE-100mb_fasta_analysis.csv"
+ cat ${JARVIS_CSV[i]}-$SORTING_TYPE-1gb.csv | grep -e "fasta_analysis" > ${JARVIS_CSV[i]}-$SORTING_TYPE-1gb_fasta_analysis.csv
+  echo "$(sort -t$',' -n -k9 ${JARVIS_CSV[i]}-$SORTING_TYPE-1gb_fasta_analysis.csv)" > "${JARVIS_CSV[i]}-$SORTING_TYPE-1gb_fasta_analysis.csv"
 
 done
 
@@ -1683,9 +1694,9 @@ done
 
   #for l in "${!sorting_method[@]}"; do
   partition=${partitions_array[j]}
-  plot_file="jarvis3-plot_${partitions_array[j]}.pdf"
+  plot_file="jarvis3-plot_${partitions_array[j]}-$SORTING_TYPE.pdf"
   #echo $plot_file
-  title="Compression Gains using JARVIS3.sh with partition ${partitions_array[j]}"
+  title="Compression Gains using JARVIS3.sh with partition ${partitions_array[j]} sorted by $SORTING_TYPE"
   #gain_x=$(awk -F "\"*,\"*" '{print $8}' data_level_${levels_array[j]}.csv) 
   #cat ${level_input_file[j]}
   #point=0
@@ -1726,9 +1737,9 @@ done
         set multiplot layout 1,2
         count=12
       #  plot sorting_points u 7:8 w points ls count notitle
-        plot "${JARVIS_CSV[0]}-${partitions_array[j]}-fasta_analysis.csv u 9:8 title "Synthetic Data" with linespoints linestyle count
+        plot "${JARVIS_CSV[0]}-${partitions_array[j]}-$SORTING_TYPE-fasta_analysis.csv u 9:8 title "Synthetic Data" with linespoints linestyle count
         count=count + 1
-        plot "${JARVIS_CSV[1]}-${partitions_array[j]}-fasta_analysis.csv" u 9:8 title "Real Data" with linespoints linestyle count
+        plot "${JARVIS_CSV[1]}-${partitions_array[j]}-$SORTING_TYPE-fasta_analysis.csv" u 9:8 title "Real Data" with linespoints linestyle count
         count=count + 1
          
 EOF
@@ -1745,6 +1756,7 @@ done
    #rm *.csv
 #partitions_array=("10mb" "100mb" "1gb")
 NAF_CSV=$1
+SORTING_TYPE=$2
 
   # IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fasta//g')
   # echo $IN_FILE_SHORT_NAME
@@ -1752,16 +1764,12 @@ NAF_CSV=$1
 
 for ((i=0; i<${#NAF_CSV[@]}; i++)); do
 #Build CSV for each sorting algorithm
-
- IN_FILE_SHORT_NAME=$(ls -1 ${NAF_CSV[i]} | sed 's/.fasta//g')
- echo $IN_FILE_SHORT_NAME
-
-cat $IN_FILE_SHORT_NAME.csv | grep -e "fasta_analysis" > $IN_FILE_SHORT_NAME-fasta_analysis.csv
-echo "$(sort -t$',' -n -k 8 $IN_FILE_SHORT_NAME-fasta_analysis.csv)" > "$IN_FILE_SHORT_NAME-fasta_analysis.csv"
-cat $IN_FILE_SHORT_NAME.csv| grep -e "sortmf" > $IN_FILE_SHORT_NAME-sortmf.csv
-echo "$(sort -t$',' -n -k 8 $IN_FILE_SHORT_NAME-sortmf.csv)" > "$IN_FILE_SHORT_NAME-sortmf.csv"
-cat $IN_FILE_SHORT_NAME.csv | grep -v -e "fasta_analysis" | grep -v -e "sortmf" > $IN_FILE_SHORT_NAME-not_sorted.csv
-echo "$(sort -t$',' -n -k 8 $IN_FILE_SHORT_NAME-not_sorted.csv)" > "$IN_FILE_SHORT_NAME-not_sorted.csv"
+cat ${NAF_CSV[i]}-$SORTING_TYPE.csv | grep -e "fasta_analysis" > ${NAF_CSV[i]}-$SORTING_TYPE-fasta_analysis.csv
+echo "$(sort -t$',' -n -k 8 ${NAF_CSV[i]}-$SORTING_TYPE-fasta_analysis.csv)" > "${NAF_CSV[i]}-$SORTING_TYPE-fasta_analysis.csv"
+cat ${NAF_CSV[i]}-$SORTING_TYPE.csv| grep -e "sortmf" > ${NAF_CSV[i]}-$SORTING_TYPE-sortmf.csv
+echo "$(sort -t$',' -n -k 8 ${NAF_CSV[i]}-$SORTING_TYPE-sortmf.csv)" > "${NAF_CSV[i]}-$SORTING_TYPE-sortmf.csv"
+cat ${NAF_CSV[i]}-$SORTING_TYPE.csv | grep -v -e "fasta_analysis" | grep -v -e "sortmf" > ${NAF_CSV[i]}-$SORTING_TYPE-not_sorted.csv
+echo "$(sort -t$',' -n -k 8 ${NAF_CSV[i]}-$SORTING_TYPE-not_sorted.csv)" > "${NAF_CSV[i]}-$SORTING_TYPE-not_sorted.csv"
 
 done
 
@@ -1771,9 +1779,9 @@ done
 
   #for l in "${!sorting_method[@]}"; do
   #partition=${partitions_array[j]}
-  plot_file="data_naf-plot.pdf"
+  plot_file="data_naf-plot-$SORTING_TYPE.pdf"
   #echo $plot_file
-  title="Compression Gains using naf"
+  title="Compression Gains using naf sorting by $SORTING_TYPE"
   #gain_x=$(awk -F "\"*,\"*" '{print $8}' data_level_${levels_array[j]}.csv) 
   #cat ${level_input_file[j]}
   #point=0
@@ -1814,9 +1822,9 @@ done
         set multiplot 
         count=12
       #  plot sorting_points u 7:8 w points ls count notitle
-        plot "${NAF_CSV[0]}-fasta_analysis.csv" u 8:7 title "Synthetic Data" with linespoints linestyle count
+        plot "${NAF_CSV[0]}-$SORTING_TYPE-fasta_analysis.csv" u 8:7 title "Synthetic Data" with linespoints linestyle count
         count=count + 1
-        #plot "${NAF_CSV[1]}-fasta_analysis.csv" u 8:7 title "Real Data" with linespoints linestyle count
+        #plot "${NAF_CSV[1]}-$SORTING_TYPE-fasta_analysis.csv" u 8:7 title "Real Data" with linespoints linestyle count
         count=count + 1
          
 EOF
@@ -1830,21 +1838,19 @@ EOF
  function PLOT_MBGC(){
    #MBGC_CSV="data_mbgc"
   MBGC_CSV=$1
+  SORTING_TYPE=$2
   # IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fasta//g')
   # echo $IN_FILE_SHORT_NAME
 #echo "$(sort -t$',' -k 8 $MBGC_CSV.csv)" > "$MBGC_CSV.csv"
 
 for ((i=0; i<${#MBGC_CSV[@]}; i++)); do
 #Build CSV for each sorting algorithm
- IN_FILE_SHORT_NAME=$(ls -1 ${MBGC_CSV[i]} | sed 's/.fasta//g')
- echo $IN_FILE_SHORT_NAME
-
-cat $IN_FILE_SHORT_NAME.csv | grep -e "fasta_analysis" > $IN_FILE_SHORT_NAME-fasta_analysis.csv
-echo "$(sort -t$',' -k 8 $IN_FILE_SHORT_NAME-fasta_analysis.csv)" > "$IN_FILE_SHORT_NAME-fasta_analysis.csv"
-cat $IN_FILE_SHORT_NAME.csv| grep -e "sortmf" > $IN_FILE_SHORT_NAME-sortmf.csv
-echo "$(sort -t$',' -k 8 $IN_FILE_SHORT_NAME-sortmf.csv)" > "$IN_FILE_SHORT_NAME-sortmf.csv"
-cat $IN_FILE_SHORT_NAME.csv | grep -v -e "fasta_analysis" | grep -v -e "sortmf" > $IN_FILE_SHORT_NAME-not_sorted.csv
-echo "$(sort -t$',' -k 8 $IN_FILE_SHORT_NAME-not_sorted.csv)" > "$IN_FILE_SHORT_NAME-not_sorted.csv"
+cat ${MBGC_CSV[i]}-$SORTING_TYPE.csv | grep -e "fasta_analysis" > ${MBGC_CSV[i]}-$SORTING_TYPE-fasta_analysis.csv
+echo "$(sort -t$',' -k 8 ${MBGC_CSV[i]}-$SORTING_TYPE-fasta_analysis.csv)" > "${MBGC_CSV[i]}-$SORTING_TYPE-fasta_analysis.csv"
+cat ${MBGC_CSV[i]}-$SORTING_TYPE.csv| grep -e "sortmf" > ${MBGC_CSV[i]}-$SORTING_TYPE-sortmf.csv
+echo "$(sort -t$',' -k 8 ${MBGC_CSV[i]}-$SORTING_TYPE-sortmf.csv)" > "${MBGC_CSV[i]}-$SORTING_TYPE-sortmf.csv"
+cat ${MBGC_CSV[i]}-$SORTING_TYPE.csv | grep -v -e "fasta_analysis" | grep -v -e "sortmf" > ${MBGC_CSV[i]}-$SORTING_TYPE-not_sorted.csv
+echo "$(sort -t$',' -k 8 ${MBGC_CSV[i]}-$SORTING_TYPE-not_sorted.csv)" > "${MBGC_CSV[i]}-$SORTING_TYPE-not_sorted.csv"
 
 
 done
@@ -1852,9 +1858,9 @@ done
 
   #for l in "${!sorting_method[@]}"; do
  # partition=${partitions_array[j]}
-  plot_file="data-plot_mbgc.pdf"
+  plot_file="data-plot_mbgc-$SORTING_TYPE.pdf"
   #echo $plot_file
-  title="Compression Gains using MBGC"
+  title="Compression Gains using MBGC sorting by $SORTING_TYPE"
   #gain_x=$(awk -F "\"*,\"*" '{print $8}' data_level_${levels_array[j]}.csv) 
   #cat ${level_input_file[j]}
   #point=0
@@ -1895,9 +1901,9 @@ done
         set multiplot
         count=12
       #  plot sorting_points u 7:8 w points ls count notitle
-        plot "${MBGC_CSV[0]}-fasta_analysis.csv" u 8:7 title "Synthetic Data"  with linespoints linestyle count
+        plot "${MBGC_CSV[0]}-$SORTING_TYPE-fasta_analysis.csv" u 8:7 title "Synthetic Data"  with linespoints linestyle count
         count=count + 1
-        plot "${MBGC_CSV[1]}-fasta_analysis.csv" u 8:7 title "Real Data"  with linespoints linestyle count
+        plot "${MBGC_CSV[1]}-$SORTING_TYPE-fasta_analysis.csv" u 8:7 title "Real Data"  with linespoints linestyle count
         count=count + 1
          
 EOF
@@ -1914,38 +1920,37 @@ EOF
 partitions_array=("1" "4" "8")
 #MFCOMPRESS_CSV="data_mfcompress"
 MFCOMPRESS_CSV=$1
+SORTING_TYPE=$2
   # IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fasta//g')
   # echo $IN_FILE_SHORT_NAME
 # echo "$(sort -t$',' -k 9 $MFCOMPRESS_CSV.csv)" > "$MFCOMPRESS_CSV.csv"
 
 for ((i=0; i<${#MFCOMPRESS_CSV[@]}; i++)); do
 #Build CSV for each partition
- IN_FILE_SHORT_NAME=$(ls -1 ${MFCOMPRESS_CSV[i]} | sed 's/.fasta//g')
- echo $IN_FILE_SHORT_NAME
- cat $IN_FILE_SHORT_NAME.csv | grep -w "1" | awk -F, '$3==1'  > $IN_FILE_SHORT_NAME-1.csv
- cat $IN_FILE_SHORT_NAME.csv| grep -w "4" | awk -F, '$3==1' > $IN_FILE_SHORT_NAME-4.csv
- cat $IN_FILE_SHORT_NAME.csv | grep -w "8" | awk -F, '$3==1' > $IN_FILE_SHORT_NAME-8.csv
+ cat ${MFCOMPRESS_CSV[i]}-$SORTING_TYPE.csv | grep -w "1" | awk -F, '$3==1'  > ${MFCOMPRESS_CSV[i]}-$SORTING_TYPE-1.csv
+ cat ${MFCOMPRESS_CSV[i]}-$SORTING_TYPE.csv| grep -w "4" | awk -F, '$3==1' > ${MFCOMPRESS_CSV[i]}-$SORTING_TYPE-4.csv
+ cat ${MFCOMPRESS_CSV[i]}-$SORTING_TYPE.csv | grep -w "8" | awk -F, '$3==1' > ${MFCOMPRESS_CSV[i]}-$SORTING_TYPE-8.csv
 
 #Build CSV for each sorting algorithm
-cat $IN_FILE_SHORT_NAME.csv | grep -e "fasta_analysis" > $IN_FILE_SHORT_NAME-fasta_analysis.csv
-cat $IN_FILE_SHORT_NAME.csv| grep -e "sortmf" > $IN_FILE_SHORT_NAME-sortmf.csv
-cat $IN_FILE_SHORT_NAME.csv | grep -v -e "fasta_analysis" | grep -v -e "sortmf" | grep -e "mfcompress" > $IN_FILE_SHORT_NAME-not_sorted.csv
+cat ${MFCOMPRESS_CSV[i]}-$SORTING_TYPE.csv | grep -e "fasta_analysis" > ${MFCOMPRESS_CSV[i]}-$SORTING_TYPE-fasta_analysis.csv
+cat ${MFCOMPRESS_CSV[i]}-$SORTING_TYPE.csv| grep -e "sortmf" > ${MFCOMPRESS_CSV[i]}-$SORTING_TYPE-sortmf.csv
+cat ${MFCOMPRESS_CSV[i]}-$SORTING_TYPE.csv | grep -v -e "fasta_analysis" | grep -v -e "sortmf" | grep -e "mfcompress" > ${MFCOMPRESS_CSV[i]}-$SORTING_TYPE-not_sorted.csv
 
 
 #Build CSV combining partition with sorting algorithm
 #MFCOMPRESS_CSV="data_jarvis3"
- cat $IN_FILE_SHORT_NAME-1.csv | grep -e "sortmf" > $IN_FILE_SHORT_NAME-1_sortmf.csv
- echo "$(sort -t$',' -n -k 9 $IN_FILE_SHORT_NAME-1_sortmf.csv)" > "$IN_FILE_SHORT_NAME-1_sortmf.csv"
- cat $IN_FILE_SHORT_NAME-4.csv | grep -e "sortmf" > $IN_FILE_SHORT_NAME-4_sortmf.csv
-  echo "$(sort -t$',' -n -k 9 $IN_FILE_SHORT_NAME-4_sortmf.csv)" > "$IN_FILE_SHORT_NAME-4_sortmf.csv"
- cat $IN_FILE_SHORT_NAME-8.csv | grep -e "sortmf" > $IN_FILE_SHORT_NAME-8_sortmf.csv
-  echo "$(sort -t$',' -n -k 9 $IN_FILE_SHORT_NAME-8_sortmf.csv)" > "$IN_FILE_SHORT_NAME-8_sortmf.csv"
- cat $IN_FILE_SHORT_NAME-1.csv | grep -e "fasta_analysis" > $IN_FILE_SHORT_NAME-1_fasta_analysis.csv
- echo "$(sort -t$',' -n -k 9 $IN_FILE_SHORT_NAME-1_fasta_analysis.csv)" > "$IN_FILE_SHORT_NAME-1_fasta_analysis.csv"
- cat $IN_FILE_SHORT_NAME-4.csv | grep -e "fasta_analysis" > $IN_FILE_SHORT_NAME-4_fasta_analysis.csv
- echo "$(sort -t$',' -n -k 9 $IN_FILE_SHORT_NAME-4_fasta_analysis.csv)" > "$IN_FILE_SHORT_NAME-4_fasta_analysis.csv"
- cat $IN_FILE_SHORT_NAME-8.csv | grep -e "fasta_analysis" > $IN_FILE_SHORT_NAME-8_fasta_analysis.csv
- echo "$(sort -t$',' -n -k 9 $IN_FILE_SHORT_NAME-8_fasta_analysis.csv)" > "$IN_FILE_SHORT_NAME-8_fasta_analysis.csv"
+ cat ${MFCOMPRESS_CSV[i]}-$SORTING_TYPE-1.csv | grep -e "sortmf" > ${MFCOMPRESS_CSV[i]}-$SORTING_TYPE-1_sortmf.csv
+ echo "$(sort -t$',' -n -k 9 ${MFCOMPRESS_CSV[i]}-$SORTING_TYPE-1_sortmf.csv)" > "${MFCOMPRESS_CSV[i]}-$SORTING_TYPE-1_sortmf.csv"
+ cat ${MFCOMPRESS_CSV[i]}-$SORTING_TYPE-4.csv | grep -e "sortmf" > ${MFCOMPRESS_CSV[i]}-$SORTING_TYPE-4_sortmf.csv
+  echo "$(sort -t$',' -n -k 9 ${MFCOMPRESS_CSV[i]}-$SORTING_TYPE-4_sortmf.csv)" > "${MFCOMPRESS_CSV[i]}-$SORTING_TYPE-4_sortmf.csv"
+ cat ${MFCOMPRESS_CSV[i]}-$SORTING_TYPE-8.csv | grep -e "sortmf" > ${MFCOMPRESS_CSV[i]}-$SORTING_TYPE-8_sortmf.csv
+  echo "$(sort -t$',' -n -k 9 ${MFCOMPRESS_CSV[i]}-$SORTING_TYPE-8_sortmf.csv)" > "${MFCOMPRESS_CSV[i]}-$SORTING_TYPE-8_sortmf.csv"
+ cat ${MFCOMPRESS_CSV[i]}-$SORTING_TYPE-1.csv | grep -e "fasta_analysis" > ${MFCOMPRESS_CSV[i]}-$SORTING_TYPE-1_fasta_analysis.csv
+ echo "$(sort -t$',' -n -k 9 ${MFCOMPRESS_CSV[i]}-$SORTING_TYPE-1_fasta_analysis.csv)" > "${MFCOMPRESS_CSV[i]}-$SORTING_TYPE-1_fasta_analysis.csv"
+ cat ${MFCOMPRESS_CSV[i]}-$SORTING_TYPE-4.csv | grep -e "fasta_analysis" > ${MFCOMPRESS_CSV[i]}-$SORTING_TYPE-4_fasta_analysis.csv
+ echo "$(sort -t$',' -n -k 9 ${MFCOMPRESS_CSV[i]}-$SORTING_TYPE-4_fasta_analysis.csv)" > "${MFCOMPRESS_CSV[i]}-$SORTING_TYPE-4_fasta_analysis.csv"
+ cat ${MFCOMPRESS_CSV[i]}-$SORTING_TYPE-8.csv | grep -e "fasta_analysis" > ${MFCOMPRESS_CSV[i]}-$SORTING_TYPE-8_fasta_analysis.csv
+ echo "$(sort -t$',' -n -k 9 ${MFCOMPRESS_CSV[i]}-$SORTING_TYPE-8_fasta_analysis.csv)" > "${MFCOMPRESS_CSV[i]}-$SORTING_TYPE-8_fasta_analysis.csv"
 
 done
 
@@ -1996,9 +2001,9 @@ done
         set multiplot
         count=12
       #  plot sorting_points u 7:8 w points ls count notitle
-        plot "${MFCOMPRESS_CSV[0]}-${partitions_array[j]}_fasta_analysis.csv" u 9:8 title "Synthetic Data" with linespoints linestyle count
+        plot "${MFCOMPRESS_CSV[0]}-$SORTING_TYPE-${partitions_array[j]}_fasta_analysis.csv" u 9:8 title "Synthetic Data" with linespoints linestyle count
         count=count + 1
-        plot "${MFCOMPRESS_CSV[1]}-${partitions_array[j]}_fasta_analysis.csv" u 9:8 title "Real Data"  with linespoints linestyle count
+        plot "${MFCOMPRESS_CSV[1]}-$SORTING_TYPE-${partitions_array[j]}_fasta_analysis.csv" u 9:8 title "Real Data"  with linespoints linestyle count
         count=count + 1
          
 EOF
@@ -2012,31 +2017,28 @@ done
  function PLOT_GZIP(){
   #GZIP_CSV="data_gzip"
    GZIP_CSV=$1
+   SORTING_TYPE=$2
   # IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fasta//g')
   # echo $IN_FILE_SHORT_NAME
 #echo "$(sort -t$',' -k 8 $GZIP_CSV.csv)" > "$GZIP_CSV.csv"
 
 for ((i=0; i<${#GZIP_CSV[@]}; i++)); do
 #Build CSV for each sorting algorithm
-IN_FILE_SHORT_NAME=$(ls -1 ${GZIP_CSV[i]} | sed 's/.fasta//g')
- echo $IN_FILE_SHORT_NAME
-
-
-cat $IN_FILE_SHORT_NAME.csv | grep -e "fasta_analysis" > $IN_FILE_SHORT_NAME-fasta_analysis.csv
-echo "$(sort -t$',' -n -k 8 $IN_FILE_SHORT_NAME-fasta_analysis.csv)" > "$IN_FILE_SHORT_NAME-fasta_analysis.csv"
-cat $IN_FILE_SHORT_NAME.csv| grep -e "sortmf" > $IN_FILE_SHORT_NAME-sortmf.csv
-echo "$(sort -t$',' -n -k 8 $IN_FILE_SHORT_NAME-sortmf.csv)" > "$IN_FILE_SHORT_NAME-sortmf.csv"
-cat $IN_FILE_SHORT_NAME.csv | grep -v -e "fasta_analysis" | grep -v -e "sortmf" > $IN_FILE_SHORT_NAME-not_sorted.csv
-echo "$(sort -t$',' -n -k 8 $IN_FILE_SHORT_NAME-not_sorted.csv)" > "$IN_FILE_SHORT_NAME-not_sorted.csv"
+cat ${GZIP_CSV[i]}-$SORTING_TYPE.csv | grep -e "fasta_analysis" > ${GZIP_CSV[i]}-$SORTING_TYPE-fasta_analysis.csv
+echo "$(sort -t$',' -n -k 8 ${GZIP_CSV[i]}-$SORTING_TYPE-fasta_analysis.csv)" > "${GZIP_CSV[i]}-$SORTING_TYPE-fasta_analysis.csv"
+cat ${GZIP_CSV[i]}-$SORTING_TYPE.csv| grep -e "sortmf" > ${GZIP_CSV[i]}-$SORTING_TYPE-sortmf.csv
+echo "$(sort -t$',' -n -k 8 ${GZIP_CSV[i]}-$SORTING_TYPE-sortmf.csv)" > "${GZIP_CSV[i]}-$SORTING_TYPE-sortmf.csv"
+cat ${GZIP_CSV[i]}-$SORTING_TYPE.csv | grep -v -e "fasta_analysis" | grep -v -e "sortmf" > ${GZIP_CSV[i]}-$SORTING_TYPE-not_sorted.csv
+echo "$(sort -t$',' -n -k 8 ${GZIP_CSV[i]}-$SORTING_TYPE-not_sorted.csv)" > "${GZIP_CSV[i]}-$SORTING_TYPE-not_sorted.csv"
 done
 
  #for j in "${!partitions_array[@]}"; do
 
   #for l in "${!sorting_method[@]}"; do
  # partition=${partitions_array[j]}
-  plot_file="data-plot_gzip.pdf"
+  plot_file="data-plot_gzip-$SORTING_TYPE.pdf"
   #echo $plot_file
-  title="Compression Gains using GZIP"
+  title="Compression Gains using GZIP using sorting by $SORTING_TYPE"
   #gain_x=$(awk -F "\"*,\"*" '{print $8}' data_level_${levels_array[j]}.csv) 
   #cat ${level_input_file[j]}
   #point=0
@@ -2077,9 +2079,9 @@ done
         set multiplot
         count=12
       #  plot sorting_points u 7:8 w points ls count notitle
-        plot "${GZIP_CSV[0]}-fasta_analysis.csv" u 8:7 title "Synthetic Data"  with linespoints linestyle count
+        plot "${GZIP_CSV[0]}-$SORTING_TYPE-fasta_analysis.csv" u 8:7 title "Synthetic Data"  with linespoints linestyle count
         count=count + 1
-        plot "${GZIP_CSV[1]}-fasta_analysis.csv" u 8:7 title "Real Data" with linespoints linestyle count
+        plot "${GZIP_CSV[1]}-$SORTING_TYPE-fasta_analysis.csv" u 8:7 title "Real Data" with linespoints linestyle count
         count=count + 1
          
 EOF
@@ -2092,21 +2094,19 @@ EOF
  function PLOT_LZMA(){
   #LZMA_CSV="data_lzma"
 LZMA_CSV=$1
+SORTING_TYPE=$2
   # IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fasta//g')
   # echo $IN_FILE_SHORT_NAME
 
 
 for ((i=0; i<${#LZMA_CSV[@]}; i++)); do
 #Build CSV for each sorting algorithm
-IN_FILE_SHORT_NAME=$(ls -1 ${LZMA_CSV[i]} | sed 's/.fasta//g')
- echo $IN_FILE_SHORT_NAME
-
-cat $IN_FILE_SHORT_NAME.csv | grep -e "fasta_analysis" > $IN_FILE_SHORT_NAME-fasta_analysis.csv
-echo "$(sort -t$',' -n -k 8 $IN_FILE_SHORT_NAME-fasta_analysis.csv)" > "$IN_FILE_SHORT_NAME-fasta_analysis.csv"
-cat $IN_FILE_SHORT_NAME.csv| grep -e "sortmf" > $IN_FILE_SHORT_NAME-sortmf.csv
-echo "$(sort -t$',' -n -k 8 $IN_FILE_SHORT_NAME-sortmf.csv)" > "$IN_FILE_SHORT_NAME-sortmf.csv"
-cat $IN_FILE_SHORT_NAME.csv | grep -v -e "fasta_analysis" | grep -v -e "sortmf" > $IN_FILE_SHORT_NAME-not_sorted.csv
-echo "$(sort -t$',' -n -k 8 $IN_FILE_SHORT_NAME-not_sorted.csv)" > "$IN_FILE_SHORT_NAME-not_sorted.csv"
+cat ${LZMA_CSV[i]}-$SORTING_TYPE.csv | grep -e "fasta_analysis" > ${LZMA_CSV[i]}-$SORTING_TYPE-fasta_analysis.csv
+echo "$(sort -t$',' -n -k 8 ${LZMA_CSV[i]}-$SORTING_TYPE-fasta_analysis.csv)" > "${LZMA_CSV[i]}-$SORTING_TYPE-fasta_analysis.csv"
+cat ${LZMA_CSV[i]}-$SORTING_TYPE.csv| grep -e "sortmf" > ${LZMA_CSV[i]}-$SORTING_TYPE-sortmf.csv
+echo "$(sort -t$',' -n -k 8 ${LZMA_CSV[i]}-$SORTING_TYPE-sortmf.csv)" > "${LZMA_CSV[i]}-$SORTING_TYPE-sortmf.csv"
+cat ${LZMA_CSV[i]}-$SORTING_TYPE.csv | grep -v -e "fasta_analysis" | grep -v -e "sortmf" > ${LZMA_CSV[i]}-$SORTING_TYPE-not_sorted.csv
+echo "$(sort -t$',' -n -k 8 ${LZMA_CSV[i]}-$SORTING_TYPE-not_sorted.csv)" > "${LZMA_CSV[i]}-$SORTING_TYPE-not_sorted.csv"
 done
 
 
@@ -2114,9 +2114,9 @@ done
 
   #for l in "${!sorting_method[@]}"; do
  # partition=${partitions_array[j]}
-  plot_file="data-plot_lzma.pdf"
+  plot_file="data-plot_lzma-$SORTING_TYPE.pdf"
   #echo $plot_file
-  title="Compression Gains using LZMA"
+  title="Compression Gains using LZMA sorting by $SORTING_TYPE"
   #gain_x=$(awk -F "\"*,\"*" '{print $8}' data_level_${levels_array[j]}.csv) 
   #cat ${level_input_file[j]}
   #point=0
@@ -2157,9 +2157,9 @@ done
         set multiplot
         count=12
       #  plot sorting_points u 7:8 w points ls count notitle
-        plot "${LZMA_CSV[0]}-fasta_analysis.csv" u 8:7 title "Synthetic Data" with linespoints linestyle count
+        plot "${LZMA_CSV[0]}-$SORTING_TYPE-fasta_analysis.csv" u 8:7 title "Synthetic Data" with linespoints linestyle count
         count=count + 1
-        plot "${LZMA_CSV[1]}-fasta_analysis.csv" u 8:7 title "Real Data" with linespoints linestyle count
+        plot "${LZMA_CSV[1]}-$SORTING_TYPE-fasta_analysis.csv" u 8:7 title "Real Data" with linespoints linestyle count
         count=count + 1
          
 EOF
@@ -2171,21 +2171,19 @@ EOF
  function PLOT_BZIP2(){
   #BZIP2_CSV="data_bzip2"
   BZIP2_CSV=$1
+  SORTING_TYPE=$2
   # IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fasta//g')
   # echo $IN_FILE_SHORT_NAME
 # echo "$(sort -t$',' -k 8 $BZIP2_CSV.csv)" > "$BZIP2_CSV.csv"
 
 for ((i=0; i<${#BZIP2_CSV[@]}; i++)); do
 #Build CSV for each sorting algorithm
-IN_FILE_SHORT_NAME=$(ls -1 ${BZIP2_CSV[i]} | sed 's/.fasta//g')
- echo $IN_FILE_SHORT_NAME
-
-cat $IN_FILE_SHORT_NAME.csv | grep -e "fasta_analysis" > $IN_FILE_SHORT_NAME-fasta_analysis.csv
-echo "$(sort -t$',' -n -k 8 $IN_FILE_SHORT_NAME-fasta_analysis.csv)" > "$IN_FILE_SHORT_NAME-fasta_analysis.csv"
-cat $IN_FILE_SHORT_NAME.csv| grep -e "sortmf" > $IN_FILE_SHORT_NAME-sortmf.csv
-echo "$(sort -t$',' -n -k 8 $IN_FILE_SHORT_NAME-sortmf.csv)" > "$IN_FILE_SHORT_NAME-sortmf.csv"
-cat $IN_FILE_SHORT_NAME.csv | grep -v -e "fasta_analysis" | grep -v -e "sortmf" > $IN_FILE_SHORT_NAME-not_sorted.csv
-echo "$(sort -t$',' -n -k 8 $IN_FILE_SHORT_NAME-not_sorted.csv)" > "$IN_FILE_SHORT_NAME-not_sorted.csv"
+cat ${BZIP2_CSV[i]}-$SORTING_TYPE.csv | grep -e "fasta_analysis" > ${BZIP2_CSV[i]}-$SORTING_TYPE-fasta_analysis.csv
+echo "$(sort -t$',' -n -k 8 ${BZIP2_CSV[i]}-$SORTING_TYPE-fasta_analysis.csv)" > "${BZIP2_CSV[i]}-$SORTING_TYPE-fasta_analysis.csv"
+cat ${BZIP2_CSV[i]}-$SORTING_TYPE.csv| grep -e "sortmf" > ${BZIP2_CSV[i]}-$SORTING_TYPE-sortmf.csv
+echo "$(sort -t$',' -n -k 8 ${BZIP2_CSV[i]}-$SORTING_TYPE-sortmf.csv)" > "${BZIP2_CSV[i]}-$SORTING_TYPE-sortmf.csv"
+cat ${BZIP2_CSV[i]}-$SORTING_TYPE.csv | grep -v -e "fasta_analysis" | grep -v -e "sortmf" > ${BZIP2_CSV[i]}-$SORTING_TYPE-not_sorted.csv
+echo "$(sort -t$',' -n -k 8 ${BZIP2_CSV[i]}-$SORTING_TYPE-not_sorted.csv)" > "${BZIP2_CSV[i]}-$SORTING_TYPE-not_sorted.csv"
 
 done
 
@@ -2193,9 +2191,9 @@ done
 
   #for l in "${!sorting_method[@]}"; do
  # partition=${partitions_array[j]}
-  plot_file="data-plot_bzip2.pdf"
+  plot_file="data-plot_bzip2-$SORTING_TYPE.pdf"
   #echo $plot_file
-  title="Compression Gains using BZIP2"
+  title="Compression Gains using BZIP2 sorting by $SORTING_TYPE"
   #gain_x=$(awk -F "\"*,\"*" '{print $8}' data_level_${levels_array[j]}.csv) 
   #cat ${level_input_file[j]}
   #point=0
@@ -2236,9 +2234,9 @@ done
         set multiplot
         count=12
       #  plot sorting_points u 7:8 w points ls count notitle
-        plot "${BZIP2_CSV[0]}-fasta_analysis.csv" u 8:7 title "Synthetic Data" with linespoints linestyle count
+        plot "${BZIP2_CSV[0]}-$SORTING_TYPE-fasta_analysis.csv" u 8:7 title "Synthetic Data" with linespoints linestyle count
         count=count + 1
-        plot "${BZIP2_CSV[1]}-fasta_analysis.csv" u 8:7 title "Real Data" with linespoints linestyle count
+        plot "${BZIP2_CSV[1]}-$SORTING_TYPE-fasta_analysis.csv" u 8:7 title "Real Data" with linespoints linestyle count
         count=count + 1
          
 EOF
@@ -2250,8 +2248,21 @@ EOF
 
 #testes com CVDB.fasta
 #sorting CVDB.fasta file
-#INPUT_FILE=$(GENERATE_ALCOR_FILE)
-INPUT_FILE=("CVDB.fasta" "synthetic.fasta")
+INPUT_FILE=()
+#while((${#INPUT_FILE[@]} < 2)); do
+INPUT_FILE+=($(GENERATE_ALCOR_FILE))
+
+read -p "File to be read : " File_1
+#read -p "File to be read : " File_2
+INPUT_FILE+=("$File_1")
+
+#for ((i=0; i<${#INPUT_FILE[@]}; i++)); do
+#echo "${INPUT_FILE[0]}"
+#done
+
+
+#done
+#INPUT_FILE=("copy2.fasta" "synth.fasta")
 
 
 #INPUT_FILE_SHORT_NAME=$(ls -1 $INPUT_FILE | sed 's/.fasta//g')
@@ -2265,94 +2276,103 @@ INPUT_FILE=("CVDB.fasta" "synthetic.fasta")
 program=("" "fasta_analysis")
 filename=("" "sort_fa")
 sequence_type=("" "Alcor")
+sorting_types=("size" "AT" "ATP" "CG" "CGP")
 
-# for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
+for ((n=0; n<${#sorting_types[@]}; n++)); do
 
-#  {  /bin/time -f "TIME\t%e\tMEM\t%M" ./FASTA_ANALY -sort=S synthetic.fasta sort_fanalysis_synthetic.fasta 5 ;  } 2>>ordering_times.txt 
-#  {  /bin/time -f "TIME\t%e\tMEM\t%M" ./sortmf ${INPUT_FILE[m]} sort_${INPUT_FILE[m]} ;  } 2>> sortmf_times.txt
-
-#NAF
-#  levels_array=("1" "8" "15" "22")
-# #levels_array=("8")
-# rm *.naf
-
-#  for ((i=0; i<${#levels_array[@]}; i++)); do
-# #INPUT_FILE_SHORT_NAME=$(ls -1 ${INPUT_FILE[m]} | sed 's/.fasta//g')
-# #NAF_COMPRESSION ${INPUT_FILE[m]} ${levels_array[i]} ;
-# INPUT_FILE_SHORT_NAME$(ls -1 synthetic.fasta | sed 's/.fasta//g')
-# NAF_COMPRESSION "synthetic.fasta" ${levels_array[i]} ;
-# echo "level" ${levels_array[i]} "completed"
-
+ #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
+ m=0
+while (($m < ${#INPUT_FILE[@]} )); do
+  {  /bin/time -f "TIME\t%e\tMEM\t%M" ./FASTA_ANALY -sort=${sorting_types[n]} ${INPUT_FILE[m]} sort_fanalysis_${INPUT_FILE[m]} 5 ;  } 2>>ordering_times.txt 
+  #{  /bin/time -f "TIME\t%e\tMEM\t%M" ./sortmf ${INPUT_FILE[m]} sort_${INPUT_FILE[m]} ;  } 2>> sortmf_times.txt
+#  m=$((m+1))
 # done
+# #NAF
+ levels_array=("1" "8" "15" "22")
+#levels_array=("8")
+rm *.naf
 
-# #CSV_BUILDER NAF
-# #rm data_naf-${INPUT_FILE[m]}.csv
-# rm data_naf-synthetic-fasta.csv
+ for ((i=0; i<${#levels_array[@]}; i++)); do
+    INPUT_FILE_SHORT_NAME=$(ls -1 ${INPUT_FILE[m]} | sed 's/.fasta//g')
+    NAF_COMPRESSION ${INPUT_FILE[m]} ${levels_array[i]} ;
+#INPUT_FILE_SHORT_NAME$(ls -1 synthetic.fasta | sed 's/.fasta//g')
+#NAF_COMPRESSION "synthetic.fasta" ${levels_array[i]} ;
+    echo "level" ${levels_array[i]} "completed"
 
-# for ((i=${#levels_array[@]}-1; i>=0; i--))
-#  do
-#    for ((j=${#program[@]}-1; j>=0; j--))
-#      do
-#      # CSV_BUILDER_NAF ${INPUT_FILE[m]} ${levels_array[i]} ${program[j]}
-#       CSV_BUILDER_NAF "synthetic.fasta" ${levels_array[i]} ${program[j]}
-#    done
-#   done
+done
 
-#  # BUILD_CSV_HEADER_1 "naf" ${INPUT_FILE[m]} 
-#  BUILD_CSV_HEADER_1 "naf" "synthetic.fasta" 
-#  PLOT_NAF "data_naf-$INPUT_FILE_SHORT_NAME"
+#CSV_BUILDER NAF
+#rm data_naf-${INPUT_FILE[m]}-${sorting_types[n]}.csv
+#rm data_naf-synthetic-fasta.csv
+rm data_naf*
+for ((i=${#levels_array[@]}-1; i>=0; i--))
+ do
+   for ((j=${#program[@]}-1; j>=0; j--))
+   do
+      CSV_BUILDER_NAF ${INPUT_FILE[m]} ${levels_array[i]} ${program[j]} ${sorting_types[n]}
+     # CSV_BUILDER_NAF "synthetic.fasta" ${levels_array[i]} ${program[j]}
+   done
+  done
 
-#  rm *naf.fasta;
-# done
+  BUILD_CSV_HEADER_1 "naf" ${INPUT_FILE[m]} ${sorting_types[n]}
+ # BUILD_CSV_HEADER_1 "naf" "synthetic.fasta" 
+ #PLOT_NAF "data_naf-$INPUT_FILE_SHORT_NAME-sorted_by-${sorting_types[n]}"
 
-for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
+ rm *naf.fasta;
+ m=$((m+1))
+done
 
+
+#for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
+m=0
+while (($m < ${#INPUT_FILE[@]} )); do
  rm "data_mfcompress.csv"
-# #MFC
- levels_array=("2" "3")
-# partitions_array=("1" "4" "8")
+#MFC
+ levels_array=("1" "2" "3")
+ partitions_array=("1" "4" "8")
 rm *.mfc
-#levels_array=("0")
+levels_array=("0")
 partitions_array=("1")
-#Levels for
+Levels for
 for ((i=0; i<${#levels_array[@]}; i++)); do
-
-#Partitions
-  for((j=0; j<${#partitions_array[@]}; j++)); do
+Partitions
+  for ((j=0; j<${#partitions_array[@]}; j++)); do
     MFCOMPRESS_COMPRESSION ${INPUT_FILE[m]} ${levels_array[i]} ${partitions_array[j]} ;
  done
 done 
 
- #CSV_BUILDER_MFCOMPRESS
+ CSV_BUILDER_MFCOMPRESS
   for ((i=${#levels_array[@]}-1; i>=0; i--))
   do
   for ((j=${#partitions_array[@]}-1; j>=0; j--))
    do
     for ((k=${#program[@]}-1; k>=0; k--))
      do
-      CSV_BUILDER_MFCOMPRESS ${INPUT_FILE[m]} ${levels_array[i]} ${partitions_array[j]} ${program[k]}
+      CSV_BUILDER_MFCOMPRESS ${INPUT_FILE[m]} ${levels_array[i]} ${partitions_array[j]} ${program[k]} ${sorting_types[n]}
 
      done
     done
    done
 
-   BUILD_CSV_HEADER_2 "mfcompress" ${INPUT_FILE[m]}
-   # PLOT_MFCOMPRESS "data_mfcompress-$INPUT_FILE_SHORT_NAME"
+   BUILD_CSV_HEADER_2 "mfcompress" ${INPUT_FILE[m]} ${sorting_types[n]}
+   PLOT_MFCOMPRESS "data_mfcompress-$INPUT_FILE_SHORT_NAME"
 
-  #rm *mfc.d
-
+  rm *mfc.d
+ m=$((m+1))
 done
 
-for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
 
+#for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
+m=0
+while (($m < ${#INPUT_FILE[@]} )); do
 #JARVIS3
 
 levels_array=("1" "2" "5" "8" )
 #levels_array=("15" "20" "25" "30")
-#partitions_array=("10MB" "100MB" "1GB")
-#partitions_in_mb=("10" "100" "1000")
-partitions_array=("10MB")
-partitions_in_mb=("10")
+partitions_array=("10MB" "100MB" "1GB")
+partitions_in_mb=("10" "100" "1000")
+#partitions_array=("10MB")
+#partitions_in_mb=("10")
 
 rm *.tar
 j=0
@@ -2374,19 +2394,22 @@ for ((i=${#levels_array[@]}-1; i>=0; i--))
    do
     for ((k=${#program[@]}-1; k>=0; k--))
      do
-      CSV_BUILDER_JARVIS3 ${INPUT_FILE[m]} ${levels_array[i]} ${partitions_array[j]} ${partitions_in_mb[j]} ${program[k]}
+      CSV_BUILDER_JARVIS3 ${INPUT_FILE[m]} ${levels_array[i]} ${partitions_array[j]} ${partitions_in_mb[j]} ${program[k]} ${sorting_types[n]}
 
      done
     done
    done
 
       
-     BUILD_CSV_HEADER_2 "jarvis3" ${INPUT_FILE[m]}
+     BUILD_CSV_HEADER_2 "jarvis3" ${INPUT_FILE[m]} ${sorting_types[n]}
    #  PLOT_JARVIS3 "data_jarvis3-$INPUT_FILE_SHORT_NAME" $partitions_array
-
+m=$((m+1))
 done
 
-for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
+
+#for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
+m=0
+while (($m < ${#INPUT_FILE[@]} )); do
 #General Use Compressors
 levels_array=("1" "4" "7" "9")
 #levels_array=("1")
@@ -2405,126 +2428,134 @@ done
    do
    for ((j=${#program[@]}-1; j>=0; j--))
      do
-      CSV_BUILDER_GZIP ${INPUT_FILE[m]} ${levels_array[i]} ${program[j]}
+      CSV_BUILDER_GZIP ${INPUT_FILE[m]} ${levels_array[i]} ${program[j]} ${sorting_types[n]}
    done
   done
 
 
-BUILD_CSV_HEADER_1 "gzip" ${INPUT_FILE[m]}
+BUILD_CSV_HEADER_1 "gzip" ${INPUT_FILE[m]} ${sorting_types[n]}
 # PLOT_GZIP "data_gzip-$INPUT_FILE_SHORT_NAME"
 
 #rm *unzip.fasta
-
-done
-
-for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
-# #lzma
- levels_array=("1" "4" "7" "9")
-
-rm "data_lzma.csv"
-rm *.lzma
-#levels_array=("1")
-#program=("" "sortmf" "fasta_analysis")
-#execution mode
-for((i=0; i<${#levels_array[@]}; i++)); do
-
-  LZMA_COMPRESSION ${INPUT_FILE[m]} ${levels_array[i]};
-done
-
-  #CSV_BUILDER_LZMA
-   for ((i=${#levels_array[@]}-1; i>=0; i--))
-   do
-   for ((j=${#program[@]}-1; j>=0; j--))
-     do
-      CSV_BUILDER_LZMA ${INPUT_FILE[m]} ${levels_array[i]} ${program[j]}
-   done
-  done
-
-  BUILD_CSV_HEADER_1 "lzma" ${INPUT_FILE[m]}
- # PLOT_LZMA "data_lzma-$INPUT_FILE_SHORT_NAME"
-
-done
-
-for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
-
-# bzip2
-levels_array=("1" "4" "7" "9")
-rm "data_bzip2.csv"
-rm *.bz2
- #levels_array=("1")
-#execution mode
-for((i=0; i<${#levels_array[@]}; i++)); do
-
-  BZIP2_COMPRESSION ${INPUT_FILE[m]} ${levels_array[i]};
-done
-
-#CSV_BUILDER_BZIP2
-  for ((i=${#levels_array[@]}-1; i>=0; i--))
-   do
-   for ((j=${#program[@]}-1; j>=0; j--))
-     do
-      CSV_BUILDER_BZIP2 ${INPUT_FILE[m]} ${levels_array[i]} ${program[j]}
-   done
-  done
-
-   BUILD_CSV_HEADER_1 "bzip2" ${INPUT_FILE[m]}
- # PLOT_BZIP2 "data_bzip2-$INPUT_FILE_SHORT_NAME"
-
+m=$((m+1))
 done
 
 
 
-for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
+# #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
+# m=0
+# while (($m < ${#INPUT_FILE[@]} )); do
+# # #lzma
+#  levels_array=("1" "4" "7" "9")
 
-   # #MBGC
-levels_array=("0" "1" "2" "3")
-#levels_array=("0")
+# rm "data_lzma.csv"
+# rm *.lzma
+# #levels_array=("1")
+# #program=("" "sortmf" "fasta_analysis")
+# #execution mode
+# for((i=0; i<${#levels_array[@]}; i++)); do
 
-rm data_mbgc.csv
- rm *.mbgc
+#   LZMA_COMPRESSION ${INPUT_FILE[m]} ${levels_array[i]};
+# done
 
- for ((i=0; i<${#levels_array[@]}; i++)); do
-  MBGC_COMPRESSION ${INPUT_FILE[m]} ${levels_array[i]};
- done
+#   #CSV_BUILDER_LZMA
+#    for ((i=${#levels_array[@]}-1; i>=0; i--))
+#    do
+#    for ((j=${#program[@]}-1; j>=0; j--))
+#      do
+#       CSV_BUILDER_LZMA ${INPUT_FILE[m]} ${levels_array[i]} ${program[j]} ${sorting_types[n]}
+#    done
+#   done
 
-#CSV_BUILDER_MBGC
-  for ((i=${#levels_array[@]}-1; i>=0; i--))
-  do
-   for ((j=${#program[@]}-1; j>=0; j--))
-     do
-      CSV_BUILDER_MBGC ${INPUT_FILE[m]} ${levels_array[i]} ${program[j]}
-   done
-  done
+#   BUILD_CSV_HEADER_1 "lzma" ${INPUT_FILE[m]} ${sorting_types[n]}
+#  # PLOT_LZMA "data_lzma-$INPUT_FILE_SHORT_NAME"
+# m=$((m+1))
+# done
+
+# #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
+# m=0
+# while (($m < ${#INPUT_FILE[@]} )); do
+# # bzip2
+# levels_array=("1" "4" "7" "9")
+# rm "data_bzip2.csv"
+# rm *.bz2
+#  #levels_array=("1")
+# #execution mode
+# for((i=0; i<${#levels_array[@]}; i++)); do
+
+#   BZIP2_COMPRESSION ${INPUT_FILE[m]} ${levels_array[i]};
+# done
+
+# #CSV_BUILDER_BZIP2
+#   for ((i=${#levels_array[@]}-1; i>=0; i--))
+#    do
+#    for ((j=${#program[@]}-1; j>=0; j--))
+#      do
+#       CSV_BUILDER_BZIP2 ${INPUT_FILE[m]} ${levels_array[i]} ${program[j]} ${sorting_types[n]}
+#    done
+#   done
+
+#    BUILD_CSV_HEADER_1 "bzip2" ${INPUT_FILE[m]} ${sorting_types[n]}
+#  # PLOT_BZIP2 "data_bzip2-$INPUT_FILE_SHORT_NAME"
+# m=$((m+1))
+# done
 
 
-BUILD_CSV_HEADER_1 "mbgc" ${INPUT_FILE[m]} 
- # PLOT_MBGC "data_mbgc-$INPUT_FILE_SHORT_NAME"
 
-# rm -d mbgc_decompress_*
-# rm -d sort_mbgc_decompress_*
-# rm -d sort_fa_mbgc_decompress_*
+# #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
+# m=0
+# while (($m < ${#INPUT_FILE[@]} )); do
 
-done
-  # PLOT CREATION
+#    # #MBGC
+# levels_array=("0" "1" "2" "3")
+# #levels_array=("0")
 
-    # PLOT_NAF $INPUT_FILE
-     PLOT_MBGC data_mbgc-$INPUT_FILE
-     PLOT_MFCOMPRESS data_mfcompress-$INPUT_FILE 
-     PLOT_GZIP data_gzip-$INPUT_FILE
-     PLOT_LZMA data_lzma-$INPUT_FILE
-     PLOT_BZIP2 data_bzip2-$INPUT_FILE
-     PLOT_JARVIS3 data_jarvis3-$INPUT_FILE
+# rm data_mbgc.csv
+#  rm *.mbgc
+
+#  for ((i=0; i<${#levels_array[@]}; i++)); do
+#   MBGC_COMPRESSION ${INPUT_FILE[m]} ${levels_array[i]};
+#  done
+
+# #CSV_BUILDER_MBGC
+#   for ((i=${#levels_array[@]}-1; i>=0; i--))
+#   do
+#    for ((j=${#program[@]}-1; j>=0; j--))
+#      do
+#       CSV_BUILDER_MBGC ${INPUT_FILE[m]} ${levels_array[i]} ${program[j]} ${sorting_types[n]}
+#    done
+#   done
+
+
+# BUILD_CSV_HEADER_1 "mbgc" ${INPUT_FILE[m]} ${sorting_types[n]}
+#  # PLOT_MBGC "data_mbgc-$INPUT_FILE_SHORT_NAME"
+
+# # rm -d mbgc_decompress_*
+# # rm -d sort_mbgc_decompress_*
+# # rm -d sort_fa_mbgc_decompress_*
+# m=$((m+1))
+# done
+#   # PLOT CREATION
+
+#      PLOT_NAF $INPUT_FILE ${sorting_types[n]}
+#      PLOT_MBGC $INPUT_FILE ${sorting_types[n]}
+#      PLOT_MFCOMPRESS $INPUT_FILE ${sorting_types[n]}
+#      PLOT_GZIP $INPUT_FILE ${sorting_types[n]}
+#      PLOT_LZMA $INPUT_FILE ${sorting_types[n]}
+#      PLOT_BZIP2 $INPUT_FILE ${sorting_types[n]}
+#      PLOT_JARVIS3 $INPUT_FILE ${sorting_types[n]}
      
 
-    #  mail -s " Att test" data_naf.csv tiagorfonseca@ua.pt 
+# done
+#     #  mail -s " Att test" data_naf.csv tiagorfonseca@ua.pt 
 
-    #  mutt -s "Subject" -a data_naf.csv -- tiagorfonseca@ua.pt < test-sort_fa_gunzip_l1.txt
-#rm data.csv
+#     #  mutt -s "Subject" -a data_naf.csv -- tiagorfonseca@ua.pt < test-sort_fa_gunzip_l1.txt
+# #rm data.csv
 
 
-  # IN_FILE="$1";
-  # LEVEL="$2";
-  # PARTITION="$3";
-  # PARTITION_MB="$4";
-  # SORTING_ALGORITHM="$5";
+#   # IN_FILE="$1";
+#   # LEVEL="$2";
+#   # PARTITION="$3";
+#   # PARTITION_MB="$4";
+#   # SORTING_ALGORITHM="$5";
 
