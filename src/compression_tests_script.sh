@@ -101,8 +101,8 @@ echo $OUT_FILE
 #sorting CVDB.fasta file
 INPUT_FILE=()
 #while((${#INPUT_FILE[@]} < 2)); do
-INPUT_FILE+=($(GENERATE_ALCOR_FILE))
-#INPUT_FILE=("synthetic.fasta")
+#INPUT_FILE+=($(GENERATE_ALCOR_FILE))
+INPUT_FILE=("synthetic.fasta")
 read -p "File to be read : " File_1
 #read -p "File to be read : " File_2
 INPUT_FILE+=("$File_1")
@@ -132,14 +132,18 @@ sorting_types=("size" "AT" "ATP" "CG" "CGP")
 for ((n=0; n<${#sorting_types[@]}; n++)); do
 
  #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
-#  m=0
- while (($m < ${#INPUT_FILE[@]} )); do
+  m=0
+  while (($m < ${#INPUT_FILE[@]} )); do
    {  /bin/time -f "TIME\t%e\tMEM\t%M" ./FASTA_ANALY -sort=${sorting_types[n]} ${INPUT_FILE[m]} sort_fanalysis_${INPUT_FILE[m]} 5 ;  } 2>>ordering_times.txt 
 #   #{  /bin/time -f "TIME\t%e\tMEM\t%M" ./sortmf ${INPUT_FILE[m]} sort_${INPUT_FILE[m]} ;  } 2>> sortmf_times.txt
-  m=$((m+1))
-  done
+   m=$((m+1))
+   done
 #NAF
-./compression_naf.sh $sorting_types $INPUT_FILE $n
+#./compression_naf.sh sorting_types INPUT_FILE $n
+./compression_naf.sh \
+  "${#sorting_types[@]}" "${sorting_types[@]}" \
+  "${#INPUT_FILE[@]}" "${INPUT_FILE[@]}" \ 
+    $n
 
 
 #  levels_array=("1" "8" "15" "22")
@@ -177,7 +181,11 @@ for ((n=0; n<${#sorting_types[@]}; n++)); do
 #   m=$((m+1))
 #  done
 
-./compression_mfcompress.sh $sorting_types $INPUT_FILE $n
+#./compression_mfcompress.sh sorting_types INPUT_FILE $n
+./compression_mfcompress.sh \
+  "${#sorting_types[@]}" "${sorting_types[@]}" \
+  "${#INPUT_FILE[@]}" "${INPUT_FILE[@]}" \ 
+    $n
 # #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
 # m=0
 # while (($m < ${#INPUT_FILE[@]} )); do
@@ -217,7 +225,10 @@ for ((n=0; n<${#sorting_types[@]}; n++)); do
 #  m=$((m+1))
 # done
 
-./compression_jarvis3.sh $sorting_types $INPUT_FILE $n
+./compression_jarvis3.sh \
+  "${#sorting_types[@]}" "${sorting_types[@]}" \
+  "${#INPUT_FILE[@]}" "${INPUT_FILE[@]}" \ 
+    $n
 
 # #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
 # m=0
@@ -263,8 +274,10 @@ for ((n=0; n<${#sorting_types[@]}; n++)); do
 #    m=$((m+1))
 #   done
 
-./compression_gzip.sh $sorting_types $INPUT_FILE $n
-
+./compression_gzip.sh \
+  "${#sorting_types[@]}" "${sorting_types[@]}" \
+  "${#INPUT_FILE[@]}" "${INPUT_FILE[@]}" \ 
+    $n
 # #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
 # m=0
 # while (($m < ${#INPUT_FILE[@]} )); do
@@ -299,8 +312,10 @@ for ((n=0; n<${#sorting_types[@]}; n++)); do
 #   m=$((m+1))
 #  done
 
-./compression_lzma.sh $sorting_types $INPUT_FILE $n
-
+./compression_lzma.sh \
+  "${#sorting_types[@]}" "${sorting_types[@]}" \
+  "${#INPUT_FILE[@]}" "${INPUT_FILE[@]}" \ 
+    $n
 # #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
 # m=0
 # while (($m < ${#INPUT_FILE[@]} )); do
@@ -331,8 +346,10 @@ for ((n=0; n<${#sorting_types[@]}; n++)); do
 # m=$((m+1))
 # done
 
-./compression_bzip2.sh $sorting_types $INPUT_FILE $n
-
+./compression_bzip2.sh \
+  "${#sorting_types[@]}" "${sorting_types[@]}" \
+  "${#INPUT_FILE[@]}" "${INPUT_FILE[@]}" \ 
+    $n
 # #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
 # m=0
 # while (($m < ${#INPUT_FILE[@]} )); do
@@ -361,8 +378,10 @@ for ((n=0; n<${#sorting_types[@]}; n++)); do
 # m=$((m+1))
 # done
 
-./compression_mbgc.sh $sorting_types $INPUT_FILE $n
-
+./compression_mbgc.sh \
+  "${#sorting_types[@]}" "${sorting_types[@]}" \
+  "${#INPUT_FILE[@]}" "${INPUT_FILE[@]}" \ 
+    $n
 # #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
 # m=0
 # while (($m < ${#INPUT_FILE[@]} )); do

@@ -319,9 +319,13 @@ EOF
 
 }
 
+sorting_types=( "${@:2:$1}" ); shift "$(( $1 + 1 ))"
+INPUT_FILE=( "${@:2:$1}" ); shift "$(( $1 + 1 ))"
 
-sorting_types=$1
-INPUT_FILE=$2
+declare -p sorting_types INPUT_FILE
+
+#sorting_types=$1
+#INPUT_FILE=$2
 n=$3
 
 #for ((n=0; n<${#sorting_types[@]}; n++)); do
@@ -359,3 +363,4 @@ BUILD_CSV_HEADER_1 "gzip" ${INPUT_FILE[m]} ${sorting_types[n]}
   m=$((m+1))
  done
 #done 
+

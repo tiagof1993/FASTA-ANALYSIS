@@ -349,8 +349,12 @@ EOF
 }
 
 #FILE=$1
-sorting_types=$1
-INPUT_FILE=$2
+sorting_types=( "${@:2:$1}" ); shift "$(( $1 + 1 ))"
+INPUT_FILE=( "${@:2:$1}" ); shift "$(( $1 + 1 ))"
+
+declare -p sorting_types INPUT_FILE
+#sorting_types=$1
+#INPUT_FILE=$2
 n=$3
 #$1 sorting_types
 #$2=INPUT_FILE

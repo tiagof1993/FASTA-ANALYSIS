@@ -331,9 +331,14 @@ EOF
 
 }
 
+#!/usr/bin/env bash
 
-sorting_types=$1
-INPUT_FILE=$2
+sorting_types=( "${@:2:$1}" ); shift "$(( $1 + 1 ))"
+INPUT_FILE=( "${@:2:$1}" ); shift "$(( $1 + 1 ))"
+
+declare -p sorting_types INPUT_FILE
+#sorting_types=$1
+#INPUT_FILE=$2
 n=$3
 
 #for ((n=0; n<${#sorting_types[@]}; n++)); do
@@ -372,4 +377,4 @@ for ((i=${#levels_array[@]}-1; i>=0; i--))
  rm *naf.fasta;
   m=$((m+1))
   done
-#done
+done
