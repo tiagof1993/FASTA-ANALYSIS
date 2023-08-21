@@ -35,6 +35,7 @@ IN_FILE="$1";
 LEVEL="$2";
 SORTING_ALGORITHM="$3";
 SORTING_TYPE="$4";
+test="$5"
   # $IN_FILE_SHORT_NAME-naf_l$LEVEL.txt
   # $IN_FILE_SHORT_NAME-naf_size_l$LEVEL.txt
 
@@ -65,7 +66,7 @@ if [ $bytes -eq $d_bytes ]
 else
   diff=1
 fi
-run=0
+run=$test
 
 printf $program | tee program_x
 printf $bytes | tee bytes_x
@@ -119,7 +120,7 @@ if [ $bytes -eq $d_bytes ]
 else
   diff=1
 fi
-run=0
+run=$test
 
 printf $program | tee program_x
 printf $bytes | tee bytes_x
@@ -172,7 +173,7 @@ if [ $bytes -eq $d_bytes ]
 else
   diff=1
 fi
-run=0
+run=$test
 
 printf $program | tee program_x
 printf $bytes | tee bytes_x
@@ -327,6 +328,7 @@ declare -p sorting_types INPUT_FILE
 #sorting_types=$1
 #INPUT_FILE=$2
 n=$3
+test=$4
 
 #for ((n=0; n<${#sorting_types[@]}; n++)); do
 #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
@@ -351,7 +353,7 @@ done
    do
    for ((j=${#program[@]}-1; j>=0; j--))
      do
-      CSV_BUILDER_GZIP ${INPUT_FILE[m]} ${levels_array[i]} ${program[j]} ${sorting_types[n]}
+      CSV_BUILDER_GZIP ${INPUT_FILE[m]} ${levels_array[i]} ${program[j]} ${sorting_types[n]} $test
    done
   done
 

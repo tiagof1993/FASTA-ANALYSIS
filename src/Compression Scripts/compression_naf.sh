@@ -43,6 +43,7 @@ IN_FILE="$1";
 LEVEL="$2";
 SORTING_ALGORITHM="$3";
 SORTING_TYPE="$4";
+test="$5"
   # $IN_FILE_SHORT_NAME-naf_l$LEVEL.txt
   # $IN_FILE_SHORT_NAME-naf_size_l$LEVEL.txt
   #rm data_naf.csv
@@ -73,7 +74,8 @@ if [ $bytes -eq $d_bytes ]
 else
   diff=1
 fi
-run=0
+run=$test
+#run=0
 
 printf $program | tee program_x
 printf $bytes | tee bytes_x
@@ -126,7 +128,7 @@ if [ $bytes -eq $d_bytes ]
 else
   diff=1
 fi
-run=0
+run=$test
 
 printf $program | tee program_x
 printf $bytes | tee bytes_x
@@ -178,7 +180,7 @@ if [ $bytes -eq $d_bytes ]
 else
   diff=1
 fi
-run=0
+run=$test
 
 printf $program | tee program_x
 printf $bytes | tee bytes_x
@@ -301,7 +303,7 @@ function BUILD_CSV_HEADER_1(){
   IN_FILE="$2";
   SORTING_TYPE="$3";
 
-    IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fasta//g')
+  IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fasta//g')
   echo $IN_FILE_SHORT_NAME
 
 file="data_$COMPRESSOR-$IN_FILE_SHORT_NAME-$SORTING_TYPE.csv"
@@ -340,6 +342,7 @@ declare -p sorting_types INPUT_FILE
 #sorting_types=$1
 #INPUT_FILE=$2
 n=$3
+test=$4
 
 #for ((n=0; n<${#sorting_types[@]}; n++)); do
 #NAF
@@ -365,7 +368,7 @@ for ((i=${#levels_array[@]}-1; i>=0; i--))
  do
    for ((j=${#program[@]}-1; j>=0; j--))
    do
-      CSV_BUILDER_NAF ${INPUT_FILE[m]} ${levels_array[i]} ${program[j]} ${sorting_types[n]}
+      CSV_BUILDER_NAF ${INPUT_FILE[m]} ${levels_array[i]} ${program[j]} ${sorting_types[n]} $test
      # CSV_BUILDER_NAF "synthetic.fasta" ${levels_array[i]} ${program[j]}
    done
   done

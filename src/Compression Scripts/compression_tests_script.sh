@@ -130,20 +130,31 @@ sequence_type=("" "Alcor")
 sorting_types=("size" "AT" "ATP" "CG" "CGP")
 
 for ((n=0; n<${#sorting_types[@]}; n++)); do
-
- #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
-  m=0
-  while (($m < ${#INPUT_FILE[@]} )); do
-   {  /bin/time -f "TIME\t%e\tMEM\t%M" ./FASTA_ANALY -sort=${sorting_types[n]} ${INPUT_FILE[m]} sort_fanalysis_${INPUT_FILE[m]} 5 ;  } 2>>ordering_times.txt 
+m=0 
+while (($m < ${#INPUT_FILE[@]} )); do
+   {  /bin/time -f "TIME\t%e\tMEM\t%M" ./FASTA_ANALY -sort=${sorting_types[n]} ${INPUT_FILE[m]} sort_fanalysis_${sorting_types[n]}-${INPUT_FILE[m]} 5 ;  } 2>>ordering_times.txt 
 #   #{  /bin/time -f "TIME\t%e\tMEM\t%M" ./sortmf ${INPUT_FILE[m]} sort_${INPUT_FILE[m]} ;  } 2>> sortmf_times.txt
    m=$((m+1))
    done
+done
+
+for ((n=0; n<${#sorting_types[@]}; n++)); do
+
+  mv sort_fanalysis_${sorting_types[n]}-${INPUT_FILE[m]} sort_fanalysis_${INPUT_FILE[m]}
+ #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
+  #m=0
+  #while (($m < ${#INPUT_FILE[@]} )); do
+  # {  /bin/time -f "TIME\t%e\tMEM\t%M" ./FASTA_ANALY -sort=${sorting_types[n]} ${INPUT_FILE[m]} sort_fanalysis_${INPUT_FILE[m]} 5 ;  } 2>>ordering_times.txt 
+#   #{  /bin/time -f "TIME\t%e\tMEM\t%M" ./sortmf ${INPUT_FILE[m]} sort_${INPUT_FILE[m]} ;  } 2>> sortmf_times.txt
+  # m=$((m+1))
+  # done
 #NAF
+for ((test=0; test<2; test++)); do
 #./compression_naf.sh sorting_types INPUT_FILE $n
 ./compression_naf.sh \
   "${#sorting_types[@]}" "${sorting_types[@]}" \
   "${#INPUT_FILE[@]}" "${INPUT_FILE[@]}" \ 
-    $n
+    $n $test
 
 
 #  levels_array=("1" "8" "15" "22")
@@ -185,7 +196,7 @@ for ((n=0; n<${#sorting_types[@]}; n++)); do
 ./compression_mfcompress.sh \
   "${#sorting_types[@]}" "${sorting_types[@]}" \
   "${#INPUT_FILE[@]}" "${INPUT_FILE[@]}" \ 
-    $n
+    $n $test
 # #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
 # m=0
 # while (($m < ${#INPUT_FILE[@]} )); do
@@ -225,10 +236,14 @@ for ((n=0; n<${#sorting_types[@]}; n++)); do
 #  m=$((m+1))
 # done
 
+done
+
+for ((test=0; test<3; test++)); do
+
 ./compression_jarvis3.sh \
   "${#sorting_types[@]}" "${sorting_types[@]}" \
   "${#INPUT_FILE[@]}" "${INPUT_FILE[@]}" \ 
-    $n
+    $n $test
 
 # #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
 # m=0
@@ -277,7 +292,7 @@ for ((n=0; n<${#sorting_types[@]}; n++)); do
 ./compression_gzip.sh \
   "${#sorting_types[@]}" "${sorting_types[@]}" \
   "${#INPUT_FILE[@]}" "${INPUT_FILE[@]}" \ 
-    $n
+    $n $test
 # #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
 # m=0
 # while (($m < ${#INPUT_FILE[@]} )); do
@@ -315,7 +330,7 @@ for ((n=0; n<${#sorting_types[@]}; n++)); do
 ./compression_lzma.sh \
   "${#sorting_types[@]}" "${sorting_types[@]}" \
   "${#INPUT_FILE[@]}" "${INPUT_FILE[@]}" \ 
-    $n
+    $n $test
 # #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
 # m=0
 # while (($m < ${#INPUT_FILE[@]} )); do
@@ -349,7 +364,7 @@ for ((n=0; n<${#sorting_types[@]}; n++)); do
 ./compression_bzip2.sh \
   "${#sorting_types[@]}" "${sorting_types[@]}" \
   "${#INPUT_FILE[@]}" "${INPUT_FILE[@]}" \ 
-    $n
+    $n $test
 # #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
 # m=0
 # while (($m < ${#INPUT_FILE[@]} )); do
@@ -381,7 +396,7 @@ for ((n=0; n<${#sorting_types[@]}; n++)); do
 ./compression_mbgc.sh \
   "${#sorting_types[@]}" "${sorting_types[@]}" \
   "${#INPUT_FILE[@]}" "${INPUT_FILE[@]}" \ 
-    $n
+    $n $test
 # #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
 # m=0
 # while (($m < ${#INPUT_FILE[@]} )); do
@@ -415,6 +430,7 @@ for ((n=0; n<${#sorting_types[@]}; n++)); do
 # rm -d sort_fa_mbgc_decompress_*
 # m=$((m+1))
 # done
+done
  done
 
 #   # PLOT CREATION

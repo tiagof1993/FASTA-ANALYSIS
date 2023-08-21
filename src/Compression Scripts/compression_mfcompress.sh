@@ -37,6 +37,7 @@ function CSV_BUILDER_MFCOMPRESS(){
   PARTITION="$3";
   SORTING_ALGORITHM="$4";
   SORTING_TYPE="$5";
+  test="$6"
 
   IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fasta//g')
   echo $IN_FILE_SHORT_NAME
@@ -66,7 +67,7 @@ if [ $bytes -eq $d_bytes ]
 else
   diff=1
 fi
-run=0
+run=$test
 
 printf $program | tee program_x
 printf $bytes | tee bytes_x
@@ -121,7 +122,7 @@ if [ $bytes -eq $d_bytes ]
 else
   diff=1
 fi
-run=0
+run=$test
 
 printf $program | tee program_x
 printf $bytes | tee bytes_x
@@ -176,7 +177,7 @@ if [ $bytes -eq $d_bytes ]
 else
   diff=1
 fi
-run=0
+run=$test
 
 printf $program | tee program_x
 printf $bytes | tee bytes_x
@@ -356,6 +357,7 @@ declare -p sorting_types INPUT_FILE
 #sorting_types=$1
 #INPUT_FILE=$2
 n=$3
+test=$4
 #$1 sorting_types
 #$2=INPUT_FILE
 
@@ -386,7 +388,7 @@ rm data_mfcompress-${INPUT_FILE[m]}-${sorting_types[n]}.csv
    do
     for ((k=${#program[@]}-1; k>=0; k--))
      do
-      CSV_BUILDER_MFCOMPRESS ${INPUT_FILE[m]} ${levels_array[i]} ${partitions_array[j]} ${program[k]} ${sorting_types[n]}
+      CSV_BUILDER_MFCOMPRESS ${INPUT_FILE[m]} ${levels_array[i]} ${partitions_array[j]} ${program[k]} ${sorting_types[n]} $test
 
      done
     done

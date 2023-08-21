@@ -44,6 +44,7 @@ function CSV_BUILDER_JARVIS3(){
   PARTITION="$3";
   PARTITION_MB="$4";
   SORTING_ALGORITHM="$5";
+  test="$6"
 
   IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fasta//g')
   echo $IN_FILE_SHORT_NAME
@@ -72,7 +73,7 @@ if [ $bytes -eq $d_bytes ]
 else
   diff=1
 fi
-run=0
+run=$test
 
 printf $program | tee program_x
 printf $bytes | tee bytes_x
@@ -126,7 +127,7 @@ if [ $bytes -eq $d_bytes ]
 else
   diff=1
 fi
-run=0
+run=$test
 
 printf $program | tee program_x
 printf $bytes | tee bytes_x
@@ -180,7 +181,7 @@ if [ $bytes -eq $d_bytes ]
 else
   diff=1
 fi
-run=0
+run=$test
 
 printf $program | tee program_x
 printf $bytes | tee bytes_x
@@ -363,6 +364,7 @@ declare -p sorting_types INPUT_FILE
 #sorting_types=$1
 #INPUT_FILE=$2
 n=$3
+test=$4
 
 #for ((n=0; n<${#sorting_types[@]}; n++)); do
 #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
@@ -397,7 +399,7 @@ for ((i=${#levels_array[@]}-1; i>=0; i--))
    do
     for ((k=${#program[@]}-1; k>=0; k--))
      do
-      CSV_BUILDER_JARVIS3 ${INPUT_FILE[m]} ${levels_array[i]} ${partitions_array[j]} ${partitions_in_mb[j]} ${program[k]} ${sorting_types[n]}
+      CSV_BUILDER_JARVIS3 ${INPUT_FILE[m]} ${levels_array[i]} ${partitions_array[j]} ${partitions_in_mb[j]} ${program[k]} ${sorting_types[n]} $test
 
      done
     done
