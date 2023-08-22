@@ -96,17 +96,19 @@ echo $OUT_FILE
 
 
 #--------MAIN---------------------------------------------------#
+read -p "Choose Installation Mode(0 [With Conda] or 1 [Manual]) : " Install_Mode
+./Install_Tools.sh $Install_Mode
 
 #testes com CVDB.fasta
 #sorting CVDB.fasta file
 INPUT_FILE=()
 #while((${#INPUT_FILE[@]} < 2)); do
-#INPUT_FILE+=($(GENERATE_ALCOR_FILE))
+INPUT_FILE+=($(GENERATE_ALCOR_FILE))
 #INPUT_FILE=("synthetic.fasta")
-INPUT_FILE=("copy2.fasta" "copy.fasta")
-#read -p "File to be read : " File_1
+#INPUT_FILE=("copy2.fasta" "copy.fasta")
+read -p "File to be read : " File_1
 #read -p "File to be read : " File_2
-#INPUT_FILE+=("$File_1")
+INPUT_FILE+=("$File_1")
 
 #for ((i=0; i<${#INPUT_FILE[@]}; i++)); do
 #echo "${INPUT_FILE[0]}"
