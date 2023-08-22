@@ -3,6 +3,7 @@ function MFCOMPRESS_COMPRESSION(){
   IN_FILE="$1";
   LEVEL="$2";
   PARTITION="$3";
+  sorting_type="$4";
 
   IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fasta//g')
   echo $IN_FILE_SHORT_NAME
@@ -10,19 +11,19 @@ function MFCOMPRESS_COMPRESSION(){
 
 { /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressC -v -$LEVEL -p $PARTITION -t 8 $IN_FILE ; } 2>$IN_FILE_SHORT_NAME-mfc_l$LEVEL-p$PARTITION-t8.txt 
 { /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressC -v -$LEVEL -p $PARTITION -t 8 sort_$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_mfc_l$LEVEL-p$PARTITION-t8.txt 
-{ /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressC -v -$LEVEL -p $PARTITION -t 8 sort_fanalysis_$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_fa_mfc_l$LEVEL-p$PARTITION-t8.txt 
+{ /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressC -v -$LEVEL -p $PARTITION -t 8 sort_fanalysis_$sorting_type-$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_fa_mfc_l$LEVEL-p$PARTITION-t8.txt 
 
 { ls $IN_FILE* -la -ltr | grep \.mfc$ |awk '{print $5;}' ; } > $IN_FILE_SHORT_NAME-mfc_size_l$LEVEL-p$PARTITION-t8.txt
 { ls sort_$IN_FILE* -la -ltr | grep \.mfc$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_mfc_size_l$LEVEL-p$PARTITION-t8.txt
-{ ls sort_fanalysis_$IN_FILE* -la -ltr | grep \.mfc$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_mfc_size_l$LEVEL-p$PARTITION-t8.txt
+{ ls sort_fanalysis_$sorting_type-$IN_FILE* -la -ltr | grep \.mfc$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_mfc_size_l$LEVEL-p$PARTITION-t8.txt
 
 { /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressD -v -$LEVEL -p $PARTITION -t 8 $IN_FILE.mfc ; } 2> $IN_FILE_SHORT_NAME-mfc_d_l$LEVEL-p$PARTITION-t8.txt 
 { /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressD -v -$LEVEL -p $PARTITION -t 8 sort_$IN_FILE.mfc ; } 2>$IN_FILE_SHORT_NAME-sort_mfc_d_l$LEVEL-p$PARTITION-t8.txt
-{ /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressD -v -$LEVEL -p $PARTITION -t 8 sort_fanalysis_$IN_FILE.mfc ; } 2>$IN_FILE_SHORT_NAME-sort_fa_mfc_d_l$LEVEL-p$PARTITION-t8.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressD -v -$LEVEL -p $PARTITION -t 8 sort_fanalysis_$sorting_type-$IN_FILE.mfc ; } 2>$IN_FILE_SHORT_NAME-sort_fa_mfc_d_l$LEVEL-p$PARTITION-t8.txt
 
 { ls $IN_FILE* -la -ltr | grep \.mfc.d$ |awk '{print $5;}' ; } > $IN_FILE_SHORT_NAME-mfc_d_size_l$LEVEL-p$PARTITION-t8.txt
 { ls sort_$IN_FILE* -la -ltr | grep \.mfc.d$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_mfc_d_size_l$LEVEL-p$PARTITION-t8.txt
-{ ls sort_fanalysis_$IN_FILE* -la -ltr | grep \.mfc.d$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_mfc_d_size_l$LEVEL-p$PARTITION-t8.txt
+{ ls sort_fanalysis_$sorting_type-$IN_FILE* -la -ltr | grep \.mfc.d$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_mfc_d_size_l$LEVEL-p$PARTITION-t8.txt
 
 rm *mfc.d
   
@@ -48,7 +49,7 @@ program="MFCOMPRESS_$IN_FILE_SHORT_NAME-fasta_analysis"
 level=$LEVEL
 partition="$PARTITION"
 #bytes=$(ls sort_fanalysis_$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
-bytes=$(ls -la sort_fanalysis_$IN_FILE_SHORT_NAME.fasta |awk '{print $5;}')
+bytes=$(ls -la sort_fanalysis_$SORTING_TYPE-$IN_FILE_SHORT_NAME.fasta |awk '{print $5;}')
 c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_mfc_size_l$LEVEL-p$PARTITION-t8.txt)
 original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-mfc_size_l$LEVEL-p$PARTITION-t8.txt)
 bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
@@ -67,7 +68,7 @@ if [ $bytes -eq $d_bytes ]
 else
   diff=1
 fi
-run=$test
+run=$(echo $test)
 
 printf $program | tee program_x
 printf $bytes | tee bytes_x
@@ -122,7 +123,7 @@ if [ $bytes -eq $d_bytes ]
 else
   diff=1
 fi
-run=$test
+run=$(echo $test)
 
 printf $program | tee program_x
 printf $bytes | tee bytes_x
@@ -177,7 +178,7 @@ if [ $bytes -eq $d_bytes ]
 else
   diff=1
 fi
-run=$test
+run=$(echo $test)
 
 printf $program | tee program_x
 printf $bytes | tee bytes_x
@@ -350,54 +351,54 @@ EOF
 }
 
 #FILE=$1
-sorting_types=( "${@:2:$1}" ); shift "$(( $1 + 1 ))"
-INPUT_FILE=( "${@:2:$1}" ); shift "$(( $1 + 1 ))"
+# sorting_types=( "${@:2:$1}" ); shift "$(( $1 + 1 ))"
+# INPUT_FILE=( "${@:2:$1}" ); shift "$(( $1 + 1 ))"
 
-declare -p sorting_types INPUT_FILE
-#sorting_types=$1
-#INPUT_FILE=$2
-n=$3
-test=$4
+# declare -p sorting_types INPUT_FILE
+sorting_type=$1
+INPUT_FILE=$2
+# n=$3
+test=$3
 #$1 sorting_types
 #$2=INPUT_FILE
 
 #for ((n=0; n<${#sorting_types[@]}; n++)); do
  #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
 m=0
-while (($m < ${#INPUT_FILE[@]} )); do
- rm "data_mfcompress.csv"
+# while (($m < ${#INPUT_FILE[@]} )); do
 #MFC
  levels_array=("1" "2" "3")
  partitions_array=("1" "4" "8")
+ program=("" "fasta_analysis")
 rm *.mfc
-levels_array=("0")
-partitions_array=("1")
+#levels_array=("0")
+#partitions_array=("1")
 #Levels for
 for ((i=0; i<${#levels_array[@]}; i++)); do
 #Partitions
   for ((j=0; j<${#partitions_array[@]}; j++)); do
-    MFCOMPRESS_COMPRESSION ${INPUT_FILE[m]} ${levels_array[i]} ${partitions_array[j]} ;
+    MFCOMPRESS_COMPRESSION $INPUT_FILE ${levels_array[i]} ${partitions_array[j]} $sorting_type ;
  done
 done 
 
- CSV_BUILDER_MFCOMPRESS
-rm data_mfcompress-${INPUT_FILE[m]}-${sorting_types[n]}.csv
+ #CSV_BUILDER_MFCOMPRESS
+#rm data_mfcompress-${INPUT_FILE[m]}-${sorting_types[n]}.csv
   for ((i=${#levels_array[@]}-1; i>=0; i--))
   do
   for ((j=${#partitions_array[@]}-1; j>=0; j--))
    do
     for ((k=${#program[@]}-1; k>=0; k--))
      do
-      CSV_BUILDER_MFCOMPRESS ${INPUT_FILE[m]} ${levels_array[i]} ${partitions_array[j]} ${program[k]} ${sorting_types[n]} $test
+      CSV_BUILDER_MFCOMPRESS $INPUT_FILE ${levels_array[i]} ${partitions_array[j]} ${program[k]} $sorting_type $test
 
      done
     done
    done
 
-   BUILD_CSV_HEADER_2 "mfcompress" ${INPUT_FILE[m]} ${sorting_types[n]}
-   PLOT_MFCOMPRESS "data_mfcompress-$INPUT_FILE_SHORT_NAME"
+   BUILD_CSV_HEADER_2 "mfcompress" $INPUT_FILE $sorting_type
+   #PLOT_MFCOMPRESS "data_mfcompress-$INPUT_FILE_SHORT_NAME"
 
   rm *mfc.d
- m=$((m+1))
-done
+#  m=$((m+1))
+# done
 #done

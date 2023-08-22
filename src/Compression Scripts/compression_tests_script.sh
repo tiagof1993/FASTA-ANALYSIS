@@ -102,10 +102,11 @@ echo $OUT_FILE
 INPUT_FILE=()
 #while((${#INPUT_FILE[@]} < 2)); do
 #INPUT_FILE+=($(GENERATE_ALCOR_FILE))
-INPUT_FILE=("synthetic.fasta")
-read -p "File to be read : " File_1
+#INPUT_FILE=("synthetic.fasta")
+INPUT_FILE=("copy2.fasta" "copy.fasta")
+#read -p "File to be read : " File_1
 #read -p "File to be read : " File_2
-INPUT_FILE+=("$File_1")
+#INPUT_FILE+=("$File_1")
 
 #for ((i=0; i<${#INPUT_FILE[@]}; i++)); do
 #echo "${INPUT_FILE[0]}"
@@ -138,9 +139,17 @@ while (($m < ${#INPUT_FILE[@]} )); do
    done
 done
 
+rm data_naf*
+rm data_mfcompress*
+rm data_jarvis3*
+rm data_gzip*
+rm data_lzma*
+rm data_bzip2*
+rm data_mbgc*
+
 for ((n=0; n<${#sorting_types[@]}; n++)); do
 
-  mv sort_fanalysis_${sorting_types[n]}-${INPUT_FILE[m]} sort_fanalysis_${INPUT_FILE[m]}
+  #mv sort_fanalysis_${sorting_types[n]}-${INPUT_FILE[m]} sort_fanalysis_${INPUT_FILE[m]}
  #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
   #m=0
   #while (($m < ${#INPUT_FILE[@]} )); do
@@ -151,10 +160,16 @@ for ((n=0; n<${#sorting_types[@]}; n++)); do
 #NAF
 for ((test=0; test<2; test++)); do
 #./compression_naf.sh sorting_types INPUT_FILE $n
-./compression_naf.sh \
-  "${#sorting_types[@]}" "${sorting_types[@]}" \
-  "${#INPUT_FILE[@]}" "${INPUT_FILE[@]}" \ 
-    $n $test
+ m=0
+ while (($m < ${#INPUT_FILE[@]} )); do
+#   # ./compression_naf.sh \
+#   #   "${#sorting_types[@]}" "${sorting_types[@]}" \
+#   #   "${#INPUT_FILE[@]}" "${INPUT_FILE[@]}" \ 
+#   #     $n $test
+    ./compression_naf.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test
+    m=$((m+1))
+   done
+  
 
 
 #  levels_array=("1" "8" "15" "22")
@@ -193,10 +208,20 @@ for ((test=0; test<2; test++)); do
 #  done
 
 #./compression_mfcompress.sh sorting_types INPUT_FILE $n
-./compression_mfcompress.sh \
-  "${#sorting_types[@]}" "${sorting_types[@]}" \
-  "${#INPUT_FILE[@]}" "${INPUT_FILE[@]}" \ 
-    $n $test
+
+# ./compression_mfcompress.sh \
+#   "${#sorting_types[@]}" "${sorting_types[@]}" \
+#   "${#INPUT_FILE[@]}" "${INPUT_FILE[@]}" \ 
+#     $n $test
+
+m=0
+ while (($m < ${#INPUT_FILE[@]} )); do
+  ./compression_mfcompress.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test
+  m=$((m+1))
+  done
+
+ done 
+
 # #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
 # m=0
 # while (($m < ${#INPUT_FILE[@]} )); do
@@ -236,167 +261,203 @@ for ((test=0; test<2; test++)); do
 #  m=$((m+1))
 # done
 
-done
-
-for ((test=0; test<3; test++)); do
-
-./compression_jarvis3.sh \
-  "${#sorting_types[@]}" "${sorting_types[@]}" \
-  "${#INPUT_FILE[@]}" "${INPUT_FILE[@]}" \ 
-    $n $test
-
-# #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
-# m=0
-# while (($m < ${#INPUT_FILE[@]} )); do
-# #JARVIS3
-
-# levels_array=("1" "2" "5" "8" )
-# #levels_array=("15" "20" "25" "30")
-# partitions_array=("10MB" "100MB" "1GB")
-# partitions_in_mb=("10" "100" "1000")
-# #partitions_array=("10MB")
-# #partitions_in_mb=("10")
-
-# rm *.tar
-# j=0
-
-# for ((i=0; i<${#levels_array[@]}; i++)); do
-# j=0
-#  while (($j < ${#partitions_array[@]} )); do
-#     JARVIS3_COMPRESSION ${INPUT_FILE[m]} ${levels_array[i]} ${partitions_array[j]} ${partitions_in_mb[j]} ;
-
-#   j=$((j+1))
-#  done
 # done
 
-# rm data_jarvis3-${INPUT_FILE[m]}-${sorting_types[n]}.csv
-# #CSV_BUILDER JARVIS3
-# for ((i=${#levels_array[@]}-1; i>=0; i--))
-#  do
-#   for ((j=${#partitions_array[@]}-1; j>=0; j--))
-#    do
-#     for ((k=${#program[@]}-1; k>=0; k--))
-#      do
-#       CSV_BUILDER_JARVIS3 ${INPUT_FILE[m]} ${levels_array[i]} ${partitions_array[j]} ${partitions_in_mb[j]} ${program[k]} ${sorting_types[n]}
+ for ((test=0; test<3; test++)); do
 
-#      done
-#     done
-#    done
+
+ m=0
+ while (($m < ${#INPUT_FILE[@]} )); do
+  ./compression_jarvis3.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test
+  m=$((m+1))
+  done
+
+#  done 
+
+# ./compression_jarvis3.sh \
+#   "${#sorting_types[@]}" "${sorting_types[@]}" \
+#   "${#INPUT_FILE[@]}" "${INPUT_FILE[@]}" \ 
+#     $n $test
+
+# # #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
+# # m=0
+# # while (($m < ${#INPUT_FILE[@]} )); do
+# # #JARVIS3
+
+# # levels_array=("1" "2" "5" "8" )
+# # #levels_array=("15" "20" "25" "30")
+# # partitions_array=("10MB" "100MB" "1GB")
+# # partitions_in_mb=("10" "100" "1000")
+# # #partitions_array=("10MB")
+# # #partitions_in_mb=("10")
+
+# # rm *.tar
+# # j=0
+
+# # for ((i=0; i<${#levels_array[@]}; i++)); do
+# # j=0
+# #  while (($j < ${#partitions_array[@]} )); do
+# #     JARVIS3_COMPRESSION ${INPUT_FILE[m]} ${levels_array[i]} ${partitions_array[j]} ${partitions_in_mb[j]} ;
+
+# #   j=$((j+1))
+# #  done
+# # done
+
+# # rm data_jarvis3-${INPUT_FILE[m]}-${sorting_types[n]}.csv
+# # #CSV_BUILDER JARVIS3
+# # for ((i=${#levels_array[@]}-1; i>=0; i--))
+# #  do
+# #   for ((j=${#partitions_array[@]}-1; j>=0; j--))
+# #    do
+# #     for ((k=${#program[@]}-1; k>=0; k--))
+# #      do
+# #       CSV_BUILDER_JARVIS3 ${INPUT_FILE[m]} ${levels_array[i]} ${partitions_array[j]} ${partitions_in_mb[j]} ${program[k]} ${sorting_types[n]}
+
+# #      done
+# #     done
+# #    done
 
       
-#      BUILD_CSV_HEADER_2 "jarvis3" ${INPUT_FILE[m]} ${sorting_types[n]}
-#    #  PLOT_JARVIS3 "data_jarvis3-$INPUT_FILE_SHORT_NAME" $partitions_array
-#    m=$((m+1))
-#   done
-
-./compression_gzip.sh \
-  "${#sorting_types[@]}" "${sorting_types[@]}" \
-  "${#INPUT_FILE[@]}" "${INPUT_FILE[@]}" \ 
-    $n $test
-# #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
-# m=0
-# while (($m < ${#INPUT_FILE[@]} )); do
-# #General Use Compressors
-# levels_array=("1" "4" "7" "9")
-# #levels_array=("1")
-# #gzip
-# #rm "data_gzip.csv"
-# rm data_gzip-${INPUT_FILE[m]}-${sorting_types[n]}.csv
-# rm *.gz
-# #execution mode
-# for((i=0; i<${#levels_array[@]}; i++)); do
-
-#   GZIP_COMPRESSION ${INPUT_FILE[m]} ${levels_array[i]};
-# done
-
-#   #CSV_BUILDER_GZIP
-#    #CSV_BUILDER_GZIP
-#    for ((i=${#levels_array[@]}-1; i>=0; i--))
-#    do
-#    for ((j=${#program[@]}-1; j>=0; j--))
-#      do
-#       CSV_BUILDER_GZIP ${INPUT_FILE[m]} ${levels_array[i]} ${program[j]} ${sorting_types[n]}
-#    done
-#   done
+# #      BUILD_CSV_HEADER_2 "jarvis3" ${INPUT_FILE[m]} ${sorting_types[n]}
+# #    #  PLOT_JARVIS3 "data_jarvis3-$INPUT_FILE_SHORT_NAME" $partitions_array
+# #    m=$((m+1))
+# #   done
 
 
-# BUILD_CSV_HEADER_1 "gzip" ${INPUT_FILE[m]} ${sorting_types[n]}
-# # PLOT_GZIP "data_gzip-$INPUT_FILE_SHORT_NAME"
+ m=0
+ while (($m < ${#INPUT_FILE[@]} )); do
+  ./compression_gzip.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test
+  m=$((m+1))
+  done
 
-# #rm *unzip.fasta
-#   m=$((m+1))
-#  done
+# ./compression_gzip.sh \
+#   "${#sorting_types[@]}" "${sorting_types[@]}" \
+#   "${#INPUT_FILE[@]}" "${INPUT_FILE[@]}" \ 
+#     $n $test
+# # #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
+# # m=0
+# # while (($m < ${#INPUT_FILE[@]} )); do
+# # #General Use Compressors
+# # levels_array=("1" "4" "7" "9")
+# # #levels_array=("1")
+# # #gzip
+# # #rm "data_gzip.csv"
+# # rm data_gzip-${INPUT_FILE[m]}-${sorting_types[n]}.csv
+# # rm *.gz
+# # #execution mode
+# # for((i=0; i<${#levels_array[@]}; i++)); do
 
-./compression_lzma.sh \
-  "${#sorting_types[@]}" "${sorting_types[@]}" \
-  "${#INPUT_FILE[@]}" "${INPUT_FILE[@]}" \ 
-    $n $test
-# #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
-# m=0
-# while (($m < ${#INPUT_FILE[@]} )); do
-# # #lzma
-#  levels_array=("1" "4" "7" "9")
+# #   GZIP_COMPRESSION ${INPUT_FILE[m]} ${levels_array[i]};
+# # done
 
-# rm "data_lzma.csv"
-# rm *.lzma
-# #levels_array=("1")
-# #program=("" "sortmf" "fasta_analysis")
-# #execution mode
-# for((i=0; i<${#levels_array[@]}; i++)); do
+# #   #CSV_BUILDER_GZIP
+# #    #CSV_BUILDER_GZIP
+# #    for ((i=${#levels_array[@]}-1; i>=0; i--))
+# #    do
+# #    for ((j=${#program[@]}-1; j>=0; j--))
+# #      do
+# #       CSV_BUILDER_GZIP ${INPUT_FILE[m]} ${levels_array[i]} ${program[j]} ${sorting_types[n]}
+# #    done
+# #   done
 
-#   LZMA_COMPRESSION ${INPUT_FILE[m]} ${levels_array[i]};
-# done
 
-#   #CSV_BUILDER_LZMA
-#    for ((i=${#levels_array[@]}-1; i>=0; i--))
-#    do
-#    for ((j=${#program[@]}-1; j>=0; j--))
-#      do
-#       CSV_BUILDER_LZMA ${INPUT_FILE[m]} ${levels_array[i]} ${program[j]} ${sorting_types[n]}
-#    done
-#   done
+# # BUILD_CSV_HEADER_1 "gzip" ${INPUT_FILE[m]} ${sorting_types[n]}
+# # # PLOT_GZIP "data_gzip-$INPUT_FILE_SHORT_NAME"
 
-#   BUILD_CSV_HEADER_1 "lzma" ${INPUT_FILE[m]} ${sorting_types[n]}
-#  # PLOT_LZMA "data_lzma-$INPUT_FILE_SHORT_NAME"
-# m=$((m+1))
-# done
+# # #rm *unzip.fasta
+# #   m=$((m+1))
+# #  done
 
-./compression_bzip2.sh \
-  "${#sorting_types[@]}" "${sorting_types[@]}" \
-  "${#INPUT_FILE[@]}" "${INPUT_FILE[@]}" \ 
-    $n $test
-# #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
-# m=0
-# while (($m < ${#INPUT_FILE[@]} )); do
-# # bzip2
-# levels_array=("1" "4" "7" "9")
-# rm "data_bzip2.csv"
-# rm *.bz2
-#  #levels_array=("1")
-# #execution mode
-# for((i=0; i<${#levels_array[@]}; i++)); do
 
-#   BZIP2_COMPRESSION ${INPUT_FILE[m]} ${levels_array[i]};
-# done
+ m=0
+  while (($m < ${#INPUT_FILE[@]} )); do
+   ./compression_lzma.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test
+   m=$((m+1))
+   done
 
-# #CSV_BUILDER_BZIP2
-#   for ((i=${#levels_array[@]}-1; i>=0; i--))
-#    do
-#    for ((j=${#program[@]}-1; j>=0; j--))
-#      do
-#       CSV_BUILDER_BZIP2 ${INPUT_FILE[m]} ${levels_array[i]} ${program[j]} ${sorting_types[n]}
-#    done
-#   done
 
-#    BUILD_CSV_HEADER_1 "bzip2" ${INPUT_FILE[m]} ${sorting_types[n]}
-#  # PLOT_BZIP2 "data_bzip2-$INPUT_FILE_SHORT_NAME"
-# m=$((m+1))
-# done
+# ./compression_lzma.sh \
+#   "${#sorting_types[@]}" "${sorting_types[@]}" \
+#   "${#INPUT_FILE[@]}" "${INPUT_FILE[@]}" \ 
+#     $n $test
+# # #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
+# # m=0
+# # while (($m < ${#INPUT_FILE[@]} )); do
+# # # #lzma
+# #  levels_array=("1" "4" "7" "9")
 
-./compression_mbgc.sh \
-  "${#sorting_types[@]}" "${sorting_types[@]}" \
-  "${#INPUT_FILE[@]}" "${INPUT_FILE[@]}" \ 
-    $n $test
+# # rm "data_lzma.csv"
+# # rm *.lzma
+# # #levels_array=("1")
+# # #program=("" "sortmf" "fasta_analysis")
+# # #execution mode
+# # for((i=0; i<${#levels_array[@]}; i++)); do
+
+# #   LZMA_COMPRESSION ${INPUT_FILE[m]} ${levels_array[i]};
+# # done
+
+# #   #CSV_BUILDER_LZMA
+# #    for ((i=${#levels_array[@]}-1; i>=0; i--))
+# #    do
+# #    for ((j=${#program[@]}-1; j>=0; j--))
+# #      do
+# #       CSV_BUILDER_LZMA ${INPUT_FILE[m]} ${levels_array[i]} ${program[j]} ${sorting_types[n]}
+# #    done
+# #   done
+
+# #   BUILD_CSV_HEADER_1 "lzma" ${INPUT_FILE[m]} ${sorting_types[n]}
+# #  # PLOT_LZMA "data_lzma-$INPUT_FILE_SHORT_NAME"
+# # m=$((m+1))
+# # done
+
+ m=0
+   while (($m < ${#INPUT_FILE[@]} )); do
+    ./compression_bzip2.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test
+    m=$((m+1))
+    done
+
+# ./compression_bzip2.sh \
+#   "${#sorting_types[@]}" "${sorting_types[@]}" \
+#   "${#INPUT_FILE[@]}" "${INPUT_FILE[@]}" \ 
+#     $n $test
+# # #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
+# # m=0
+# # while (($m < ${#INPUT_FILE[@]} )); do
+# # # bzip2
+# # levels_array=("1" "4" "7" "9")
+# # rm "data_bzip2.csv"
+# # rm *.bz2
+# #  #levels_array=("1")
+# # #execution mode
+# # for((i=0; i<${#levels_array[@]}; i++)); do
+
+# #   BZIP2_COMPRESSION ${INPUT_FILE[m]} ${levels_array[i]};
+# # done
+
+# # #CSV_BUILDER_BZIP2
+# #   for ((i=${#levels_array[@]}-1; i>=0; i--))
+# #    do
+# #    for ((j=${#program[@]}-1; j>=0; j--))
+# #      do
+# #       CSV_BUILDER_BZIP2 ${INPUT_FILE[m]} ${levels_array[i]} ${program[j]} ${sorting_types[n]}
+# #    done
+# #   done
+
+# #    BUILD_CSV_HEADER_1 "bzip2" ${INPUT_FILE[m]} ${sorting_types[n]}
+# #  # PLOT_BZIP2 "data_bzip2-$INPUT_FILE_SHORT_NAME"
+# # m=$((m+1))
+# # done
+
+  m=0
+   while (($m < ${#INPUT_FILE[@]} )); do
+    ./compression_mbgc.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test
+    m=$((m+1))
+    done
+
+# ./compression_mbgc.sh \
+#   "${#sorting_types[@]}" "${sorting_types[@]}" \
+#   "${#INPUT_FILE[@]}" "${INPUT_FILE[@]}" \ 
+#     $n $test
 # #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
 # m=0
 # while (($m < ${#INPUT_FILE[@]} )); do
@@ -430,7 +491,8 @@ for ((test=0; test<3; test++)); do
 # rm -d sort_fa_mbgc_decompress_*
 # m=$((m+1))
 # done
-done
+
+  done
  done
 
 #   # PLOT CREATION

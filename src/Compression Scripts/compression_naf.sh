@@ -3,6 +3,7 @@
 function NAF_COMPRESSION() {
   IN_FILE="$1";
   LEVEL="$2";
+  sorting_type="$3";
 
   IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fasta//g')
   echo $IN_FILE_SHORT_NAME
@@ -11,26 +12,26 @@ function NAF_COMPRESSION() {
 if [[ $LEVEL -gt 17 ]]; then
 { /bin/time -f "TIME\t%e\tMEM\t%M"  ennaf --strict --temp-dir tmp/ --dna -$LEVEL --level $LEVEL $IN_FILE ; } 2>$IN_FILE_SHORT_NAME-naf_l$LEVEL.txt
 { /bin/time -f "TIME\t%e\tMEM\t%M"  ennaf --strict --temp-dir tmp/ --dna -$LEVEL --level $LEVEL sort_$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_naf_l$LEVEL.txt
-{ /bin/time -f "TIME\t%e\tMEM\t%M"  ennaf --strict --temp-dir tmp/ --dna -$LEVEL --level $LEVEL sort_fanalysis_$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_fa_naf_l$LEVEL.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M"  ennaf --strict --temp-dir tmp/ --dna -$LEVEL --level $LEVEL sort_fanalysis_$sorting_type-$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_fa_naf_l$LEVEL.txt
 else
 { /bin/time -f "TIME\t%e\tMEM\t%M"  ennaf --strict --temp-dir tmp/ --dna --level $LEVEL $IN_FILE ; } 2>$IN_FILE_SHORT_NAME-naf_l$LEVEL.txt
 { /bin/time -f "TIME\t%e\tMEM\t%M"  ennaf --strict --temp-dir tmp/ --dna --level $LEVEL sort_$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_naf_l$LEVEL.txt
-{ /bin/time -f "TIME\t%e\tMEM\t%M"  ennaf --strict --temp-dir tmp/ --dna --level $LEVEL sort_fanalysis_$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_fa_naf_l$LEVEL.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M"  ennaf --strict --temp-dir tmp/ --dna --level $LEVEL sort_fanalysis_$sorting_type-$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_fa_naf_l$LEVEL.txt
 fi
 
 { ls $IN_FILE* -la -ltr | grep \.naf$ |awk '{print $5;}' ; } > $IN_FILE_SHORT_NAME-naf_size_l$LEVEL.txt
 { ls sort_$IN_FILE* -la -ltr | grep \.naf$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_naf_size_l$LEVEL.txt
-{ ls sort_fanalysis_$IN_FILE* -la -ltr | grep \.naf$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_naf_size_l$LEVEL.txt
+{ ls sort_fanalysis_$sorting_type-$IN_FILE* -la -ltr | grep \.naf$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_naf_size_l$LEVEL.txt
 
 echo "NAF Level" $LEVEL "decompression" 
 
 { /bin/time -f "TIME\t%e\tMEM\t%M" unnaf  $IN_FILE.naf -o $IN_FILE_SHORT_NAME-naf.fasta ; } 2>$IN_FILE_SHORT_NAME-unnaf_l$LEVEL.txt
 { /bin/time -f "TIME\t%e\tMEM\t%M" unnaf  sort_$IN_FILE.naf -o sort_$IN_FILE_SHORT_NAME-naf.fasta ; } 2>$IN_FILE_SHORT_NAME-sort_unnaf_l$LEVEL.txt
-{ /bin/time -f "TIME\t%e\tMEM\t%M" unnaf  sort_fanalysis_$IN_FILE.naf -o sort_fanalysis_$IN_FILE_SHORT_NAME-naf.fasta ; } 2>$IN_FILE_SHORT_NAME-sort_fa_unnaf_l$LEVEL.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" unnaf  sort_fanalysis_$sorting_type-$IN_FILE.naf -o sort_fanalysis_$sorting_type-$IN_FILE_SHORT_NAME-naf.fasta ; } 2>$IN_FILE_SHORT_NAME-sort_fa_unnaf_l$LEVEL.txt
 
 { ls $IN_FILE_SHORT_NAME* -la -ltr | grep \naf.fasta$ |awk '{print $5;}' ; } > $IN_FILE_SHORT_NAME-unnaf_size_l$LEVEL.txt
 { ls sort_$IN_FILE_SHORT_NAME* -la -ltr | grep \naf.fasta$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_unnaf_size_l$LEVEL.txt
-{ ls sort_fanalysis_$IN_FILE_SHORT_NAME* -la -ltr | grep \naf.fasta$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_unnaf_size_l$LEVEL.txt
+{ ls sort_fanalysis_$sorting_type-$IN_FILE_SHORT_NAME* -la -ltr | grep \naf.fasta$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_unnaf_size_l$LEVEL.txt
 
 rm *naf.fasta
 
@@ -50,12 +51,13 @@ test="$5"
 
   IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fasta//g')
   echo $IN_FILE_SHORT_NAME
+  echo $SORTING_TYPE
 
 if [[ $SORTING_ALGORITHM == "fasta_analysis" ]]; then  
 
 program="NAF_$IN_FILE_SHORT_NAME-fasta_analysis"
 level=$LEVEL
-bytes=$(ls sort_fanalysis_$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
+bytes=$(ls sort_fanalysis_$SORTING_TYPE-$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
 c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_naf_size_l$LEVEL.txt)
 original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-naf_size_l$LEVEL.txt)
 bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
@@ -74,7 +76,7 @@ if [ $bytes -eq $d_bytes ]
 else
   diff=1
 fi
-run=$test
+run=$( echo $test)
 #run=0
 
 printf $program | tee program_x
@@ -128,7 +130,7 @@ if [ $bytes -eq $d_bytes ]
 else
   diff=1
 fi
-run=$test
+run=$(echo $test)
 
 printf $program | tee program_x
 printf $bytes | tee bytes_x
@@ -180,7 +182,7 @@ if [ $bytes -eq $d_bytes ]
 else
   diff=1
 fi
-run=$test
+run=$(echo $test)
 
 printf $program | tee program_x
 printf $bytes | tee bytes_x
@@ -335,25 +337,30 @@ EOF
 
 #!/usr/bin/env bash
 
-sorting_types=( "${@:2:$1}" ); shift "$(( $1 + 1 ))"
-INPUT_FILE=( "${@:2:$1}" ); shift "$(( $1 + 1 ))"
+#sorting_types=( "${@:2:$1}" ); shift "$(( $1 + 1 ))"
+#INPUT_FILE=( "${@:2:$1}" ); shift "$(( $1 + 1 ))"
+sorting_type=$1
+input_file=$2
 
-declare -p sorting_types INPUT_FILE
+#declare -p sorting_types INPUT_FILE
 #sorting_types=$1
 #INPUT_FILE=$2
-n=$3
-test=$4
+#n=$3
+test=$3
 
 #for ((n=0; n<${#sorting_types[@]}; n++)); do
 #NAF
  levels_array=("1" "8" "15" "22")
+ program=("" "fasta_analysis")
 #levels_array=("8")
 rm *.naf
 m=0
-while (($m < ${#INPUT_FILE[@]} )); do
+#while (($m < ${#INPUT_FILE[@]} )); do
  for ((i=0; i<${#levels_array[@]}; i++)); do
-    INPUT_FILE_SHORT_NAME=$(ls -1 ${INPUT_FILE[m]} | sed 's/.fasta//g')
-    NAF_COMPRESSION ${INPUT_FILE[m]} ${levels_array[i]} ;
+    #INPUT_FILE_SHORT_NAME=$(ls -1 ${INPUT_FILE[m]} | sed 's/.fasta//g')
+    INPUT_FILE_SHORT_NAME=$(ls -1 $input_file | sed 's/.fasta//g')
+    #NAF_COMPRESSION ${INPUT_FILE[m]} ${levels_array[i]} ${sorting_types[n]} ;
+    NAF_COMPRESSION $input_file ${levels_array[i]} $sorting_type ;
 #INPUT_FILE_SHORT_NAME$(ls -1 synthetic.fasta | sed 's/.fasta//g')
 #NAF_COMPRESSION "synthetic.fasta" ${levels_array[i]} ;
     echo "level" ${levels_array[i]} "completed"
@@ -363,21 +370,22 @@ done
 #CSV_BUILDER NAF
 #rm data_naf-${INPUT_FILE[m]}-${sorting_types[n]}.csv
 #rm data_naf-synthetic-fasta.csv
-rm data_naf*
+#rm data_naf*
 for ((i=${#levels_array[@]}-1; i>=0; i--))
  do
    for ((j=${#program[@]}-1; j>=0; j--))
    do
-      CSV_BUILDER_NAF ${INPUT_FILE[m]} ${levels_array[i]} ${program[j]} ${sorting_types[n]} $test
+      #CSV_BUILDER_NAF ${INPUT_FILE[m]} ${levels_array[i]} ${program[j]} ${sorting_types[n]} $test
+      CSV_BUILDER_NAF $input_file ${levels_array[i]} ${program[j]} $sorting_type $test
      # CSV_BUILDER_NAF "synthetic.fasta" ${levels_array[i]} ${program[j]}
    done
   done
 
-  BUILD_CSV_HEADER_1 "naf" ${INPUT_FILE[m]} ${sorting_types[n]}
+  BUILD_CSV_HEADER_1 "naf" $input_file $sorting_type
  # BUILD_CSV_HEADER_1 "naf" "synthetic.fasta" 
  #PLOT_NAF "data_naf-$INPUT_FILE_SHORT_NAME-sorted_by-${sorting_types[n]}"
 
  rm *naf.fasta;
-  m=$((m+1))
-  done
-done
+ # m=$((m+1))
+ # done
+#done

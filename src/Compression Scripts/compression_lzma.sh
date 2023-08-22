@@ -2,29 +2,30 @@
 function LZMA_COMPRESSION(){
   IN_FILE="$1";
   LEVEL="$2";
+  sorting_type="$3";
 
   IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fasta//g')
   echo $IN_FILE_SHORT_NAME
 
 { /bin/time -f "TIME\t%e\tMEM\t%M" lzma -$LEVEL -f -k $IN_FILE ; } 2> $IN_FILE_SHORT_NAME-lzma_l$LEVEL.txt  
 { /bin/time -f "TIME\t%e\tMEM\t%M" lzma -$LEVEL -f -k sort_$IN_FILE ; } 2> $IN_FILE_SHORT_NAME-sort_lzma_l$LEVEL.txt  
-{ /bin/time -f "TIME\t%e\tMEM\t%M" lzma -$LEVEL -f -k sort_fanalysis_$IN_FILE ; } 2> $IN_FILE_SHORT_NAME-sort_fa_lzma_l$LEVEL.txt  
+{ /bin/time -f "TIME\t%e\tMEM\t%M" lzma -$LEVEL -f -k sort_fanalysis_$sorting_type-$IN_FILE ; } 2> $IN_FILE_SHORT_NAME-sort_fa_lzma_l$LEVEL.txt  
 
 { ls $IN_FILE* -la -ltr | grep \.lzma$ |awk '{print $5;}' ; } > $IN_FILE_SHORT_NAME-lzma_size_l$LEVEL.txt 
 { ls sort_$IN_FILE* -la -ltr | grep \.lzma$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_lzma_size_l$LEVEL.txt 
-{ ls sort_fanalysis_$IN_FILE* -la -ltr | grep \.lzma$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_lzma_size_l$LEVEL.txt 
+{ ls sort_fanalysis_$sorting_type-$IN_FILE* -la -ltr | grep \.lzma$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_lzma_size_l$LEVEL.txt 
 
 mv $IN_FILE.lzma $IN_FILE_SHORT_NAME-c_l.fasta.lzma
 mv sort_$IN_FILE.lzma sort_$IN_FILE_SHORT_NAME-c_l.fasta.lzma
-mv sort_fanalysis_$IN_FILE.lzma sort_fanalysis_$IN_FILE_SHORT_NAME-c_l.fasta.lzma
+mv sort_fanalysis_$sorting_type-$IN_FILE.lzma sort_fanalysis_$sorting_type-$IN_FILE_SHORT_NAME-c_l.fasta.lzma
 
 { /bin/time -f "TIME\t%e\tMEM\t%M" lzma -f -k -d $IN_FILE_SHORT_NAME-c_l.fasta.lzma ; } 2>$IN_FILE_SHORT_NAME-lzma_d_l$LEVEL.txt   
 { /bin/time -f "TIME\t%e\tMEM\t%M" lzma -f -k -d sort_$IN_FILE_SHORT_NAME-c_l.fasta.lzma ; } 2>$IN_FILE_SHORT_NAME-sort_lzma_d_l$LEVEL.txt    
-{ /bin/time -f "TIME\t%e\tMEM\t%M" lzma -f -k -d sort_fanalysis_$IN_FILE_SHORT_NAME-c_l.fasta.lzma ; } 2>$IN_FILE_SHORT_NAME-sort_fa_lzma_d_l$LEVEL.txt   
+{ /bin/time -f "TIME\t%e\tMEM\t%M" lzma -f -k -d sort_fanalysis_$sorting_type-$IN_FILE_SHORT_NAME-c_l.fasta.lzma ; } 2>$IN_FILE_SHORT_NAME-sort_fa_lzma_d_l$LEVEL.txt   
 
 { ls $IN_FILE_SHORT_NAME-c_l* -la -ltr | grep \.fasta$ |awk '{print $5;}' ; } > $IN_FILE_SHORT_NAME-lzma_d_size_l$LEVEL.txt
 { ls sort_$IN_FILE_SHORT_NAME-c_l* -la -ltr | grep \.fasta$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_lzma_d_size_l$LEVEL.txt
-{ ls sort_fanalysis_$IN_FILE_SHORT_NAME-c_l* -la -ltr | grep \.fasta$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_lzma_d_size_l$LEVEL.txt
+{ ls sort_fanalysis_$sorting_type-$IN_FILE_SHORT_NAME-c_l* -la -ltr | grep \.fasta$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_lzma_d_size_l$LEVEL.txt
 
 rm *-c_l.fasta
  
@@ -49,7 +50,7 @@ if [[ $SORTING_ALGORITHM == "fasta_analysis" ]]; then
 
 program="lzma_$IN_FILE_SHORT_NAME-fasta_analysis"
 level=$LEVEL
-bytes=$(ls sort_fanalysis_$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
+bytes=$(ls sort_fanalysis_$SORTING_TYPE-$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
 c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_lzma_size_l$LEVEL.txt)
 original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-lzma_size_l$LEVEL.txt)
 bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
@@ -68,7 +69,7 @@ if [ $bytes -eq $d_bytes ]
 else
   diff=1
 fi
-run=$test
+run=$(echo $test)
 
 printf $program | tee program_x
 printf $bytes | tee bytes_x
@@ -121,7 +122,7 @@ if [ $bytes -eq $d_bytes ]
 else
   diff=1
 fi
-run=$test
+run=$(echo $test)
 
 printf $program | tee program_x
 printf $bytes | tee bytes_x
@@ -173,7 +174,7 @@ if [ $bytes -eq $d_bytes ]
 else
   diff=1
 fi
-run=$test
+run=$(echo $test)
 
 printf $program | tee program_x
 printf $bytes | tee bytes_x
@@ -320,22 +321,23 @@ EOF
 
 }
 
-sorting_types=( "${@:2:$1}" ); shift "$(( $1 + 1 ))"
-INPUT_FILE=( "${@:2:$1}" ); shift "$(( $1 + 1 ))"
+# sorting_types=( "${@:2:$1}" ); shift "$(( $1 + 1 ))"
+# INPUT_FILE=( "${@:2:$1}" ); shift "$(( $1 + 1 ))"
 
-declare -p sorting_types INPUT_FILE
+# declare -p sorting_types INPUT_FILE
 
-#sorting_types=$1
-#INPUT_FILE=$2
-n=$3
-test=$4
+sorting_types=$1
+INPUT_FILE=$2
+#n=$3
+test=$3
 
 #for ((n=0; n<${#sorting_types[@]}; n++)); do
 #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
-m=0
-while (($m < ${#INPUT_FILE[@]} )); do
-# #lzma
+# m=0
+# while (($m < ${#INPUT_FILE[@]} )); do
+# # #lzma
  levels_array=("1" "4" "7" "9")
+ program=("" "fasta_analysis")
 
 rm "data_lzma.csv"
 rm *.lzma
@@ -344,21 +346,21 @@ rm *.lzma
 #execution mode
 for((i=0; i<${#levels_array[@]}; i++)); do
 
-  LZMA_COMPRESSION ${INPUT_FILE[m]} ${levels_array[i]};
+  LZMA_COMPRESSION $INPUT_FILE ${levels_array[i]} $sorting_types;
 done
 
   #CSV_BUILDER_LZMA
-   for ((i=${#levels_array[@]}-1; i>=0; i--)
+   for ((i=${#levels_array[@]}-1; i>=0; i--))
    do
    for ((j=${#program[@]}-1; j>=0; j--))
      do
-      CSV_BUILDER_LZMA ${INPUT_FILE[m]} ${levels_array[i]} ${program[j]} ${sorting_types[n]} $test
+      CSV_BUILDER_LZMA $INPUT_FILE ${levels_array[i]} ${program[j]} $sorting_types $test
    done
   done
 
-  BUILD_CSV_HEADER_1 "lzma" ${INPUT_FILE[m]} ${sorting_types[n]}
+  BUILD_CSV_HEADER_1 "lzma" $INPUT_FILE $sorting_types
  # PLOT_LZMA "data_lzma-$INPUT_FILE_SHORT_NAME"
-m=$((m+1))
- done
+# m=$((m+1))
+#  done
 #done
 

@@ -5,6 +5,7 @@ function JARVIS3_COMPRESSION(){
   LEVEL="$2";
   PARTITION="$3";
   PARTITION_MB="$4"
+  sorting_type="$5"
   # SORTING_TYPE="$5"
 
   IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fasta//g')
@@ -16,19 +17,19 @@ function JARVIS3_COMPRESSION(){
 
   { /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -l $LEVEL --block $PARTITION --fasta -i $IN_FILE ; } 2>$IN_FILE_SHORT_NAME-$PARTITION_MB-l$LEVEL.txt
   { /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -l $LEVEL --block $PARTITION --fasta -i sort_$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_$PARTITION_MB-l$LEVEL.txt
-  { /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -l $LEVEL --block $PARTITION --fasta -i sort_fanalysis_$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_fa_$PARTITION_MB-l$LEVEL.txt
+  { /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -l $LEVEL --block $PARTITION --fasta -i sort_fanalysis_$sorting_type-$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_fa_$PARTITION_MB-l$LEVEL.txt
 
   { ls $IN_FILE* -la -ltr | grep \.tar$ | awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-size_$PARTITION_MB-l$LEVEL.txt
   { ls sort_$IN_FILE* -la -ltr | grep \.tar$ | awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_size_$PARTITION_MB-l$LEVEL.txt
-  { ls sort_fanalysis_$IN_FILE* -la -ltr | grep \.tar$ | awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_size_$PARTITION_MB-l$LEVEL.txt
+  { ls sort_fanalysis_$sorting_type-$IN_FILE* -la -ltr | grep \.tar$ | awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_size_$PARTITION_MB-l$LEVEL.txt
 
   { /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -d -l $LEVEL --fasta -i $IN_FILE.tar ;  } 2>$IN_FILE_SHORT_NAME-d_$PARTITION_MB-l$LEVEL.txt
   { /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -d -l $LEVEL --fasta -i sort_$IN_FILE.tar ;  } 2>$IN_FILE_SHORT_NAME-sort_d_$PARTITION_MB-l$LEVEL.txt
-  { /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -d -l $LEVEL --fasta -i sort_fanalysis_$IN_FILE.tar ;  } 2>$IN_FILE_SHORT_NAME-sort_fa_d_$PARTITION_MB-l$LEVEL.txt
+  { /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -d -l $LEVEL --fasta -i sort_fanalysis_$sorting_type-$IN_FILE.tar ;  } 2>$IN_FILE_SHORT_NAME-sort_fa_d_$PARTITION_MB-l$LEVEL.txt
 
   { ls $IN_FILE* -la -ltr | grep \.tar.out$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-size_d_$PARTITION_MB-l$LEVEL.txt
   { ls sort_$IN_FILE* -la -ltr | grep \.tar.out$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_size_d_$PARTITION_MB-l$LEVEL.txt
-  { ls sort_fanalysis_$IN_FILE* -la -ltr | grep \.tar.out$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_size_d_$PARTITION_MB-l$LEVEL.txt
+  { ls sort_fanalysis_$sorting_type-$IN_FILE* -la -ltr | grep \.tar.out$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_size_d_$PARTITION_MB-l$LEVEL.txt
 
   rm *tar.out
 
@@ -44,7 +45,8 @@ function CSV_BUILDER_JARVIS3(){
   PARTITION="$3";
   PARTITION_MB="$4";
   SORTING_ALGORITHM="$5";
-  test="$6"
+  SORTING_TYPE="$6";
+  test="$7"
 
   IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fasta//g')
   echo $IN_FILE_SHORT_NAME
@@ -54,7 +56,7 @@ if [[ $SORTING_ALGORITHM == "fasta_analysis" ]]; then
 program="JARVIS3_$INPUT_FILE_SHORT_NAME-fasta_analysis"
 level=$LEVEL
 partition="$PARTITION"
-bytes=$(ls sort_fanalysis_$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
+bytes=$(ls sort_fanalysis_$SORTING_TYPE-$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
 c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_size_$PARTITION_MB-l$LEVEL.txt)
 original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-size_$PARTITION_MB-l$LEVEL.txt)
 bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
@@ -73,7 +75,7 @@ if [ $bytes -eq $d_bytes ]
 else
   diff=1
 fi
-run=$test
+run=$(echo $test)
 
 printf $program | tee program_x
 printf $bytes | tee bytes_x
@@ -127,7 +129,7 @@ if [ $bytes -eq $d_bytes ]
 else
   diff=1
 fi
-run=$test
+run=$(echo $test)
 
 printf $program | tee program_x
 printf $bytes | tee bytes_x
@@ -181,7 +183,7 @@ if [ $bytes -eq $d_bytes ]
 else
   diff=1
 fi
-run=$test
+run=$(echo $test)
 
 printf $program | tee program_x
 printf $bytes | tee bytes_x
@@ -357,25 +359,26 @@ EOF
 
 }
 
-sorting_types=( "${@:2:$1}" ); shift "$(( $1 + 1 ))"
-INPUT_FILE=( "${@:2:$1}" ); shift "$(( $1 + 1 ))"
+# sorting_types=( "${@:2:$1}" ); shift "$(( $1 + 1 ))"
+# INPUT_FILE=( "${@:2:$1}" ); shift "$(( $1 + 1 ))"
 
-declare -p sorting_types INPUT_FILE
-#sorting_types=$1
-#INPUT_FILE=$2
-n=$3
-test=$4
+# declare -p sorting_types INPUT_FILE
+sorting_type=$1
+INPUT_FILE=$2
+#n=$3
+test=$3
 
 #for ((n=0; n<${#sorting_types[@]}; n++)); do
 #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
-m=0
-while (($m < ${#INPUT_FILE[@]} )); do
+# m=0
+# while (($m < ${#INPUT_FILE[@]} )); do
 #JARVIS3
 
 levels_array=("1" "2" "5" "8" )
 #levels_array=("15" "20" "25" "30")
 partitions_array=("10MB" "100MB" "1GB")
 partitions_in_mb=("10" "100" "1000")
+program=("" "fasta_analysis")
 #partitions_array=("10MB")
 #partitions_in_mb=("10")
 
@@ -385,13 +388,12 @@ j=0
 for ((i=0; i<${#levels_array[@]}; i++)); do
 j=0
  while (($j < ${#partitions_array[@]} )); do
-    JARVIS3_COMPRESSION ${INPUT_FILE[m]} ${levels_array[i]} ${partitions_array[j]} ${partitions_in_mb[j]} ;
+    JARVIS3_COMPRESSION $INPUT_FILE ${levels_array[i]} ${partitions_array[j]} ${partitions_in_mb[j]} $sorting_type;
 
   j=$((j+1))
  done
 done
 
-rm data_jarvis3-${INPUT_FILE[m]}-${sorting_types[n]}.csv
 #CSV_BUILDER JARVIS3
 for ((i=${#levels_array[@]}-1; i>=0; i--))
  do
@@ -399,16 +401,16 @@ for ((i=${#levels_array[@]}-1; i>=0; i--))
    do
     for ((k=${#program[@]}-1; k>=0; k--))
      do
-      CSV_BUILDER_JARVIS3 ${INPUT_FILE[m]} ${levels_array[i]} ${partitions_array[j]} ${partitions_in_mb[j]} ${program[k]} ${sorting_types[n]} $test
+      CSV_BUILDER_JARVIS3 $INPUT_FILE ${levels_array[i]} ${partitions_array[j]} ${partitions_in_mb[j]} ${program[k]} $sorting_type $test
 
      done
     done
    done
 
       
-     BUILD_CSV_HEADER_2 "jarvis3" ${INPUT_FILE[m]} ${sorting_types[n]}
+     BUILD_CSV_HEADER_2 "jarvis3" $INPUT_FILE $sorting_type
    #  PLOT_JARVIS3 "data_jarvis3-$INPUT_FILE_SHORT_NAME" $partitions_array
-   m=$((m+1))
-  done
-#done  
+# #    m=$((m+1))
+# #   done
+# # #done  
 
