@@ -41,3 +41,15 @@ cd src/Compression_Scripts
 chmod +x *.sh
 </pre>
 
+
+
+### Compression Tests Usage: ###
+
+Run alll compression commands:
+<pre>
+./compression_test_script.sh
+</pre>
+
+Run compressor isolated:
+./compression_COMPRESSORNAME.sh size INPUT_FILE 0
+
