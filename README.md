@@ -51,5 +51,7 @@ Run alll compression commands:
 </pre>
 
 Run compressor isolated:
+<pre>
 ./compression_COMPRESSORNAME.sh size INPUT_FILE 0
+</pre>
 
