@@ -7,7 +7,7 @@ But, if we can work on a previous ordered file, where we group the most similar 
 On the other hand, there's also a compression script being developed where we test the 5 sorting compression scenarios along with 6 different compressors, 3 general-purpose and 4 DNA-specific. This script will gives not only the sizes of the compressed files and the times of the compression but also a comparison between compression with or without sorting using tables and plots to give a better graphical understanding of what's happening 
 
 ## Usage Example
-` ./FASTA_ANALY -sort=AT unsorted_file.fasta sorted_file.fasta 1 
+` ./FASTA_ANALY -sort=AT unsorted_file.fasta sorted_file.fasta 1 `
 
 A description of the options available can be obtained by invoking:
 
