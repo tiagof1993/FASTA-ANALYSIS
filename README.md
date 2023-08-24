@@ -28,12 +28,12 @@ A description of the options available can be obtained by invoking:
 | gzip           |<a href="https://ftp.eq.uc.pt/software/unix/gnu/gzip/">code</a>  | <a href="https://www.gnu.org/software/gzip/manual/">article</a>|
 | lzma            |<a href="https://tukaani.org/xz/">code</a>  | <a href="https://tukaani.org/xz/">article</a>|
 | bzip2           |<a href="https://sourceware.org/bzip2/">code</a>  | <a href="https://sourceware.org/bzip2/">article</a>|
-| MBGC         |<a href="https://github.com/kowallus/mbgc">code</a>  | <a href=https://academic.oup.com/gigascience/article/doi/10.1093/gigascience/giab099/6515740">article</a> |
+| MBGC         |<a href="https://github.com/kowallus/mbgc">code</a>  | <a href=https://academic.oup.com/gigascience/article/doi/10.1093/gigascience/giab099/6515740/">article</a> |
 
 </div>
 <br>
 
-### Reproducibility: ###
+### Compression Tests Reproducibility: ###
 
 Change directory and give permitions:
 <pre>
