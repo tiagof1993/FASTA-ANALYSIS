@@ -96,15 +96,15 @@ echo $OUT_FILE
 
 
 #--------MAIN---------------------------------------------------#
-read -p "Choose Installation Mode(0 [With Conda] or 1 [Manual]) : " Install_Mode
-./Install_Tools.sh $Install_Mode
+# read -p "Choose Installation Mode(0 [With Conda] or 1 [Manual]) : " Install_Mode
+# ./Install_Tools.sh $Install_Mode
 
 #testes com CVDB.fasta
 #sorting CVDB.fasta file
-INPUT_FILE=()
+#INPUT_FILE=()
 #while((${#INPUT_FILE[@]} < 2)); do
-INPUT_FILE+=($(GENERATE_ALCOR_FILE))
-#INPUT_FILE=("synthetic.fasta")
+#INPUT_FILE+=($(GENERATE_ALCOR_FILE))
+INPUT_FILE=("synthetic.fasta")
 #INPUT_FILE=("copy2.fasta" "copy.fasta")
 read -p "File to be read : " File_1
 #read -p "File to be read : " File_2
@@ -123,7 +123,6 @@ INPUT_FILE+=("$File_1")
 #echo $INPUT_FILE_SHORT_NAME
 
 #sorting files
-
 #Tests performed by
 #JARVIS3 
 #rm *.txt
@@ -132,14 +131,14 @@ filename=("" "sort_fa")
 sequence_type=("" "Alcor")
 sorting_types=("size" "AT" "ATP" "CG" "CGP")
 
-for ((n=0; n<${#sorting_types[@]}; n++)); do
-m=0 
-while (($m < ${#INPUT_FILE[@]} )); do
-   {  /bin/time -f "TIME\t%e\tMEM\t%M" ./FASTA_ANALY -sort=${sorting_types[n]} ${INPUT_FILE[m]} sort_fanalysis_${sorting_types[n]}-${INPUT_FILE[m]} 5 ;  } 2>>ordering_times.txt 
-#   #{  /bin/time -f "TIME\t%e\tMEM\t%M" ./sortmf ${INPUT_FILE[m]} sort_${INPUT_FILE[m]} ;  } 2>> sortmf_times.txt
-   m=$((m+1))
-   done
-done
+#  for ((n=0; n<${#sorting_types[@]}; n++)); do
+# m=1 
+# # while (($m < ${#INPUT_FILE[@]} )); do
+# { /bin/time -f "TIME\t%e\tMEM\t%M" ./FASTA_ANALY -sort=${sorting_types[n]} ${INPUT_FILE[m]} sort_fanalysis_${sorting_types[n]}-${INPUT_FILE[m]} 5 ; } 2>>ordering_times.txt 
+# # #   #{  /bin/time -f "TIME\t%e\tMEM\t%M" ./sortmf ${INPUT_FILE[m]} sort_${INPUT_FILE[m]} ;  } 2>> sortmf_times.txt
+# #    m=$((m+1))
+# #    done
+#  done
 
 rm data_naf*
 rm data_mfcompress*
@@ -151,26 +150,15 @@ rm data_mbgc*
 
 for ((n=0; n<${#sorting_types[@]}; n++)); do
 
-  #mv sort_fanalysis_${sorting_types[n]}-${INPUT_FILE[m]} sort_fanalysis_${INPUT_FILE[m]}
+ # mv sort_fanalysis_${sorting_types[n]}-${INPUT_FILE[m]} sort_fanalysis_${INPUT_FILE[m]}
  #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
-  #m=0
-  #while (($m < ${#INPUT_FILE[@]} )); do
-  # {  /bin/time -f "TIME\t%e\tMEM\t%M" ./FASTA_ANALY -sort=${sorting_types[n]} ${INPUT_FILE[m]} sort_fanalysis_${INPUT_FILE[m]} 5 ;  } 2>>ordering_times.txt 
-#   #{  /bin/time -f "TIME\t%e\tMEM\t%M" ./sortmf ${INPUT_FILE[m]} sort_${INPUT_FILE[m]} ;  } 2>> sortmf_times.txt
-  # m=$((m+1))
-  # done
-#NAF
-for ((test=0; test<2; test++)); do
-#./compression_naf.sh sorting_types INPUT_FILE $n
- m=0
- while (($m < ${#INPUT_FILE[@]} )); do
-#   # ./compression_naf.sh \
-#   #   "${#sorting_types[@]}" "${sorting_types[@]}" \
-#   #   "${#INPUT_FILE[@]}" "${INPUT_FILE[@]}" \ 
-#   #     $n $test
-    ./compression_naf.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test
-    m=$((m+1))
-   done
+  # m=0
+   # while (($m < ${#INPUT_FILE[@]} )); do
+     # {  /bin/time -f "TIME\t%e\tMEM\t%M" ./FASTA_ANALY -sort=${sorting_types[n]} ${INPUT_FILE[m]} sort_fanalysis_${INPUT_FILE[m]} 5 ;  } 2>>ordering_times.txt 
+     # {  /bin/time -f "TIME\t%e\tMEM\t%M" ./sortmf ${INPUT_FILE[m]} sort_${INPUT_FILE[m]} ;  } 2>> sortmf_times.txt
+   # m=$((m+1))
+# done
+
   
 
 
@@ -216,13 +204,46 @@ for ((test=0; test<2; test++)); do
 #   "${#INPUT_FILE[@]}" "${INPUT_FILE[@]}" \ 
 #     $n $test
 
+test=0
+m=0
+while (($m < ${#INPUT_FILE[@]} )); do
+ ./compression_naf.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test
+ m=$((m+1))
+done 
+
+test=0
 m=0
  while (($m < ${#INPUT_FILE[@]} )); do
-  ./compression_mfcompress.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test
-  m=$((m+1))
-  done
+ ./compression_mfcompress.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test
+ m=$((m+1))
+done
 
- done 
+# for ((test=1; test<2; test++)); do
+# #NAF
+#  m=0
+#  while (($m < ${#INPUT_FILE[@]} )); do
+# #   # ./compression_naf.sh \
+# #   #   "${#sorting_types[@]}" "${sorting_types[@]}" \
+# #   #   "${#INPUT_FILE[@]}" "${INPUT_FILE[@]}" \ 
+# #   #     $n $test
+#     ./compression_naf.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test
+#     m=$((m+1))
+#    done
+
+# #MFCompress
+# m=0
+#  while (($m < ${#INPUT_FILE[@]} )); do
+#   ./compression_mfcompress.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test
+#   m=$((m+1))
+#   done
+
+#  done 
+
+ 
+# for ((test=0; test<1; test++)); do
+# #./compression_naf.sh sorting_types INPUT_FILE $n
+
+#  done  
 
 # #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
 # m=0
@@ -264,8 +285,8 @@ m=0
 # done
 
 # done
-
- for ((test=0; test<3; test++)); do
+test=0
+#  for ((test=0; test<3; test++)); do
 
 
  m=0
@@ -495,7 +516,7 @@ m=0
 # done
 
   done
- done
+ #done
 
 #   # PLOT CREATION
 
@@ -520,3 +541,21 @@ m=0
 #   # PARTITION="$3";
 #   # PARTITION_MB="$4";
 #   # SORTING_ALGORITHM="$5";
+
+
+
+#Genomes to Download
+
+    # "https://ftp.cngb.org/pub/gigadb/pub/10.5524/102001_103000/102199/hg38.fa.gz" # 938.09MB
+    # "https://ftp.cngb.org/pub/gigadb/pub/10.5524/102001_103000/102199/gorGor6.fa.gz" # 903.79MB
+    # "https://ftp.cngb.org/pub/gigadb/pub/10.5524/102001_103000/102199/calJac4.fa.gz" # 887.99MB	
+    # "https://ftp.cngb.org/pub/gigadb/pub/10.5524/102001_103000/102191/Pseudobrama_simoni.genome.fa" # 886.11MB
+    # "https://ftp.cngb.org/pub/gigadb/pub/10.5524/102001_103000/102192/Rhodeus_ocellatus.genome.fa" # 860.71MB
+    # "https://ftp.cngb.org/pub/gigadb/pub/10.5524/102001_103000/102188/Naso_vlamingii.genome.fa" # 821.29MB
+    # "https://ftp.cngb.org/pub/gigadb/pub/10.5524/102001_103000/102193/00_Assembly_Fasta/haplotigs/TME204.HiFi_HiC.haplotig1.fa" # CASSAVA, 727.09MB
+    # "https://ftp.cngb.org/pub/gigadb/pub/10.5524/102001_103000/102199/Mmur_3.0.fa.gz" # 720.14MB
+    # "https://ftp.cngb.org/pub/gigadb/pub/10.5524/102001_103000/102193/00_Assembly_Fasta/haplotigs/TME204.HiFi_HiC.haplotig2.fa" # 673.62MB
+    # "https://ftp.cngb.org/pub/gigadb/pub/10.5524/102001_103000/102187/Chaetodon_trifasciatus.genome.fa" # 636.91MB
+    # "https://ftp.cngb.org/pub/gigadb/pub/10.5524/102001_103000/102189/Chelmon_rostratus.genome.fa" # 609.48MB
+    # "https://ftp.cngb.org/pub/gigadb/pub/10.5524/102001_103000/102190/Helostoma_temminckii.genome.fa" # 605.25MB
+    # "https://ftp.cngb.org/pub/gigadb/pub/10.5524/102001_103000/102171/Eudyptes_moseleyi.genomic.fa.gz" # 353.42MB
