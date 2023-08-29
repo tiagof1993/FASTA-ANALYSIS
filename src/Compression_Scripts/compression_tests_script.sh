@@ -67,7 +67,7 @@ do
    for((z=1;z<=$AUX_SEQ; z++ ))
    do
    #  if [ $x -eq 0 ];then
-   #    #x=$((${#seed_arr[@]}-1))
+   #    # x=$((${#seed_arr[@]}-1))
    #    x=$(($SEED_RANGE-1))
    #   else
    #    x=$(($x-1))
@@ -97,14 +97,15 @@ echo $OUT_FILE
 
 #--------MAIN---------------------------------------------------#
 # read -p "Choose Installation Mode(0 [With Conda] or 1 [Manual]) : " Install_Mode
-# ./Install_Tools.sh $Install_Mode
+ ./Install_Tools.sh $Install_Mode
+ ./Genomes_dowload.sh
 
 #testes com CVDB.fasta
 #sorting CVDB.fasta file
 #INPUT_FILE=()
 #while((${#INPUT_FILE[@]} < 2)); do
-#INPUT_FILE+=($(GENERATE_ALCOR_FILE))
-INPUT_FILE=("synthetic.fasta")
+INPUT_FILE+=($(GENERATE_ALCOR_FILE))
+#INPUT_FILE=("synthetic.fasta")
 #INPUT_FILE=("copy2.fasta" "copy.fasta")
 read -p "File to be read : " File_1
 #read -p "File to be read : " File_2

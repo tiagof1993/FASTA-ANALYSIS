@@ -49,7 +49,7 @@ urls=(
 
 #
 # === Download rawFiles ===========================================================================
-#
+
 printf "downloading...\n"
 for url in "${urls[@]}"; do
     # gets filename by spliting in "/" and getting the last element
@@ -67,6 +67,14 @@ for url in "${urls[@]}"; do
     fi
 done
 
+
+
+gzFiles=( $(ls "$genomesPath" | egrep ".gz$") )
+rawFiles=( $(ls $genomesPath | egrep "_raw.fa") )
+if [ ${#rawFiles[@]} -eq 0 ]; then 
+    echo "all files have been previously downloaded, so the program will end here"; 
+    exit; 
+fi
 #
 # === Unzip .gz files ===========================================================================
 #
