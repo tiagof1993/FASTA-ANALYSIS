@@ -210,14 +210,16 @@ m=0
 while (($m < ${#INPUT_FILE[@]} )); do
  ./compression_naf.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test
  m=$((m+1))
-done 
+done
+./plot_naf.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]} 
 
 test=0
 m=0
  while (($m < ${#INPUT_FILE[@]} )); do
  ./compression_mfcompress.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test
  m=$((m+1))
-done
+
+./plot_mfcompress.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]} 
 
 # for ((test=1; test<2; test++)); do
 # #NAF
@@ -295,7 +297,7 @@ test=0
   ./compression_jarvis3.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test
   m=$((m+1))
   done
-
+./plot_jarvis3.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]} 
 #  done 
 
 # ./compression_jarvis3.sh \
@@ -353,6 +355,7 @@ test=0
   ./compression_gzip.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test
   m=$((m+1))
   done
+  ./plot_gzip.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]} 
 
 # ./compression_gzip.sh \
 #   "${#sorting_types[@]}" "${sorting_types[@]}" \
@@ -398,6 +401,7 @@ test=0
    ./compression_lzma.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test
    m=$((m+1))
    done
+   ./plot_gzip.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]} 
 
 
 # ./compression_lzma.sh \
@@ -439,6 +443,7 @@ test=0
     ./compression_bzip2.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test
     m=$((m+1))
     done
+    ./plot_bzip2.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]} 
 
 # ./compression_bzip2.sh \
 #   "${#sorting_types[@]}" "${sorting_types[@]}" \
@@ -477,6 +482,7 @@ test=0
     ./compression_mbgc.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test
     m=$((m+1))
     done
+    ./plot_mbgc.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]} 
 
 # ./compression_mbgc.sh \
 #   "${#sorting_types[@]}" "${sorting_types[@]}" \
