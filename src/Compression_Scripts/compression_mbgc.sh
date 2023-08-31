@@ -242,6 +242,7 @@ test=$3
    # #MBGC
 levels_array=("0" "1" "2" "3")
 program=("" "fasta_analysis")
+#program=("fasta_analysis")
 #levels_array=("0")
 
 # rm data_mbgc.csv
@@ -252,17 +253,17 @@ program=("" "fasta_analysis")
  done
 
 #CSV_BUILDER_MBGC
-  for ((i=${#levels_array[@]}-1; i>=0; i--))
-  do
-   for ((j=${#program[@]}-1; j>=0; j--))
-     do
-      CSV_BUILDER_MBGC $INPUT_FILE ${levels_array[i]} ${program[j]} $sorting_types $test
+   for ((i=${#levels_array[@]}-1; i>=0; i--))
+   do
+    for ((j=${#program[@]}-1; j>=0; j--))
+      do
+       CSV_BUILDER_MBGC $INPUT_FILE ${levels_array[i]} ${program[j]} $sorting_types $test
+    done
    done
-  done
 
 
-BUILD_CSV_HEADER_1 "mbgc" $INPUT_FILE $sorting_types
- #PLOT_MBGC "data_mbgc-$INPUT_FILE_SHORT_NAME"
+# BUILD_CSV_HEADER_1 "mbgc" $INPUT_FILE $sorting_types
+ PLOT_MBGC "data_mbgc-$INPUT_FILE_SHORT_NAME"
 
 rm -d mbgc_decompress_*
 rm -d sort_mbgc_decompress_*

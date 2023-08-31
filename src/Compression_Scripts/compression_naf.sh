@@ -271,11 +271,9 @@ test=$3
 #levels_array=("8")
 rm *.naf
 m=0
-while (($m < ${#INPUT_FILE[@]} )); do
+#while (($m < ${#INPUT_FILE[@]} )); do
  for ((i=0; i<${#levels_array[@]}; i++)); do
-    #INPUT_FILE_SHORT_NAME=$(ls -1 ${INPUT_FILE[m]} | sed 's/.fasta//g')
     INPUT_FILE_SHORT_NAME=$(ls -1 $input_file | sed 's/.fasta//g')
-    #NAF_COMPRESSION ${INPUT_FILE[m]} ${levels_array[i]} ${sorting_types[n]} ;
     NAF_COMPRESSION $input_file ${levels_array[i]} $sorting_type ;
 #INPUT_FILE_SHORT_NAME$(ls -1 synthetic.fasta | sed 's/.fasta//g')
 #NAF_COMPRESSION "synthetic.fasta" ${levels_array[i]} ;
@@ -284,9 +282,6 @@ while (($m < ${#INPUT_FILE[@]} )); do
 done
 
 #CSV_BUILDER NAF
-#rm data_naf-${INPUT_FILE[m]}-${sorting_types[n]}.csv
-#rm data_naf-synthetic-fasta.csv
-#rm data_naf*
 for ((i=${#levels_array[@]}-1; i>=0; i--))
  do
    for ((j=${#program[@]}-1; j>=0; j--))

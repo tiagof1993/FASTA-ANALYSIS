@@ -259,18 +259,19 @@ test=$3
 # m=0
 # while (($m < ${#INPUT_FILE[@]} )); do
 # # #lzma
- levels_array=("1" "4" "7" "9")
+ levels_array=("1" "4" "7")
  program=("" "fasta_analysis")
 
-rm "data_lzma.csv"
-rm *.lzma
+#rm "data_lzma.csv"
+#rm *.lzma
+
 #levels_array=("1")
 #program=("" "sortmf" "fasta_analysis")
 #execution mode
-for((i=0; i<${#levels_array[@]}; i++)); do
+# for((i=0; i<${#levels_array[@]}; i++)); do
 
-  LZMA_COMPRESSION $INPUT_FILE ${levels_array[i]} $sorting_types;
-done
+#   LZMA_COMPRESSION $INPUT_FILE ${levels_array[i]} $sorting_types;
+# done
 
   #CSV_BUILDER_LZMA
    for ((i=${#levels_array[@]}-1; i>=0; i--))

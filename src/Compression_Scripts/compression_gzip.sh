@@ -257,7 +257,7 @@ test=$3
 # m=0
 # while (($m < ${#INPUT_FILE[@]} )); do
 #General Use Compressors
-levels_array=("1" "4" "7" "9")
+levels_array=("1" "4" "7")
 program=("" "fasta_analysis")
 #levels_array=("1")
 #gzip

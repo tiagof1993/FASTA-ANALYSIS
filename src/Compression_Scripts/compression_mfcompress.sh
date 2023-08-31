@@ -270,7 +270,7 @@ m=0
  levels_array=("1" "2" "3")
  partitions_array=("4" "8")
   # levels_array=("3")
-  #  partitions_array=("1" "4" "8")
+  #partitions_array=("1" "4" "8")
  program=("" "fasta_analysis")
 rm *.mfc
 #levels_array=("0")
