@@ -103,6 +103,6 @@ Install=$1
 
 if [ $Install -eq 0 ];then
     Install_with_Conda
-else then
+else
     Manual_Installation
 fi
