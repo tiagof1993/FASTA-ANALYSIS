@@ -100,25 +100,10 @@ read -p "Choose Installation Mode(0 [With Conda] or 1 [Manual]) : " Install_Mode
  ./Install_Tools.sh $Install_Mode
  ./Genomes_download.sh
 
-#testes com CVDB.fasta
-#sorting CVDB.fasta file
-#INPUT_FILE=()
-#while((${#INPUT_FILE[@]} < 2)); do
+
 INPUT_FILE+=($(GENERATE_ALCOR_FILE))
-#INPUT_FILE=("synthetic.fasta")
-#INPUT_FILE=("copy2.fasta" "copy.fasta")
 read -p "File to be read : " File_1
-#read -p "File to be read : " File_2
 INPUT_FILE+=("$File_1")
-
-#for ((i=0; i<${#INPUT_FILE[@]}; i++)); do
-#echo "${INPUT_FILE[0]}"
-#done
-
-
-#done
-#INPUT_FILE=("copy2.fasta" "synth.fasta")
-
 
 #INPUT_FILE_SHORT_NAME=$(ls -1 $INPUT_FILE | sed 's/.fasta//g')
 #echo $INPUT_FILE_SHORT_NAME
@@ -132,14 +117,17 @@ filename=("" "sort_fa")
 sequence_type=("" "Alcor")
 sorting_types=("size" "AT" "ATP" "CG" "CGP")
 
-#  for ((n=0; n<${#sorting_types[@]}; n++)); do
-# m=1 
-# # while (($m < ${#INPUT_FILE[@]} )); do
-# { /bin/time -f "TIME\t%e\tMEM\t%M" ./FASTA_ANALY -sort=${sorting_types[n]} ${INPUT_FILE[m]} sort_fanalysis_${sorting_types[n]}-${INPUT_FILE[m]} 5 ; } 2>>ordering_times.txt 
-# # #   #{  /bin/time -f "TIME\t%e\tMEM\t%M" ./sortmf ${INPUT_FILE[m]} sort_${INPUT_FILE[m]} ;  } 2>> sortmf_times.txt
-# #    m=$((m+1))
-# #    done
-#  done
+for ((n=0; n<${#sorting_types[@]}; n++)); do
+m=0
+ while (($m < ${#INPUT_FILE[@]} )); do
+   { /bin/time -f "TIME\t%e\tMEM\t%M" ./FASTA_ANALY -sort=${sorting_types[n]} ${INPUT_FILE[m]} sort_fanalysis_${sorting_types[n]}-${INPUT_FILE[m]} 5 ; } 2>>ordering_times.txt 
+# #   #{  /bin/time -f "TIME\t%e\tMEM\t%M" ./sortmf ${INPUT_FILE[m]} sort_${INPUT_FILE[m]} ;  } 2>> sortmf_times.txt
+    m=$((m+1))
+  done
+done
+
+ #valgrind -v ennaf --strict --temp-dir tmp/ --dna --level 1 sort_fanalysis_AT-TaeRenan_refseq_v2_1.fasta
+
 
 rm data_naf*
 rm data_mfcompress*
@@ -149,15 +137,7 @@ rm data_lzma*
 rm data_bzip2*
 rm data_mbgc*
 
-for ((n=0; n<${#sorting_types[@]}; n++)); do
-
-test=0
-m=0
-while (($m < ${#INPUT_FILE[@]} )); do
- ./compression_naf.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test
- m=$((m+1))
-done
-./plot_naf.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]} 
+for ((n=1; n<${#sorting_types[@]}; n++)); do
 
 test=0
 m=0
@@ -208,10 +188,3 @@ test=0
    ./plot_mbgc.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]} 
 
 done
-
-
-# done
-#     #  mail -s " Att test" data_naf.csv tiagorfonseca@ua.pt 
-
-#     #  mutt -s "Subject" -a data_naf.csv -- tiagorfonseca@ua.pt < test-sort_fa_gunzip_l1.txt
-# #rm data.csv
