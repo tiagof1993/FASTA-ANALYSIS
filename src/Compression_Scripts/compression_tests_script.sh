@@ -140,70 +140,70 @@ rm data_lzma*
 rm data_bzip2*
 rm data_mbgc*
 
-for ((n=1; n<${#sorting_types[@]}; n++)); do
+for ((n=0; n<${#sorting_types[@]}; n++)); do
 
 #gnome-terminal -- bash -c "; exec bash"
 test=0
   m=0
-  while (($m < ${#INPUT_FILE[@]} )); do
-  gnome-terminal -- bash -c "./compression_naf.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test; exec bash"
+  #while (($m < ${#INPUT_FILE[@]} )); do
+  gnome-terminal -- bash -c "./compression_naf.sh ${sorting_types[n]} ${INPUT_FILE[0]} $test & ./compression_naf.sh ${sorting_types[n]} ${INPUT_FILE[1]} $test & ./plot_naf.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]}; exec bash"
   # ./compression_naf.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test
-   m=$((m+1))
-  done
-  ./plot_naf.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]} 
+  # m=$((m+1))
+  #done
+  #./plot_naf.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]} 
 
 test=0
 m=0
- while (($m < ${#INPUT_FILE[@]} )); do
- gnome-terminal -- bash -c "./compression_mfcompress.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test; exec bash"
+ #while (($m < ${#INPUT_FILE[@]} )); do
+ gnome-terminal -- bash -c "./compression_mfcompress.sh ${sorting_types[n]} ${INPUT_FILE[0]} $test & ./compression_mfcompress.sh ${sorting_types[n]} ${INPUT_FILE[1]} $ & ./plot_mfcompress.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]} ; exec bash"
 #./compression_mfcompress.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test
- m=$((m+1))
- done
-./plot_mfcompress.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]} 
+# m=$((m+1))
+ #done
+#./plot_mfcompress.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]} 
 
 test=0
  m=0
- while (($m < ${#INPUT_FILE[@]} )); do
- gnome-terminal -- bash -c "./compression_jarvis3.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test; exec bash"
+ #while (($m < ${#INPUT_FILE[@]} )); do
+ gnome-terminal -- bash -c "./compression_jarvis3.sh ${sorting_types[n]} ${INPUT_FILE[0]} $test & ./compression_jarvis3.sh ${sorting_types[n]} ${INPUT_FILE[1]} $test & ./plot_jarvis3.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]} ; exec bash"
   #./compression_jarvis3.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test
-  m=$((m+1))
-  done
-./plot_jarvis3.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]} 
+  #m=$((m+1))
+  #done
+
 
 test=0
  m=0
- while (($m < ${#INPUT_FILE[@]} )); do
+ #while (($m < ${#INPUT_FILE[@]} )); do
  # ./compression_gzip.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test
-  gnome-terminal -- bash -c "./compression_gzip.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test; exec bash"
-  m=$((m+1))
-  done
-  ./plot_gzip.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]} 
+  gnome-terminal -- bash -c "./compression_gzip.sh ${sorting_types[n]} ${INPUT_FILE[0]} $test  & ./compression_gzip.sh ${sorting_types[n]} ${INPUT_FILE[1]} $test & ./plot_gzip.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]}; exec bash"
+  #m=$((m+1))
+  #done
 
  test=0
  m=0
-  while (($m < ${#INPUT_FILE[@]} )); do
+  #while (($m < ${#INPUT_FILE[@]} )); do
    #./compression_lzma.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test
-   gnome-terminal -- bash -c "./compression_lzma.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test; exec bash"
-   m=$((m+1))
-   done
-   ./plot_lzma.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]} 
+   gnome-terminal -- bash -c "/compression_lzma.sh ${sorting_types[n]} ${INPUT_FILE[0]} $test & ./compression_lzma.sh ${sorting_types[n]} ${INPUT_FILE[1]} $test & ./plot_lzma.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]} ; exec bash"
+  # m=$((m+1))
+  # done
+   
 
  test=0
  m=0
-   while (($m < ${#INPUT_FILE[@]} )); do
-   gnome-terminal -- bash -c "./compression_bzip2.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test; exec bash"
+ #  while (($m < ${#INPUT_FILE[@]} )); do
+   gnome-terminal -- bash -c "./compression_bzip2.sh ${sorting_types[n]} ${INPUT_FILE[0]} $test & ./compression_bzip2.sh ${sorting_types[n]} ${INPUT_FILE[1]} $test & ./plot_bzip2.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]}; exec bash"
     #./compression_bzip2.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test
-    m=$((m+1))
-    done
-    ./plot_bzip2.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]} 
+  #  m=$((m+1))
+  #  done
+     
 
   test=0
   m=0
-   while (($m < ${#INPUT_FILE[@]} )); do
-   gnome-terminal -- bash -c "./compression_mbgc.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test; exec bash"
+   #while (($m < ${#INPUT_FILE[@]} )); do
+   gnome-terminal -- bash -c "./compression_mbgc.sh ${sorting_types[n]} ${INPUT_FILE[0]} $test  & ./compression_mbgc.sh ${sorting_types[n]} ${INPUT_FILE[1]} $test & ./plot_mbgc.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]} ; exec bash"
     #./compression_mbgc.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test
-    m=$((m+1))
-    done
-   ./plot_mbgc.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]} 
+   # m=$((m+1))
+   # done
+   
 
 done
+
