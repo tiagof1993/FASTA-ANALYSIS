@@ -1,4 +1,5 @@
 
+#!/bin/bash
 
 function PLOT_JARVIS3(){
 #rm *.csv

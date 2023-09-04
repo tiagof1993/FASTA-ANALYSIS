@@ -1,3 +1,4 @@
+#!/bin/bash
 
 function PLOT_NAF(){
    #rm *.csv

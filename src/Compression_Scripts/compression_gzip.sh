@@ -1,3 +1,4 @@
+#!/bin/bash
 
 function GZIP_COMPRESSION(){
   IN_FILE="$1";

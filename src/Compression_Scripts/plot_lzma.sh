@@ -1,3 +1,4 @@
+#!/bin/bash
 
  function PLOT_LZMA(){
   #LZMA_CSV="data_lzma"

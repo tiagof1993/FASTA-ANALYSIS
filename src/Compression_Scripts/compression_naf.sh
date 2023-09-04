@@ -1,4 +1,5 @@
 
+#!/bin/bash
 
 function NAF_COMPRESSION() {
   IN_FILE="$1";

@@ -1,4 +1,4 @@
-
+#!/bin/bash
 
 function JARVIS3_COMPRESSION(){
   IN_FILE="$1";

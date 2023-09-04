@@ -1,4 +1,6 @@
 
+#!/bin/bash
+
 function LZMA_COMPRESSION(){
   IN_FILE="$1";
   LEVEL="$2";
@@ -268,10 +270,10 @@ test=$3
 #levels_array=("1")
 #program=("" "sortmf" "fasta_analysis")
 #execution mode
-# for((i=0; i<${#levels_array[@]}; i++)); do
+for((i=0; i<${#levels_array[@]}; i++)); do
 
-#   LZMA_COMPRESSION $INPUT_FILE ${levels_array[i]} $sorting_types;
-# done
+  LZMA_COMPRESSION $INPUT_FILE ${levels_array[i]} $sorting_types;
+done
 
   #CSV_BUILDER_LZMA
    for ((i=${#levels_array[@]}-1; i>=0; i--))

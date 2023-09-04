@@ -1,4 +1,5 @@
-
+#!/bin/bash
+ 
  function PLOT_GZIP(){
   #GZIP_CSV="data_gzip"
    GZIP_synthetic_CSV=$1

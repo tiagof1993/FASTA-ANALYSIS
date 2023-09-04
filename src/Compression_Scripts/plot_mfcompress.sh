@@ -1,3 +1,5 @@
+ #!/bin/bash
+ 
  function PLOT_MFCOMPRESS(){
   #rm *.csv
 partitions_array=("1" "4" "8")

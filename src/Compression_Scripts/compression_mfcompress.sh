@@ -1,4 +1,6 @@
 
+#!/bin/bash
+
 function MFCOMPRESS_COMPRESSION(){
   IN_FILE="$1";
   LEVEL="$2";

@@ -1,4 +1,6 @@
 
+ #!/bin/bash
+ 
  function PLOT_BZIP2(){
   #BZIP2_CSV="data_bzip2"
 BZIP2_synthetic_CSV=$1

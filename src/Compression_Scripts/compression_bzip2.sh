@@ -1,3 +1,4 @@
+#!/bin/bash
 
 function BZIP2_COMPRESSION(){
   IN_FILE="$1";

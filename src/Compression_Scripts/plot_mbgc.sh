@@ -1,3 +1,4 @@
+#!/bin/bash
 
  function PLOT_MBGC(){
    #MBGC_CSV="data_mbgc"
