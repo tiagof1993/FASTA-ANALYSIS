@@ -59,7 +59,7 @@ mv mbgc mbgc_dir # rename mbgc directory to move mbgc executable to scripts
 cp mbgc_dir/build/mbgc .
 rm -fr mbgc_dir
 #
-#ALCOR ----------------------------------------------------------------------
+#ALCOR-----------------------------------------------------------------------
 #
 sudo apt-get install cmake git
 git clone https://github.com/cobilab/alcor.git
@@ -69,6 +69,13 @@ make
 cd ..
 cd ..
 cp alcor/src/AlcoR .
+
+
+#FASTA_ANALY----------------------------------------------------------------------
+#
+git clone https://github.com/tiagof1993/Eficient_DNA_Compressor
+cp Eficient_DNA_Compressor/bin/FASTA_ANALY .
+
 
 }
 
