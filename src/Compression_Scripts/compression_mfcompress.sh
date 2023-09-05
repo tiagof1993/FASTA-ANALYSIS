@@ -12,20 +12,20 @@ function MFCOMPRESS_COMPRESSION(){
 
 
 { /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressC -v -$LEVEL -p $PARTITION -t 8 $IN_FILE ; } 2>$IN_FILE_SHORT_NAME-mfc_l$LEVEL-p$PARTITION-t8.txt 
-{ /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressC -v -$LEVEL -p $PARTITION -t 8 sort_$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_mfc_l$LEVEL-p$PARTITION-t8.txt 
-{ /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressC -v -$LEVEL -p $PARTITION -t 8 sort_fanalysis_$sorting_type-$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_fa_mfc_l$LEVEL-p$PARTITION-t8.txt 
+{ /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressC -v -$LEVEL -p $PARTITION -t 8 sort_$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_mfc_l$LEVEL-p$PARTITION-t8-$sorting_type.txt 
+{ /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressC -v -$LEVEL -p $PARTITION -t 8 sort_fanalysis_$sorting_type-$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_fa_mfc_l$LEVEL-p$PARTITION-t8-$sorting_type.txt 
 
 { ls $IN_FILE* -la -ltr | grep \.mfc$ |awk '{print $5;}' ; } > $IN_FILE_SHORT_NAME-mfc_size_l$LEVEL-p$PARTITION-t8.txt
-{ ls sort_$IN_FILE* -la -ltr | grep \.mfc$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_mfc_size_l$LEVEL-p$PARTITION-t8.txt
-{ ls sort_fanalysis_$sorting_type-$IN_FILE* -la -ltr | grep \.mfc$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_mfc_size_l$LEVEL-p$PARTITION-t8.txt
+{ ls sort_$IN_FILE* -la -ltr | grep \.mfc$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_mfc_size_l$LEVEL-p$PARTITION-t8-$sorting_type.txt
+{ ls sort_fanalysis_$sorting_type-$IN_FILE* -la -ltr | grep \.mfc$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_mfc_size_l$LEVEL-p$PARTITION-t8-$sorting_type.txt
 
 { /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressD -v -$LEVEL -p $PARTITION -t 8 $IN_FILE.mfc ; } 2> $IN_FILE_SHORT_NAME-mfc_d_l$LEVEL-p$PARTITION-t8.txt 
-{ /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressD -v -$LEVEL -p $PARTITION -t 8 sort_$IN_FILE.mfc ; } 2>$IN_FILE_SHORT_NAME-sort_mfc_d_l$LEVEL-p$PARTITION-t8.txt
-{ /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressD -v -$LEVEL -p $PARTITION -t 8 sort_fanalysis_$sorting_type-$IN_FILE.mfc ; } 2>$IN_FILE_SHORT_NAME-sort_fa_mfc_d_l$LEVEL-p$PARTITION-t8.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressD -v -$LEVEL -p $PARTITION -t 8 sort_$IN_FILE.mfc ; } 2>$IN_FILE_SHORT_NAME-sort_mfc_d_l$LEVEL-p$PARTITION-t8-$sorting_type.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" ./MFCompressD -v -$LEVEL -p $PARTITION -t 8 sort_fanalysis_$sorting_type-$IN_FILE.mfc ; } 2>$IN_FILE_SHORT_NAME-sort_fa_mfc_d_l$LEVEL-p$PARTITION-t8-$sorting_type.txt
 
 { ls $IN_FILE* -la -ltr | grep \.mfc.d$ |awk '{print $5;}' ; } > $IN_FILE_SHORT_NAME-mfc_d_size_l$LEVEL-p$PARTITION-t8.txt
-{ ls sort_$IN_FILE* -la -ltr | grep \.mfc.d$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_mfc_d_size_l$LEVEL-p$PARTITION-t8.txt
-{ ls sort_fanalysis_$sorting_type-$IN_FILE* -la -ltr | grep \.mfc.d$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_mfc_d_size_l$LEVEL-p$PARTITION-t8.txt
+{ ls sort_$IN_FILE* -la -ltr | grep \.mfc.d$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_mfc_d_size_l$LEVEL-p$PARTITION-t8-$sorting_type.txt
+{ ls sort_fanalysis_$sorting_type-$IN_FILE* -la -ltr | grep \.mfc.d$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_mfc_d_size_l$LEVEL-p$PARTITION-t8-$sorting_type.txt
 
 rm *mfc.d
   
@@ -52,17 +52,17 @@ level=$LEVEL
 partition="$PARTITION"
 #bytes=$(ls sort_fanalysis_$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
 bytes=$(ls -la sort_fanalysis_$SORTING_TYPE-$IN_FILE_SHORT_NAME.fasta |awk '{print $5;}')
-c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_mfc_size_l$LEVEL-p$PARTITION-t8.txt)
-original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-mfc_size_l$LEVEL-p$PARTITION-t8.txt)
+c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_mfc_size_l$LEVEL-p$PARTITION-t8-$SORTING_TYPE.txt)
+original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-mfc_size_l$LEVEL-p$PARTITION-t8-$SORTING_TYPE.txt)
 bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
 bps_final=$(echo "scale=3; ($c_bytes * 8) / $bytes" | bc)
 #gain=$(echo "scale=3; ($c_bytes / $original_c_bytes)*100" | bc)
 gain=$(echo "scale=3; (1-($c_bytes / $original_c_bytes))*100" | bc)
-c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_fa_mfc_l$LEVEL-p$PARTITION-t8.txt)
-c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_mfc_l$LEVEL-p$PARTITION-t8.txt)
-d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_mfc_d_size_l$LEVEL-p$PARTITION-t8.txt)
-d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_fa_mfc_d_l$LEVEL-p$PARTITION-t8.txt)
-d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_mfc_d_l$LEVEL-p$PARTITION-t8.txt)
+c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_fa_mfc_l$LEVEL-p$PARTITION-t8-$SORTING_TYPE.txt)
+c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_mfc_l$LEVEL-p$PARTITION-t8-$SORTING_TYPE.txt)
+d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_mfc_d_size_l$LEVEL-p$PARTITION-t8-$SORTING_TYPE.txt)
+d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_fa_mfc_d_l$LEVEL-p$PARTITION-t8-$SORTING_TYPE.txt)
+d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_mfc_d_l$LEVEL-p$PARTITION-t8-$SORTING_TYPE.txt)
 diff=0
 if [ $bytes -eq $d_bytes ] 
  then
@@ -107,17 +107,17 @@ level=$LEVEL
 partition="$PARTITION"
 #bytes=$(ls sort_$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
 bytes=$(ls -la sort_$IN_FILE_SHORT_NAME.fasta |awk '{print $5;}')
-c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_mfc_size_l$LEVEL-p$PARTITION-t8.txt)
-original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-mfc_size_l$LEVEL-p$PARTITION-t8.txt)
+c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_mfc_size_l$LEVEL-p$PARTITION-t8-$SORTING_TYPE.txt)
+original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-mfc_size_l$LEVEL-p$PARTITION-t8-$SORTING_TYPE.txt)
 bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
 bps_final=$(echo "scale=3; ($c_bytes * 8) / $bytes" | bc)
 #gain=$(echo "scale=3; ($c_bytes / $original_c_bytes)*100" | bc)
 gain=$(echo "scale=3; (1-($c_bytes / $original_c_bytes))*100" | bc)
-c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_mfc_l$LEVEL-p$PARTITION-t8.txt)
-c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_mfc_l$LEVEL-p$PARTITION-t8.txt)
-d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_mfc_d_size_l$LEVEL-p$PARTITION-t8.txt)
-d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_mfc_d_l$LEVEL-p$PARTITION-t8.txt)
-d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_mfc_d_l$LEVEL-p$PARTITION-t8.txt)
+c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_mfc_l$LEVEL-p$PARTITION-t8-$SORTING_TYPE.txt)
+c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_mfc_l$LEVEL-p$PARTITION-t8-$SORTING_TYPE.txt)
+d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_mfc_d_size_l$LEVEL-p$PARTITION-t8-$SORTING_TYPE.txt)
+d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_mfc_d_l$LEVEL-p$PARTITION-t8-$SORTING_TYPE.txt)
+d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_mfc_d_l$LEVEL-p$PARTITION-t8-$SORTING_TYPE.txt)
 diff=0
 if [ $bytes -eq $d_bytes ] 
  then
@@ -261,6 +261,7 @@ sorting_type=$1
 INPUT_FILE=$2
 # n=$3
 test=$3
+full=$4
 #$1 sorting_types
 #$2=INPUT_FILE
 
@@ -273,7 +274,13 @@ m=0
  partitions_array=("4" "8")
   # levels_array=("3")
   #partitions_array=("1" "4" "8")
- program=("" "fasta_analysis")
+ #program=("" "fasta_analysis")
+ program=()
+ if [[ $full -eq 1 ]]; then
+ program=("")
+else
+  program=("fasta_analysis")
+fi  
 rm *.mfc
 #levels_array=("0")
 #partitions_array=("1")

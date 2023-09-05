@@ -145,82 +145,62 @@ rm data_bzip2*
 rm data_mbgc*
 n=0
 
-for ((n=0; n<${#sorting_types[@]}; n++)); do
+full=1
 
-#gnome-terminal -- bash -c "; exec bash"
-test=0
-  m=0
-  #while (($m < ${#INPUT_FILE[@]} )); do
 
-#  gnome-terminal -- bash -c " ./compression_naf.sh ${sorting_types[n]} ${INPUT_FILE[0]} $test; ./compression_naf.sh ${sorting_types[n]} ${INPUT_FILE[1]} $test; ./plot_naf.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]}; exec bash"
+  gnome-terminal -- bash -c " ./compression_naf.sh ${sorting_types[n]} ${INPUT_FILE[0]} $test $full; ./compression_naf.sh ${sorting_types[n]} ${INPUT_FILE[1]} $test $full; ./plot_naf.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]}; ./compression_mfcompress.sh ${sorting_types[n]} ${INPUT_FILE[0]} $test $full; ./compression_mfcompress.sh ${sorting_types[n]} ${INPUT_FILE[1]} $test $full; ./plot_mfcompress.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]} ; exec bash"
+  gnome-terminal -- bash -c "./compression_jarvis3.sh ${sorting_types[n]} ${INPUT_FILE[0]} $test $full; ./compression_jarvis3.sh ${sorting_types[n]} ${INPUT_FILE[1]} $test $full; ./plot_jarvis3.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]} ; ./compression_gzip.sh ${sorting_types[n]} ${INPUT_FILE[0]} $test $full; ./compression_gzip.sh ${sorting_types[n]} ${INPUT_FILE[1]} $test $full; ./plot_gzip.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]}; exec bash"
+  gnome-terminal -- bash -c "./compression_lzma.sh ${sorting_types[n]} ${INPUT_FILE[0]} $test $full; ./compression_lzma.sh ${sorting_types[n]} ${INPUT_FILE[1]} $test $full; ./plot_lzma.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]}; ./compression_bzip2.sh ${sorting_types[n]} ${INPUT_FILE[0]} $test $full; ./compression_bzip2.sh ${sorting_types[n]} ${INPUT_FILE[1]} $test $full; ./plot_bzip2.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]} ; ./compression_mbgc.sh ${sorting_types[n]} ${INPUT_FILE[0]} $test $full; ./compression_mbgc.sh ${sorting_types[n]} ${INPUT_FILE[1]} $test $full; ./plot_mbgc.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]} ;  exec bash"
 
- gnome-terminal -- bash -c " ./compression_naf.sh ${sorting_types[n]} ${INPUT_FILE[0]} $test; ./compression_naf.sh ${sorting_types[n]} ${INPUT_FILE[1]} $test; ./plot_naf.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]}; /compression_mfcompress.sh ${sorting_types[n]} ${INPUT_FILE[0]} $test; ./compression_mfcompress.sh ${sorting_types[n]} ${INPUT_FILE[1]} $test; ./plot_mfcompress.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]} ; exec bash"
-
-   # ./compression_naf.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test
-  # m=$((m+1))
-  #done
-  #./plot_naf.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]}
-
+#full≃1
+#for ((n=0; n<${#sorting_types[@]}; n++)); do
+ full=0
+# #gnome-terminal -- bash -c "; exec bash"
 # test=0
-# m=0
-#  #while (($m < ${#INPUT_FILE[@]} )); do
-#  gnome-terminal -- bash -c "./compression_mfcompress.sh ${sorting_types[n]} ${INPUT_FILE[0]} $test; ./compression_mfcompress.sh ${sorting_types[n]} ${INPUT_FILE[1]} $test; ./plot_mfcompress.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]} ; exec bash"
-# #sleep 60
-# #./compression_mfcompress.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test
-# # m=$((m+1))
-#  #done
-# #./plot_mfcompress.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]}
-
-# test=0
-#  m=0
-# #  while (($m < ${#INPUT_FILE[@]} )); do
-#  gnome-terminal -- bash -c "./compression_jarvis3.sh ${sorting_types[n]} ${INPUT_FILE[0]} $test; ./compression_jarvis3.sh ${sorting_types[n]} ${INPUT_FILE[1]} $test; ./plot_jarvis3.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]} ; exec bash"
-
- gnome-terminal -- bash -c "./compression_jarvis3.sh ${sorting_types[n]} ${INPUT_FILE[0]} $test; ./compression_jarvis3.sh ${sorting_types[n]} ${INPUT_FILE[1]} $test; ./plot_jarvis3.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]} ; ./compression_gzip.sh ${sorting_types[n]} ${INPUT_FILE[0]} $test; ./compression_gzip.sh ${sorting_types[n]} ${INPUT_FILE[1]} $test; ./plot_gzip.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]}; exec bash"
-
-#   # ./compression_jarvis3.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test
-#   # m=$((m+1))
-#   # done
-
-
-# test=0
-#  m=0
-# #  while (($m < ${#INPUT_FILE[@]} )); do
-# #  ./compression_gzip.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test
-#   gnome-terminal -- bash -c "./compression_gzip.sh ${sorting_types[n]} ${INPUT_FILE[0]} $test; ./compression_gzip.sh ${sorting_types[n]} ${INPUT_FILE[1]} $test; ./plot_gzip.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]}; exec bash"
-
-gnome-terminal -- bash -c "./compression_gzip.sh ${sorting_types[n]} ${INPUT_FILE[0]} $test; ./compression_gzip.sh ${sorting_types[n]} ${INPUT_FILE[1]} $test; ./plot_gzip.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]}; ./compression_lzma.sh ${sorting_types[n]} ${INPUT_FILE[0]} $test; ./compression_lzma.sh ${sorting_types[n]} ${INPUT_FILE[1]} $test; ./plot_lzma.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]} ; ./compression_mbgc.sh ${sorting_types[n]} ${INPUT_FILE[0]} $test; ./compression_mbgc.sh ${sorting_types[n]} ${INPUT_FILE[1]} $test; ./plot_mbgc.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]} ;  exec bash"
-
-
-#   # m=$((m+1))
-#   # done
-
-#  test=0
-#  m=0
-#   #while (($m < ${#INPUT_FILE[@]} )); do
-#    #./compression_lzma.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test
-#    gnome-terminal -- bash -c "./compression_lzma.sh ${sorting_types[n]} ${INPUT_FILE[0]} $test; ./compression_lzma.sh ${sorting_types[n]} ${INPUT_FILE[1]} $test; ./plot_lzma.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]} ; exec bash"
-#   # m=$((m+1))
-#   # done
-
-
-#  test=0
-#  m=0
-#   # while (($m < ${#INPUT_FILE[@]} )); do
-#    gnome-terminal -- bash -c "./compression_bzip2.sh ${sorting_types[n]} ${INPUT_FILE[0]} $test; ./compression_bzip2.sh ${sorting_types[n]} ${INPUT_FILE[1]} $test; ./plot_bzip2.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]}; exec bash"
-#     # ./compression_bzip2.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test
-#   #  m=$((m+1))
-#   #  done
-
-
-#   test=0
 #   m=0
-#    #while (($m < ${#INPUT_FILE[@]} )); do
-#    gnome-terminal -- bash -c "./compression_mbgc.sh ${sorting_types[n]} ${INPUT_FILE[0]} $test; ./compression_mbgc.sh ${sorting_types[n]} ${INPUT_FILE[1]} $test; ./plot_mbgc.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]} ; exec bash"
-#     #./compression_mbgc.sh ${sorting_types[n]} ${INPUT_FILE[m]} $test
-#    # m=$((m+1))
-#    # done
+#   #while (($m < ${#INPUT_FILE[@]} )); do
 
+# #  gnome-terminal -- bash -c " ./compression_naf.sh ${sorting_types[n]} ${INPUT_FILE[0]} $test; ./compression_naf.sh ${sorting_types[n]} ${INPUT_FILE[1]} $test; ./plot_naf.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]}; exec bash"
 
-done
+ #gnome-terminal -- bash -c " ./compression_naf.sh ${sorting_types[n]} ${INPUT_FILE[0]} $test $full; ./compression_naf.sh ${sorting_types[n]} ${INPUT_FILE[1]} $test $full; ./plot_naf.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[n]}; exec bash"
+ gnome-terminal -- bash -c " ./compression_naf.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test $full; ./compression_naf.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test $full; ./plot_naf.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[0]} ; \
+  ./compression_naf.sh ${sorting_types[1]} ${INPUT_FILE[0]} $test $full; ./compression_naf.sh ${sorting_types[1]} ${INPUT_FILE[1]} $test $full; ./plot_naf.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[1]} ; \
+  ./compression_naf.sh ${sorting_types[2]} ${INPUT_FILE[0]} $test $full; ./compression_naf.sh ${sorting_types[2]} ${INPUT_FILE[1]} $test $full; ./plot_naf.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[2]} ; \ 
+  ./compression_naf.sh ${sorting_types[3]} ${INPUT_FILE[0]} $test $full; ./compression_naf.sh ${sorting_types[3]} ${INPUT_FILE[1]} $test $full; ./plot_naf.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[3]} ; \ 
+  ./compression_naf.sh ${sorting_types[4]} ${INPUT_FILE[0]} $test $full; ./compression_naf.sh ${sorting_types[4]} ${INPUT_FILE[1]} $test $full; ./plot_naf.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[4]} ; exec bash"
+ 
+ gnome-terminal -- bash -c " ./compression_mfcompress.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test $full; ./compression_mfcompress.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test $full; ./plot_mfcompress.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[0]} ; \
+  ./compression_mfcompress.sh ${sorting_types[1]} ${INPUT_FILE[0]} $test $full; ./compression_mfcompress.sh ${sorting_types[1]} ${INPUT_FILE[1]} $test $full; ./plot_mfcompress.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[1]} ; \
+  ./compression_mfcompress.sh ${sorting_types[2]} ${INPUT_FILE[0]} $test $full; ./compression_mfcompress.sh ${sorting_types[2]} ${INPUT_FILE[1]} $test $full; ./plot_mfcompress.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[2]} ; \ 
+  ./compression_mfcompress.sh ${sorting_types[3]} ${INPUT_FILE[0]} $test $full; ./compression_mfcompress.sh ${sorting_types[3]} ${INPUT_FILE[1]} $test $full; ./plot_mfcompress.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[3]} ; \ 
+  ./compression_mfcompress.sh ${sorting_types[4]} ${INPUT_FILE[0]} $test $full; ./compression_mfcompress.sh ${sorting_types[4]} ${INPUT_FILE[1]} $test $full; ./plot_mfcompress.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[4]} ; exec bash"
 
+gnome-terminal -- bash -c " ./compression_jarvis3.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test $full; ./compression_jarvis3.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test $full; ./plot_jarvis3.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[0]} ; \
+  ./compression_jarvis3.sh ${sorting_types[1]} ${INPUT_FILE[0]} $test $full; ./compression_jarvis3.sh ${sorting_types[1]} ${INPUT_FILE[1]} $test $full; ./plot_jarvis3.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[1]} ; \
+  ./compression_jarvis3.sh ${sorting_types[2]} ${INPUT_FILE[0]} $test $full; ./compression_jarvis3.sh ${sorting_types[2]} ${INPUT_FILE[1]} $test $full; ./plot_jarvis3.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[2]} ; \ 
+  ./compression_jarvis3.sh ${sorting_types[3]} ${INPUT_FILE[0]} $test $full; ./compression_jarvis3.sh ${sorting_types[3]} ${INPUT_FILE[1]} $test $full; ./plot_jarvis3.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[3]} ; \ 
+  ./compression_jarvis3.sh ${sorting_types[4]} ${INPUT_FILE[0]} $test $full; ./compression_jarvis3.sh ${sorting_types[4]} ${INPUT_FILE[1]} $test $full; ./plot_jarvis3.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[4]} ; exec bash"
+
+gnome-terminal -- bash -c " ./compression_gzip.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test $full; ./compression_gzip.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test $full; ./plot_gzip.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[0]} ; \
+  ./compression_gzip.sh ${sorting_types[1]} ${INPUT_FILE[0]} $test $full; ./compression_gzip.sh ${sorting_types[1]} ${INPUT_FILE[1]} $test $full; ./plot_gzip.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[1]} ; \
+  ./compression_gzip.sh ${sorting_types[2]} ${INPUT_FILE[0]} $test $full; ./compression_gzip.sh ${sorting_types[2]} ${INPUT_FILE[1]} $test $full; ./plot_gzip.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[2]} ; \ 
+  ./compression_gzip.sh ${sorting_types[3]} ${INPUT_FILE[0]} $test $full; ./compression_gzip.sh ${sorting_types[3]} ${INPUT_FILE[1]} $test $full; ./plot_gzip.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[3]} ; \ 
+  ./compression_gzip.sh ${sorting_types[4]} ${INPUT_FILE[0]} $test $full; ./compression_gzip.sh ${sorting_types[4]} ${INPUT_FILE[1]} $test $full; ./plot_gzip.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[4]} ; exec bash"
+
+gnome-terminal -- bash -c " ./compression_lzma.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test $full; ./compression_lzma.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test $full; ./plot_lzma.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[0]} ; \
+  ./compression_lzma.sh ${sorting_types[1]} ${INPUT_FILE[0]} $test $full; ./compression_lzma.sh ${sorting_types[1]} ${INPUT_FILE[1]} $test $full; ./plot_lzma.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[1]} ; \
+  ./compression_lzma.sh ${sorting_types[2]} ${INPUT_FILE[0]} $test $full; ./compression_lzma.sh ${sorting_types[2]} ${INPUT_FILE[1]} $test $full; ./plot_lzma.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[2]} ; \ 
+  ./compression_lzma.sh ${sorting_types[3]} ${INPUT_FILE[0]} $test $full; ./compression_lzma.sh ${sorting_types[3]} ${INPUT_FILE[1]} $test $full; ./plot_lzma.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[3]} ; \ 
+  ./compression_lzma.sh ${sorting_types[4]} ${INPUT_FILE[0]} $test $full; ./compression_lzma.sh ${sorting_types[4]} ${INPUT_FILE[1]} $test $full; ./plot_lzma.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[4]} ; exec bash"
+
+gnome-terminal -- bash -c " ./compression_bzip2.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test $full; ./compression_bzip2.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test $full; ./plot_bzip2.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[0]} ; \
+  ./compression_bzip2.sh ${sorting_types[1]} ${INPUT_FILE[0]} $test $full; ./compression_bzip2.sh ${sorting_types[1]} ${INPUT_FILE[1]} $test $full; ./plot_bzip2.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[1]} ; \
+  ./compression_bzip2.sh ${sorting_types[2]} ${INPUT_FILE[0]} $test $full; ./compression_bzip2.sh ${sorting_types[2]} ${INPUT_FILE[1]} $test $full; ./plot_bzip2.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[2]} ; \ 
+  ./compression_bzip2.sh ${sorting_types[3]} ${INPUT_FILE[0]} $test $full; ./compression_bzip2.sh ${sorting_types[3]} ${INPUT_FILE[1]} $test $full; ./plot_bzip2.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[3]} ; \ 
+  ./compression_bzip2.sh ${sorting_types[4]} ${INPUT_FILE[0]} $test $full; ./compression_bzip2.sh ${sorting_types[4]} ${INPUT_FILE[1]} $test $full; ./plot_bzip2.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[4]} ; exec bash"
+
+gnome-terminal -- bash -c " ./compression_mbgc.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test $full; ./compression_mbgc.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test $full; ./plot_mbgc.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[0]} ; \
+  ./compression_mbgc.sh ${sorting_types[1]} ${INPUT_FILE[0]} $test $full; ./compression_mbgc.sh ${sorting_types[1]} ${INPUT_FILE[1]} $test $full; ./plot_mbgc.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[1]} ; \
+  ./compression_mbgc.sh ${sorting_types[2]} ${INPUT_FILE[0]} $test $full; ./compression_mbgc.sh ${sorting_types[2]} ${INPUT_FILE[1]} $test $full; ./plot_mbgc.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[2]} ; \ 
+  ./compression_mbgc.sh ${sorting_types[3]} ${INPUT_FILE[0]} $test $full; ./compression_mbgc.sh ${sorting_types[3]} ${INPUT_FILE[1]} $test $full; ./plot_mbgc.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[3]} ; \ 
+  ./compression_mbgc.sh ${sorting_types[4]} ${INPUT_FILE[0]} $test $full; ./compression_mbgc.sh ${sorting_types[4]} ${INPUT_FILE[1]} $test $full; ./plot_mbgc.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[4]} ; exec bash"

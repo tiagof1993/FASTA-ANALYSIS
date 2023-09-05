@@ -9,24 +9,24 @@ function BZIP2_COMPRESSION(){
   echo $IN_FILE_SHORT_NAME
 
 { /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -$LEVEL -f -k $IN_FILE ; } 2> $IN_FILE_SHORT_NAME-bzip2_l$LEVEL.txt  
-{ /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -$LEVEL -f -k sort_$IN_FILE ; } 2> $IN_FILE_SHORT_NAME-sort_bzip2_l$LEVEL.txt  
-{ /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -$LEVEL -f -k sort_fanalysis_$sorting_type-$IN_FILE ; } 2> $IN_FILE_SHORT_NAME-sort_fa_bzip2_l$LEVEL.txt  
+{ /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -$LEVEL -f -k sort_$IN_FILE ; } 2> $IN_FILE_SHORT_NAME-sort_bzip2_l$LEVEL-$sorting_type.txt  
+{ /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -$LEVEL -f -k sort_fanalysis_$sorting_type-$IN_FILE ; } 2> $IN_FILE_SHORT_NAME-sort_fa_bzip2_l$LEVEL-$sorting_type.txt  
 
 mv $IN_FILE.bz2 $IN_FILE_SHORT_NAME-c_b.fasta.bz2
 mv sort_$IN_FILE.bz2 sort_$IN_FILE_SHORT_NAME-c_b.fasta.bz2
 mv sort_fanalysis_$sorting_type-$IN_FILE.bz2 sort_fanalysis_$sorting_type-$IN_FILE_SHORT_NAME-c_b.fasta.bz2
 
 { ls $IN_FILE_SHORT_NAME-c_b* -la -ltr | grep \.bz2$ |awk '{print $5;}' ; } > $IN_FILE_SHORT_NAME-bzip2_size_l$LEVEL.txt  
-{ ls sort_$IN_FILE_SHORT_NAME-c_b* -la -ltr | grep \.bz2$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_bzip2_size_l$LEVEL.txt  
-{ ls sort_fanalysis_$sorting_type-$IN_FILE_SHORT_NAME-c_b* -la -ltr | grep \.bz2$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_bzip2_size_l$LEVEL.txt 
+{ ls sort_$IN_FILE_SHORT_NAME-c_b* -la -ltr | grep \.bz2$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_bzip2_size_l$LEVEL-$sorting_type.txt  
+{ ls sort_fanalysis_$sorting_type-$IN_FILE_SHORT_NAME-c_b* -la -ltr | grep \.bz2$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_bzip2_size_l$LEVEL-$sorting_type.txt 
 
 { /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -f -k -d $IN_FILE_SHORT_NAME-c_b.fasta.bz2 ; } 2>$IN_FILE_SHORT_NAME-bzip2_d_l$LEVEL.txt   
-{ /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -f -k -d sort_$IN_FILE_SHORT_NAME-c_b.fasta.bz2 ; } 2>$IN_FILE_SHORT_NAME-sort_bzip2_d_l$LEVEL.txt   
-{ /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -f -k -d sort_fanalysis_$sorting_type-$IN_FILE_SHORT_NAME-c_b.fasta.bz2 ; } 2>$IN_FILE_SHORT_NAME-sort_fa_bzip2_d_l$LEVEL.txt  
+{ /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -f -k -d sort_$IN_FILE_SHORT_NAME-c_b.fasta.bz2 ; } 2>$IN_FILE_SHORT_NAME-sort_bzip2_d_l$LEVEL-$sorting_type.txt   
+{ /bin/time -f "TIME\t%e\tMEM\t%M" bzip2 -f -k -d sort_fanalysis_$sorting_type-$IN_FILE_SHORT_NAME-c_b.fasta.bz2 ; } 2>$IN_FILE_SHORT_NAME-sort_fa_bzip2_d_l$LEVEL-$sorting_type.txt  
 
 { ls $IN_FILE_SHORT_NAME-c_b* -la -ltr | grep \.fasta$ |awk '{print $5;}' ; } >  $IN_FILE_SHORT_NAME-bzip2_d_size_l$LEVEL.txt 
-{ ls sort_$IN_FILE_SHORT_NAME-c_b* -la -ltr | grep \.fasta$ |awk '{print $5;}'; } >  $IN_FILE_SHORT_NAME-sort_bzip2_d_size_l$LEVEL.txt 
-{ ls sort_fanalysis_$sorting_type-$IN_FILE_SHORT_NAME-c_b* -la -ltr | grep \.fasta$ |awk '{print $5;}'; } >  $IN_FILE_SHORT_NAME-sort_fa_bzip2_d_size_l$LEVEL.txt 
+{ ls sort_$IN_FILE_SHORT_NAME-c_b* -la -ltr | grep \.fasta$ |awk '{print $5;}'; } >  $IN_FILE_SHORT_NAME-sort_bzip2_d_size_l$LEVEL-$sorting_type.txt 
+{ ls sort_fanalysis_$sorting_type-$IN_FILE_SHORT_NAME-c_b* -la -ltr | grep \.fasta$ |awk '{print $5;}'; } >  $IN_FILE_SHORT_NAME-sort_fa_bzip2_d_size_l$LEVEL-$sorting_type.txt 
 
 rm *-c_b.fasta
 
@@ -52,17 +52,17 @@ if [[ $SORTING_ALGORITHM == "fasta_analysis" ]]; then
 program="bzip2_$IN_FILE_SHORT_NAME-fasta_analysis"
 level=$LEVEL
 bytes=$(ls sort_fanalysis_$SORTING_TYPE-$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
-c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_bzip2_size_l$LEVEL.txt)
-original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-bzip2_size_l$LEVEL.txt)
+c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_bzip2_size_l$LEVEL-$SORTING_TYPE.txt)
+original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-bzip2_size_l$LEVEL-$SORTING_TYPE.txt)
 bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
 bps_final=$(echo "scale=3; ($c_bytes * 8) / $bytes" | bc)
 #gain=$(echo "scale=3; ($c_bytes / $original_c_bytes)*100" | bc)
 gain=$(echo "scale=3; (1-($c_bytes / $original_c_bytes))*100" | bc)
-c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_fa_bzip2_l$LEVEL.txt)
-c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_bzip2_l$LEVEL.txt)
-d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_bzip2_d_size_l$LEVEL.txt)
-d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_fa_bzip2_d_l$LEVEL.txt)
-d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_bzip2_d_l$LEVEL.txt)
+c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_fa_bzip2_l$LEVEL-$SORTING_TYPE.txt)
+c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_bzip2_l$LEVEL-$SORTING_TYPE.txt)
+d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_bzip2_d_size_l$LEVEL-$SORTING_TYPE.txt)
+d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_fa_bzip2_d_l$LEVEL-$SORTING_TYPE.txt)
+d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_bzip2_d_l$LEVEL-$SORTING_TYPE.txt)
 diff=0
 if [ $bytes -eq $d_bytes ] 
  then
@@ -105,17 +105,17 @@ elif [[ $SORTING_ALGORITHM == "sortmf" ]]; then
 program="bzip2_$IN_FILE_SHORT_NAME-sortmf"
 level=$LEVEL
 bytes=$(ls sort_$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
-c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_bzip2_size_l$LEVEL.txt)
-original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-bzip2_size_l$LEVEL.txt)
+c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_bzip2_size_l$LEVEL-$SORTING_TYPE.txt)
+original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-bzip2_size_l$LEVEL-$SORTING_TYPE.txt)
 bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
 bps_final=$(echo "scale=3; ($c_bytes * 8) / $bytes" | bc)
 #gain=$(echo "scale=3; ($c_bytes / $original_c_bytes)*100" | bc)
 gain=$(echo "scale=3; (1-($c_bytes / $original_c_bytes))*100" | bc)
-c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_bzip2_l$LEVEL.txt)
-c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_bzip2_l$LEVEL.txt)
-d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_bzip2_d_size_l$LEVEL.txt)
-d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_bzip2_d_l$LEVEL.txt)
-d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_bzip2_d_l$LEVEL.txt)
+c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_bzip2_l$LEVEL-$SORTING_TYPE.txt)
+c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_bzip2_l$LEVEL-$SORTING_TYPE.txt)
+d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_bzip2_d_size_l$LEVEL-$SORTING_TYPE.txt)
+d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_bzip2_d_l$LEVEL-$SORTING_TYPE.txt)
+d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_bzip2_d_l$LEVEL-$SORTING_TYPE.txt)
 diff=0
 if [ $bytes -eq $d_bytes ] 
  then
@@ -253,6 +253,7 @@ sorting_types=$1
 INPUT_FILE=$2
 #n=$3
 test=$3
+full=$4
 
 #for ((n=0; n<${#sorting_types[@]}; n++)); do
 #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
@@ -260,7 +261,13 @@ test=$3
 # while (($m < ${#INPUT_FILE[@]} )); do
 # bzip2
 levels_array=("1" "4" "7" "9")
-program=("" "fasta_analysis")
+program=()
+if [[ $full -eq 1 ]]; then
+ program=("")
+else
+  program=("fasta_analysis")
+fi  
+#program=("" "fasta_analysis")
 # rm "data_bzip2.csv"
 rm *.bz2
  #levels_array=("1")

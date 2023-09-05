@@ -16,20 +16,20 @@ function JARVIS3_COMPRESSION(){
   # fi
 
   { /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -l $LEVEL --block $PARTITION --fasta -i $IN_FILE ; } 2>$IN_FILE_SHORT_NAME-$PARTITION_MB-l$LEVEL.txt
-  { /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -l $LEVEL --block $PARTITION --fasta -i sort_$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_$PARTITION_MB-l$LEVEL.txt
-  { /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -l $LEVEL --block $PARTITION --fasta -i sort_fanalysis_$sorting_type-$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_fa_$PARTITION_MB-l$LEVEL.txt
+  { /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -l $LEVEL --block $PARTITION --fasta -i sort_$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_$PARTITION_MB-l$LEVEL-$sorting_type.txt
+  { /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -l $LEVEL --block $PARTITION --fasta -i sort_fanalysis_$sorting_type-$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_fa_$PARTITION_MB-l$LEVEL-$sorting_type.txt
 
   { ls $IN_FILE* -la -ltr | grep \.tar$ | awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-size_$PARTITION_MB-l$LEVEL.txt
-  { ls sort_$IN_FILE* -la -ltr | grep \.tar$ | awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_size_$PARTITION_MB-l$LEVEL.txt
-  { ls sort_fanalysis_$sorting_type-$IN_FILE* -la -ltr | grep \.tar$ | awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_size_$PARTITION_MB-l$LEVEL.txt
+  { ls sort_$IN_FILE* -la -ltr | grep \.tar$ | awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_size_$PARTITION_MB-l$LEVEL-$sorting_type.txt
+  { ls sort_fanalysis_$sorting_type-$IN_FILE* -la -ltr | grep \.tar$ | awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_size_$PARTITION_MB-l$LEVEL-$sorting_type.txt
 
   { /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -d -l $LEVEL --fasta -i $IN_FILE.tar ;  } 2>$IN_FILE_SHORT_NAME-d_$PARTITION_MB-l$LEVEL.txt
-  { /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -d -l $LEVEL --fasta -i sort_$IN_FILE.tar ;  } 2>$IN_FILE_SHORT_NAME-sort_d_$PARTITION_MB-l$LEVEL.txt
-  { /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -d -l $LEVEL --fasta -i sort_fanalysis_$sorting_type-$IN_FILE.tar ;  } 2>$IN_FILE_SHORT_NAME-sort_fa_d_$PARTITION_MB-l$LEVEL.txt
+  { /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -d -l $LEVEL --fasta -i sort_$IN_FILE.tar ;  } 2>$IN_FILE_SHORT_NAME-sort_d_$PARTITION_MB-l$LEVEL-$sorting_type.txt
+  { /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -d -l $LEVEL --fasta -i sort_fanalysis_$sorting_type-$IN_FILE.tar ;  } 2>$IN_FILE_SHORT_NAME-sort_fa_d_$PARTITION_MB-l$LEVEL-$sorting_type.txt
 
   { ls $IN_FILE* -la -ltr | grep \.tar.out$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-size_d_$PARTITION_MB-l$LEVEL.txt
-  { ls sort_$IN_FILE* -la -ltr | grep \.tar.out$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_size_d_$PARTITION_MB-l$LEVEL.txt
-  { ls sort_fanalysis_$sorting_type-$IN_FILE* -la -ltr | grep \.tar.out$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_size_d_$PARTITION_MB-l$LEVEL.txt
+  { ls sort_$IN_FILE* -la -ltr | grep \.tar.out$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_size_d_$PARTITION_MB-l$LEVEL-$sorting_type.txt
+  { ls sort_fanalysis_$sorting_type-$IN_FILE* -la -ltr | grep \.tar.out$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_size_d_$PARTITION_MB-l$LEVEL-$sorting_type.txt
 
   rm *tar.out
 
@@ -57,17 +57,17 @@ program="JARVIS3_$INPUT_FILE_SHORT_NAME-fasta_analysis"
 level=$LEVEL
 partition="$PARTITION"
 bytes=$(ls sort_fanalysis_$SORTING_TYPE-$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
-c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_size_$PARTITION_MB-l$LEVEL.txt)
-original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-size_$PARTITION_MB-l$LEVEL.txt)
+c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_size_$PARTITION_MB-l$LEVEL-$SORTING_TYPE.txt)
+original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-size_$PARTITION_MB-l$LEVEL-$SORTING_TYPE.txt)
 bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
 bps_final=$(echo "scale=3; ($c_bytes * 8) / $bytes" | bc)
 #gain=$(echo "scale=3; ($c_bytes / $original_c_bytes)*100" | bc)
 gain=$(echo "scale=3; (1-($c_bytes / $original_c_bytes))*100" | bc)
-c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_fa_$PARTITION_MB-l$LEVEL.txt)
-c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_$PARTITION_MB-l$LEVEL.txt)
-d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_size_d_$PARTITION_MB-l$LEVEL.txt)
-d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_fa_d_$PARTITION_MB-l$LEVEL.txt)
-d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_d_$PARTITION_MB-l$LEVEL.txt)
+c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_fa_$PARTITION_MB-l$LEVEL-$SORTING_TYPE.txt)
+c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_$PARTITION_MB-l$LEVEL-$SORTING_TYPE.txt)
+d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_size_d_$PARTITION_MB-l$LEVEL-$SORTING_TYPE.txt)
+d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_fa_d_$PARTITION_MB-l$LEVEL-$SORTING_TYPE.txt)
+d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_d_$PARTITION_MB-l$LEVEL-$SORTING_TYPE.txt)
 diff=0
 if [ $bytes -eq $d_bytes ] 
  then
@@ -111,17 +111,17 @@ program="JARVIS3_$IN_FILE_SHORT_NAME-sortmf"
 level=$LEVEL
 partition="$PARTITION"
 bytes=$(ls sort_$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
-c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_size_$PARTITION_MB-l$LEVEL.txt)
-original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-size_$PARTITION_MB-l$LEVEL.txt)
+c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_size_$PARTITION_MB-l$LEVEL-$SORTING_TYPE.txt)
+original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-size_$PARTITION_MB-l$LEVEL-$SORTING_TYPE.txt)
 bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
 bps_final=$(echo "scale=3; ($c_bytes * 8) / $bytes" | bc)
 #gain=$(echo "scale=3; ($c_bytes / $original_c_bytes)*100" | bc)
 gain=$(echo "scale=3; (1-($c_bytes / $original_c_bytes))*100" | bc)
-c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_$PARTITION_MB-l$LEVEL.txt)
-c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_$PARTITION_MB-l$LEVEL.txt)
-d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-size_d_$PARTITION_MB-l$LEVEL.txt)
-d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_d_$PARTITION_MB-l$LEVEL.txt)
-d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_d_$PARTITION_MB-l$LEVEL.txt)
+c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_$PARTITION_MB-l$LEVEL-$SORTING_TYPE.txt)
+c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_$PARTITION_MB-l$LEVEL-$SORTING_TYPE.txt)
+d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-size_d_$PARTITION_MB-l$LEVEL-$SORTING_TYPE.txt)
+d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_d_$PARTITION_MB-l$LEVEL-$SORTING_TYPE.txt)
+d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_d_$PARTITION_MB-l$LEVEL-$SORTING_TYPE.txt)
 diff=0
 if [ $bytes -eq $d_bytes ] 
  then
@@ -261,6 +261,7 @@ sorting_type=$1
 INPUT_FILE=$2
 #n=$3
 test=$3
+full=$4
 
 #for ((n=0; n<${#sorting_types[@]}; n++)); do
 #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
@@ -274,7 +275,13 @@ levels_array=("1" "2" "5")
 # partitions_in_mb=("10" "100" "1000")
 partitions_array=("100MB")
 partitions_in_mb=("100")
-program=("" "fasta_analysis")
+program=()
+if [[ $full -eq 1 ]]; then
+ program=("")
+else
+  program=("fasta_analysis")
+fi  
+#program=("" "fasta_analysis")
 #partitions_array=("10MB")
 #partitions_in_mb=("10")
 

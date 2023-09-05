@@ -11,20 +11,20 @@ rm $IN_FILE.gz
 rm sort_$IN_FILE.gz
 rm sort_fanalysis_$sorting_type-$IN_FILE.gz
 { /bin/time -f "TIME\t%e\tMEM\t%M"  gzip -k -$LEVEL $IN_FILE; } 2>$IN_FILE_SHORT_NAME-gzip_l$LEVEL.txt  
-{ /bin/time -f "TIME\t%e\tMEM\t%M"  gzip -k -$LEVEL sort_$IN_FILE; } 2>$IN_FILE_SHORT_NAME-sort_gzip_l$LEVEL.txt 
-{ /bin/time -f "TIME\t%e\tMEM\t%M"  gzip -k -$LEVEL sort_fanalysis_$sorting_type-$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_fa_gzip_l$LEVEL.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M"  gzip -k -$LEVEL sort_$IN_FILE; } 2>$IN_FILE_SHORT_NAME-sort_gzip_l$LEVEL-$sorting_type.txt 
+{ /bin/time -f "TIME\t%e\tMEM\t%M"  gzip -k -$LEVEL sort_fanalysis_$sorting_type-$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_fa_gzip_l$LEVEL-$sorting_type.txt
 
 { ls $IN_FILE* -la -ltr | grep \.gz$ |awk '{print $5;}' ; } > $IN_FILE_SHORT_NAME-gzip_size_l$LEVEL.txt  
-{ ls sort_$IN_FILE* -la -ltr | grep \.gz$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_gzip_size_l$LEVEL.txt  
-{ ls sort_fanalysis_$sorting_type-$IN_FILE* -la -ltr | grep \.gz$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_gzip_size_l$LEVEL.txt  
+{ ls sort_$IN_FILE* -la -ltr | grep \.gz$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_gzip_size_l$LEVEL-$sorting_type.txt  
+{ ls sort_fanalysis_$sorting_type-$IN_FILE* -la -ltr | grep \.gz$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_gzip_size_l$LEVEL-$sorting_type.txt  
 
 { /bin/time -f "TIME\t%e\tMEM\t%M" gunzip -c $IN_FILE.gz >$IN_FILE_SHORT_NAME-gunzip.fasta ; } 2>$IN_FILE_SHORT_NAME-gunzip_l$LEVEL.txt  
-{ /bin/time -f "TIME\t%e\tMEM\t%M" gunzip -c sort_$IN_FILE.gz >sort_$IN_FILE_SHORT_NAME-gunzip.fasta ; } 2>$IN_FILE_SHORT_NAME-sort_gunzip_l$LEVEL.txt 
-{ /bin/time -f "TIME\t%e\tMEM\t%M" gunzip -c sort_fanalysis_$sorting_type-$IN_FILE.gz >sort_fanalysis_$IN_FILE_SHORT_NAME-$sorting_type-gunzip.fasta ; } 2>$IN_FILE_SHORT_NAME-sort_fa_gunzip_l$LEVEL.txt 
+{ /bin/time -f "TIME\t%e\tMEM\t%M" gunzip -c sort_$IN_FILE.gz >sort_$IN_FILE_SHORT_NAME-gunzip.fasta ; } 2>$IN_FILE_SHORT_NAME-sort_gunzip_l$LEVEL-$sorting_type.txt 
+{ /bin/time -f "TIME\t%e\tMEM\t%M" gunzip -c sort_fanalysis_$sorting_type-$IN_FILE.gz >sort_fanalysis_$IN_FILE_SHORT_NAME-$sorting_type-gunzip.fasta ; } 2>$IN_FILE_SHORT_NAME-sort_fa_gunzip_l$LEVEL-$sorting_type.txt 
 
 { ls $IN_FILE_SHORT_NAME* -la -ltr | grep \unzip.fasta$ |awk '{print $5;}' ; } > $IN_FILE_SHORT_NAME-gunzip_size_l$LEVEL.txt 
-{ ls sort_$IN_FILE_SHORT_NAME* -la -ltr | grep \unzip.fasta$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_gunzip_size_l$LEVEL.txt 
-{ ls sort_fanalysis_$IN_FILE_SHORT_NAME-$sorting_type* -la -ltr | grep \unzip.fasta$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_gunzip_size_l$LEVEL.txt 
+{ ls sort_$IN_FILE_SHORT_NAME* -la -ltr | grep \unzip.fasta$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_gunzip_size_l$LEVEL-$sorting_type.txt 
+{ ls sort_fanalysis_$IN_FILE_SHORT_NAME-$sorting_type* -la -ltr | grep \unzip.fasta$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_gunzip_size_l$LEVEL-$sorting_type.txt 
 
 rm *unzip.fasta
 
@@ -50,17 +50,17 @@ program="gzip_$IN_FILE_SHORT_NAME-fasta_analysis"
 level=$LEVEL
 #bytes=$(ls sort_fanalysis_$IN_FILE_SHORT_NAME* -la -ltr | grep \.fasta$ |awk '{print $5;}')
 bytes=$(ls -la sort_fanalysis_$SORTING_TYPE-$IN_FILE_SHORT_NAME.fasta |awk '{print $5;}')
-c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_gzip_size_l$LEVEL.txt)
-original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-gzip_size_l$LEVEL.txt)
+c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_gzip_size_l$LEVEL-$SORTING_TYPE.txt)
+original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-gzip_size_l$LEVEL-$SORTING_TYPE.txt)
 bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
 bps_final=$(echo "scale=3; ($c_bytes * 8) / $bytes" | bc)
 #gain=$(echo "scale=3; ($c_bytes / $original_c_bytes)*100" | bc)
 gain=$(echo "scale=3; (1-($c_bytes / $original_c_bytes))*100" | bc)
-c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_fa_gzip_l$LEVEL.txt)
-c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_gzip_l$LEVEL.txt)
-d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_gunzip_size_l$LEVEL.txt)
-d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_fa_gunzip_l$LEVEL.txt)
-d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_gunzip_l$LEVEL.txt)
+c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_fa_gzip_l$LEVEL-$SORTING_TYPE.txt)
+c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_gzip_l$LEVEL-$SORTING_TYPE.txt)
+d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_gunzip_size_l$LEVEL-$SORTING_TYPE.txt)
+d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_fa_gunzip_l$LEVEL-$SORTING_TYPE.txt)
+d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_gunzip_l$LEVEL-$SORTING_TYPE.txt)
 diff=0
 if [ $bytes -eq $d_bytes ] 
  then
@@ -104,17 +104,17 @@ program="gzip_$IN_FILE_SHORT_NAME-sortmf"
 level=$LEVEL
 #bytes=$(ls sort_$IN_FILE_SHORT_NAME* -la -ltr | grep \.fasta$ |awk '{print $5;}')
 bytes=$(ls -la sort_$IN_FILE_SHORT_NAME.fasta |awk '{print $5;}')
-c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_gzip_size_l$LEVEL.txt)
-original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-gzip_size_l$LEVEL.txt)
+c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_gzip_size_l$LEVEL-$SORTING_TYPE.txt)
+original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-gzip_size_l$LEVEL-$SORTING_TYPE.txt)
 bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
 bps_final=$(echo "scale=3; ($c_bytes * 8) / $bytes" | bc)
 #gain=$(echo "scale=3; ($c_bytes / $original_c_bytes)*100" | bc)
 gain=$(echo "scale=3; (1-($c_bytes / $original_c_bytes))*100" | bc)
-c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_gzip_l$LEVEL.txt)
-c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_gzip_l$LEVEL.txt)
-d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_gunzip_size_l$LEVEL.txt)
-d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_gunzip_l$LEVEL.txt)
-d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_gunzip_l$LEVEL.txt)
+c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_gzip_l$LEVEL-$SORTING_TYPE.txt)
+c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_gzip_l$LEVEL-$SORTING_TYPE.txt)
+d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_gunzip_size_l$LEVEL-$SORTING_TYPE.txt)
+d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_gunzip_l$LEVEL-$SORTING_TYPE.txt)
+d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_gunzip_l$LEVEL-$SORTING_TYPE.txt)
 diff=0
 if [ $bytes -eq $d_bytes ] 
  then
@@ -252,6 +252,7 @@ sorting_types=$1
 INPUT_FILE=$2
 #n=$3
 test=$3
+full=$4
 
 #for ((n=0; n<${#sorting_types[@]}; n++)); do
 #for ((m=0; m<${#INPUT_FILE[@]}; m++)); do
@@ -259,7 +260,13 @@ test=$3
 # while (($m < ${#INPUT_FILE[@]} )); do
 #General Use Compressors
 levels_array=("1" "4" "7")
-program=("" "fasta_analysis")
+program=()
+if [[ $full -eq 1 ]]; then
+ program=("")
+else
+  program=("fasta_analysis")
+fi  
+#program=("" "fasta_analysis")
 #levels_array=("1")
 #gzip
 # #rm "data_gzip.csv"

@@ -12,27 +12,27 @@ function NAF_COMPRESSION() {
   echo "NAF Level" $LEVEL "compression"
 if [[ $LEVEL -gt 17 ]]; then
 { /bin/time -f "TIME\t%e\tMEM\t%M"  ennaf --strict --temp-dir tmp/ --dna -$LEVEL --level $LEVEL $IN_FILE ; } 2>$IN_FILE_SHORT_NAME-naf_l$LEVEL.txt
-{ /bin/time -f "TIME\t%e\tMEM\t%M"  ennaf --strict --temp-dir tmp/ --dna -$LEVEL --level $LEVEL sort_$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_naf_l$LEVEL.txt
-{ /bin/time -f "TIME\t%e\tMEM\t%M"  ennaf --strict --temp-dir tmp/ --dna -$LEVEL --level $LEVEL sort_fanalysis_$sorting_type-$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_fa_naf_l$LEVEL.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M"  ennaf --strict --temp-dir tmp/ --dna -$LEVEL --level $LEVEL sort_$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_naf_l$LEVEL-$sorting_type.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M"  ennaf --strict --temp-dir tmp/ --dna -$LEVEL --level $LEVEL sort_fanalysis_$sorting_type-$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_fa_naf_l$LEVEL-$sorting_type.txt
 else
 { /bin/time -f "TIME\t%e\tMEM\t%M"  ennaf --strict --temp-dir tmp/ --dna --level $LEVEL $IN_FILE ; } 2>$IN_FILE_SHORT_NAME-naf_l$LEVEL.txt
-{ /bin/time -f "TIME\t%e\tMEM\t%M"  ennaf --strict --temp-dir tmp/ --dna --level $LEVEL sort_$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_naf_l$LEVEL.txt
-{ /bin/time -f "TIME\t%e\tMEM\t%M"  ennaf --strict --temp-dir tmp/ --dna --level $LEVEL sort_fanalysis_$sorting_type-$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_fa_naf_l$LEVEL.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M"  ennaf --strict --temp-dir tmp/ --dna --level $LEVEL sort_$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_naf_l$LEVEL-$sorting_type.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M"  ennaf --strict --temp-dir tmp/ --dna --level $LEVEL sort_fanalysis_$sorting_type-$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_fa_naf_l$LEVEL-$sorting_type.txt
 fi
 
 { ls $IN_FILE* -la -ltr | grep \.naf$ |awk '{print $5;}' ; } > $IN_FILE_SHORT_NAME-naf_size_l$LEVEL.txt
-{ ls sort_$IN_FILE* -la -ltr | grep \.naf$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_naf_size_l$LEVEL.txt
-{ ls sort_fanalysis_$sorting_type-$IN_FILE* -la -ltr | grep \.naf$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_naf_size_l$LEVEL.txt
+{ ls sort_$IN_FILE* -la -ltr | grep \.naf$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_naf_size_l$LEVEL-$sorting_type.txt
+{ ls sort_fanalysis_$sorting_type-$IN_FILE* -la -ltr | grep \.naf$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_naf_size_l$LEVEL-$sorting_type.txt
 
 echo "NAF Level" $LEVEL "decompression" 
 
 { /bin/time -f "TIME\t%e\tMEM\t%M" unnaf  $IN_FILE.naf -o $IN_FILE_SHORT_NAME-naf.fasta ; } 2>$IN_FILE_SHORT_NAME-unnaf_l$LEVEL.txt
-{ /bin/time -f "TIME\t%e\tMEM\t%M" unnaf  sort_$IN_FILE.naf -o sort_$IN_FILE_SHORT_NAME-naf.fasta ; } 2>$IN_FILE_SHORT_NAME-sort_unnaf_l$LEVEL.txt
-{ /bin/time -f "TIME\t%e\tMEM\t%M" unnaf  sort_fanalysis_$sorting_type-$IN_FILE.naf -o sort_fanalysis_$sorting_type-$IN_FILE_SHORT_NAME-naf.fasta ; } 2>$IN_FILE_SHORT_NAME-sort_fa_unnaf_l$LEVEL.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" unnaf  sort_$IN_FILE.naf -o sort_$IN_FILE_SHORT_NAME-naf.fasta ; } 2>$IN_FILE_SHORT_NAME-sort_unnaf_l$LEVEL-$sorting_type.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" unnaf  sort_fanalysis_$sorting_type-$IN_FILE.naf -o sort_fanalysis_$sorting_type-$IN_FILE_SHORT_NAME-naf.fasta ; } 2>$IN_FILE_SHORT_NAME-sort_fa_unnaf_l$LEVEL-$sorting_type.txt
 
 { ls $IN_FILE_SHORT_NAME* -la -ltr | grep \naf.fasta$ |awk '{print $5;}' ; } > $IN_FILE_SHORT_NAME-unnaf_size_l$LEVEL.txt
-{ ls sort_$IN_FILE_SHORT_NAME* -la -ltr | grep \naf.fasta$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_unnaf_size_l$LEVEL.txt
-{ ls sort_fanalysis_$sorting_type-$IN_FILE_SHORT_NAME* -la -ltr | grep \naf.fasta$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_unnaf_size_l$LEVEL.txt
+{ ls sort_$IN_FILE_SHORT_NAME* -la -ltr | grep \naf.fasta$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_unnaf_size_l$LEVEL-$sorting_type.txt
+{ ls sort_fanalysis_$sorting_type-$IN_FILE_SHORT_NAME* -la -ltr | grep \naf.fasta$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_unnaf_size_l$LEVEL-$sorting_type.txt
 
 rm *naf.fasta
 
@@ -59,17 +59,17 @@ if [[ $SORTING_ALGORITHM == "fasta_analysis" ]]; then
 program="NAF_$IN_FILE_SHORT_NAME-fasta_analysis"
 level=$LEVEL
 bytes=$(ls sort_fanalysis_$SORTING_TYPE-$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
-c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_naf_size_l$LEVEL.txt)
-original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-naf_size_l$LEVEL.txt)
+c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_naf_size_l$LEVEL-$SORTING_TYPE.txt)
+original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-naf_size_l$LEVEL-$SORTING_TYPE.txt)
 bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
 bps_final=$(echo "scale=3; ($c_bytes * 8) / $bytes" | bc)
 #gain=$(echo "scale=3; ($c_bytes / $original_c_bytes)*100" | bc)
 gain=$(echo "scale=3; (1-($c_bytes / $original_c_bytes))*100" | bc)
-c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_fa_naf_l$LEVEL.txt)
-c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_naf_l$LEVEL.txt)
-d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_unnaf_size_l$LEVEL.txt)
-d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_fa_unnaf_l$LEVEL.txt)
-d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_unnaf_l$LEVEL.txt)
+c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_fa_naf_l$LEVEL-$SORTING_TYPE.txt)
+c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_naf_l$LEVEL-$SORTING_TYPE.txt)
+d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_unnaf_size_l$LEVEL-$SORTING_TYPE.txt)
+d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_fa_unnaf_l$LEVEL-$SORTING_TYPE.txt)
+d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_fa_unnaf_l$LEVEL-$SORTING_TYPE.txt)
 diff=0
 if [ $bytes -eq $d_bytes ] 
  then
@@ -113,17 +113,17 @@ elif [[ $SORTING_ALGORITHM == "sortmf" ]]; then
 program="NAF_$IN_FILE_SHORT_NAME-sortmf"
 level=$LEVEL
 bytes=$(ls sort_$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
-c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_naf_size_l$LEVEL.txt)
-original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-naf_size_l$LEVEL.txt)
+c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_naf_size_l$LEVEL-$SORTING_TYPE.txt)
+original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-naf_size_l$LEVEL-$SORTING_TYPE.txt)
 bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
 bps_final=$(echo "scale=3; ($c_bytes * 8) / $bytes" | bc)
 #gain=$(echo "scale=3; ($c_bytes / $original_c_bytes)*100" | bc)
 gain=$(echo "scale=3; (1-($c_bytes / $original_c_bytes))*100" | bc)
-c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_naf_l$LEVEL.txt)
-c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_naf_l$LEVEL.txt)
-d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_unnaf_size_l$LEVEL.txt)
-d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_unnaf_l$LEVEL.txt)
-d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_unnaf_l$LEVEL.txt)
+c_time=$(awk 'FNR ==1 {print $2}' $IN_FILE_SHORT_NAME-sort_naf_l$LEVEL-$SORTING_TYPE.txt)
+c_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_naf_l$LEVEL-$SORTING_TYPE.txt)
+d_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_unnaf_size_l$LEVEL-$SORTING_TYPE.txt)
+d_time=$(awk 'FNR ==1 {print $2}'  $IN_FILE_SHORT_NAME-sort_unnaf_l$LEVEL-$SORTING_TYPE.txt)
+d_mem=$(awk 'FNR ==1 {print $4}'  $IN_FILE_SHORT_NAME-sort_unnaf_l$LEVEL-$SORTING_TYPE.txt)
 diff=0
 if [ $bytes -eq $d_bytes ] 
  then
@@ -264,11 +264,17 @@ input_file=$2
 #INPUT_FILE=$2
 #n=$3
 test=$3
+full=$4
 
 #for ((n=0; n<${#sorting_types[@]}; n++)); do
 #NAF
  levels_array=("1" "8" "15" "22")
- program=("" "fasta_analysis")
+ program=()
+if [[ $full -eq 1 ]]; then
+ program=("")
+else
+  program=("fasta_analysis")
+fi  
 #levels_array=("8")
 rm *.naf
 m=0
