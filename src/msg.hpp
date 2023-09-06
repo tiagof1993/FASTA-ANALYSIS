@@ -1,3 +1,11 @@
+//
+// Created by fonsecatiago on 14-04-2023.
+//
+
+#ifndef FASTA_ANALYSIS_MSG_H
+#define FASTA_ANALYSIS_MSG_H
+
+#endif //FASTA_ANALYSIS_MSG_H
 #ifndef MSG_H_INCLUDED
 #define MSG_H_INCLUDED
 
@@ -11,6 +19,6 @@ void PrintMenuCompression   (void);
 void PrintVersion           (void);
 void PrintHelpMenu	    (int flag);
 //void PrintExamples          (void);
- void PrintNoArgumentsError();
+void PrintNoArgumentsError();
 
 #endif

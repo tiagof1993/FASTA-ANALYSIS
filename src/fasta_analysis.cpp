@@ -19,8 +19,11 @@ Options resolveOption(std::string input) {
     if( input == "-sort=S" ) return Sort_size;
     if( input == "-sort=AT") return Sort_nucleotide_AT;
     if( input == "-sort=CG") return Sort_nucleotide_CG;
+    if( input == "-sort=ATP") return Sort_nucleotide_AT_percentage;
+    if( input == "-sort=CGP") return Sort_nucleotide_CG_percentage;
     if( input == "-sort=A" ) return Sort_alphabetically;
     if( input == "-s" ) return Shuffle;
+    //Sort_nucleotide_AT_percentage
     return Option_Invalid;
 }
 
@@ -37,8 +40,18 @@ bool compareByATNucleotide(const item &a, const item &b){
     return a.AT_nucleotides < b.AT_nucleotides;
 }
 
+bool compareByATNucleotidePercentage(const item &a, const item &b){
+    //return a.AT_percentage < b.AT_percentage;
+    return (a.AT_nucleotides/a.size) < (b.AT_nucleotides/b.size);
+}
+
 bool compareByCGNucleotide(const item &a, const item &b){
     return a.CG_nucleotides < b.CG_nucleotides;
+}
+
+bool compareByCGNucleotidePercentage(const item &a, const item &b){
+    //return a.CG_percentage < b.CG_percentage;
+    return (a.CG_nucleotides/a.size) < (b.CG_nucleotides/b.size);
 }
 
 bool compareByUnknownNucleotides(const item &a, const item &b){
@@ -61,6 +74,9 @@ void shuffle_items(std::vector<item> item_vec,std::string input_filename, unsign
 
     FILE* pfile;
     std::ofstream shuffled_fasta_file("shuffled.fasta");
+    std::ofstream input_seq ("input_seq.txt");
+    std::ofstream shuffled_seq ("shuffled_seq.txt");
+   
     size_t result;
     long l_size;
     char* buffer;
@@ -75,6 +91,9 @@ void shuffle_items(std::vector<item> item_vec,std::string input_filename, unsign
     long int j=0;
     char value=' ';
 
+for(long int i=0;i< item_vec.size();i++){
+  input_seq << "initial: " << item_vec[i].initial_position << ", initial_sequence: " << item_vec[i].initial_sequence_position << ", final: " << item_vec[i].final_position << endl;
+}
 // buffer = (char*) malloc (sizeof(char)*l_size);
     // if(buffer == NULL) {fputs("Memory error",stderr); exit(2);}
 
@@ -89,6 +108,11 @@ void shuffle_items(std::vector<item> item_vec,std::string input_filename, unsign
     //cout << "last_position" << endl;
 
     item_vec.erase(item_vec.begin());
+    for(long int i=0;i<item_vec.size();i++){
+     if(item_vec[i].final_position <= item_vec[i].initial_position){
+      item_vec.erase(item_vec.begin()+i);
+     }
+    }
 
     if(seed_numb==(unsigned)0){
         seed = std::chrono::system_clock::now().time_since_epoch().count();
@@ -97,6 +121,10 @@ void shuffle_items(std::vector<item> item_vec,std::string input_filename, unsign
         seed = seed_numb;
     }
     shuffle(item_vec.begin(),item_vec.end(),std::default_random_engine(seed));
+    
+   for(long int i=0;i<item_vec.size();i++){
+     shuffled_seq << "initial: " << item_vec[i].initial_position << ", initial_sequence: " << item_vec[i].initial_sequence_position << ", final: " << item_vec[i].final_position << endl;
+    }
 
     //sequence_ordering(item_vec,Shuffle,input_filename,"shuffled.fasta");
 
@@ -194,6 +222,8 @@ void shuffle_items(std::vector<item> item_vec,std::string input_filename, unsign
 
     fclose(pfile);
     shuffled_fasta_file.close();
+    input_seq.close();
+    shuffled_seq.close();
 }
 
 
@@ -240,7 +270,7 @@ std::vector<item> readFilePositions(std::string file_name){
     //max_size = 33 295 309 016
 
 
-    long int sequences_number =0;
+    long int sequences_number=0;
 //items.reserve(400000000000);
 // cout << "length: " << length << endl;
 
@@ -266,9 +296,9 @@ std::vector<item> readFilePositions(std::string file_name){
     std::vector<std::string> char_reads={};
 
     // long int initial_read_position =((file_length/chunk_division_factor)*chunk_selected)-1;
-    long int final_read_position =0;// ((file_length/chunk_division_factor)*chunk_selected+1)-1;
+    long int final_read_position=0;// ((file_length/chunk_division_factor)*chunk_selected+1)-1;
 
-
+   // cout << "Items_0: " << items[items.size()-1] << endl;
     long int sequence_initial_position=0;
     std::vector<long int> line_breaks={};
     char previous_value=' ';
@@ -276,6 +306,7 @@ std::vector<item> readFilePositions(std::string file_name){
         while((value = fgetc(pfile))!= EOF){
             current_position++;
             if(value=='>' && current_position >1){
+               // cout << items[items.size()-1].final_position << endl;
                 seq={items[items.size()-1].final_position,line_breaks[0],current_position,current_position-items[items.size()-1].final_position,0,0,0};
                 items.push_back(seq);
                 line_breaks.clear();
@@ -287,8 +318,8 @@ std::vector<item> readFilePositions(std::string file_name){
 
         }
         //line_breaks.push_back(current_position);
-        seq={items[items.size()-1].final_position,line_breaks[0],current_position,current_position-items[items.size()-1].final_position,0,0,0};
-        items.push_back(seq);
+       // seq={items[items.size()-1].final_position,line_breaks[0],current_position,current_position-items[items.size()-1].final_position,0,0,0};
+       // items.push_back(seq);
         item_records << "initial: " << items[items.size()-1].initial_position << ", initial_sequence: " << items[items.size()-1].initial_sequence_position << ", final: " << items[items.size()-1].final_position << ", size: " << (items[items.size()-1].final_position-items[items.size()-1].initial_sequence_position) << endl;
         //cout << value << endl;
     }catch(std::bad_alloc & exception){
@@ -309,7 +340,7 @@ std::vector<item> readFilePositions(std::string file_name){
                     item_records << "initial: " << items[items.size()-1].initial_position << ", initial_sequence: " << items[items.size()-1].initial_sequence_position << ", final: " << items[items.size()-1].final_position << ", size: " << items[items.size()-1].size << endl;
                     line_breaks.clear();
                     // }
-                }
+                }    
             }
 
             //label_size++; continue;
@@ -348,6 +379,13 @@ std::vector<item> readFilePositions(std::string file_name){
     //return sequence;
     cout << "ending read function" << endl;
     //return std::make_pair(items,sequence);
+    // for(long int i=0;i<items.size();i++){
+    //  if(items[i].final_position <= items[i].initial_position){
+    //   items.erase(items.begin()+i);
+    //  }
+    // }
+   // items[0].initial_position=1;
+
     return items;
 
 }
@@ -370,6 +408,8 @@ void sequence_ordering(std::vector<item> items_vec,Options option,std::string in
     }*/
 
     items_vec.erase(items_vec.begin());
+    
+
     cout << items_vec.size() << endl;
     long int j=0;
     long int k=0;
@@ -537,6 +577,28 @@ void sequence_ordering(std::vector<item> items_vec,Options option,std::string in
         }
         //}
     }
+
+    else if(option==Sort_nucleotide_AT_percentage ){
+        //if(nucleotide=="CG" || nucleotide=="GC"){
+        std::sort(items_vec.begin(), items_vec.end() ,compareByATNucleotidePercentage);
+
+        for(long int i=0;i< items_vec.size();i++){
+            // for(long int j=0; j < items_vec[i]; j++){
+            nucleotides_count << "items_nucleotides percentage: " << (items_vec[i].AT_nucleotides/items_vec[i].size) << endl;
+        }
+        //}
+    }
+
+     else if(option==Sort_nucleotide_CG_percentage ){
+        //if(nucleotide=="CG" || nucleotide=="GC"){
+        std::sort(items_vec.begin(), items_vec.end() ,compareByCGNucleotidePercentage);
+
+        for(long int i=0;i< items_vec.size();i++){
+            // for(long int j=0; j < items_vec[i]; j++){
+            nucleotides_count << "items_nucleotides percentage: " << (items_vec[i].CG_nucleotides/items_vec[i].size) << endl;
+        }
+        //}
+    }
 //else if(nucleotide=="N"){
 //  std::sort(items_vec.begin(), items_vec.end() ,compareByUnknownNucleotides);
 //}
@@ -573,9 +635,9 @@ void sequence_ordering(std::vector<item> items_vec,Options option,std::string in
 
             ordered_fasta_file << ">";
         }*/
-         if(items_vec[p].initial_position>0){
+         //if(items_vec[p].initial_position>0){
             ordered_fasta_file << ">";
-        }
+        //}
         // cout << p << ", total size: " << items_vec.size() << endl;
         current_position=items_vec[p].initial_position;
         fseeko64(pfile,current_position , SEEK_SET);
@@ -712,7 +774,7 @@ int main(int argc,char** argv){
     //nucleotide = argv[argc-4];
 
 
-    assert(outfile.substr(outfile.size()-6)==".fasta" || outfile.substr(outfile.size()-3)==".fna");
+    assert(outfile.substr(outfile.size()-6)==".fasta" || outfile.substr(outfile.size()-4)==".fna" || outfile.substr(outfile.size()-3)==".fa");
     // assert(seed_str!="");
     //assert (nucleotide=="A" || nucleotide=="C" || nucleotide== "G" || nucleotide == "T");
 
@@ -751,6 +813,20 @@ int main(int argc,char** argv){
             recorded_items = readFilePositions(infile);
             //sequence_ordering(recorded_items.first,Sort_nucleotide_CG,recorded_items.second,infile,outfile);
             sequence_ordering(recorded_items,Sort_nucleotide_CG,infile,outfile);
+            break;
+
+        case Sort_nucleotide_AT_percentage:
+            recorded_items = readFilePositions(infile);
+            //sequence_ordering(recorded_items.first,Sort_nucleotide_AT,recorded_items.second,infile,outfile);
+            sequence_ordering(recorded_items,Sort_nucleotide_AT_percentage,infile,outfile);
+
+            break;
+
+        case Sort_nucleotide_CG_percentage:
+            recorded_items = readFilePositions(infile);
+            //sequence_ordering(recorded_items.first,Sort_nucleotide_CG,recorded_items.second,infile,outfile);
+            sequence_ordering(recorded_items,Sort_nucleotide_CG_percentage,infile,outfile);
+
             break;
 
         case Sort_alphabetically:
