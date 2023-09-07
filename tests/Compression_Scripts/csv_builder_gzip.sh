@@ -196,6 +196,19 @@ i
 wq
 EOF
 }
+file="data_$COMPRESSOR-$IN_FILE_SHORT_NAME-$SORTING_TYPE.csv"
+
+{
+ed -s "$file" <<EOF
+1
+i
+"$COMPRESSOR DATA",
+.
+wq
+EOF
+}
+
+}
 
  
 sorting_types=$1

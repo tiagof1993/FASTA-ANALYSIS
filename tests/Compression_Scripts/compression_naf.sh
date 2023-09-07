@@ -7,6 +7,10 @@ function NAF_COMPRESSION_UNSORTED(){
   SORTING_ALGORITHM="$4";
 
 
+  IN_FILE_SHORT_NAME=$(ls -1 $IN_FILE | sed 's/.fa//g')
+  echo $IN_FILE_SHORT_NAME
+
+
 if [[ $LEVEL -gt 17 ]]; then
 { /bin/time -f "TIME\t%e\tMEM\t%M"  ennaf --strict --temp-dir tmp/ --dna -$LEVEL --level $LEVEL $IN_FILE ; } 2>$IN_FILE_SHORT_NAME-naf_l$LEVEL.txt
 else
@@ -44,11 +48,11 @@ fi
 
 echo "NAF Level" $LEVEL "decompression" 
 
-{ /bin/time -f "TIME\t%e\tMEM\t%M" unnaf  sort_fanalysis_$sorting_type-$IN_FILE.naf -o sort_fanalysis_$sorting_type-$IN_FILE_SHORT_NAME-naf.fasta ; } 2>$IN_FILE_SHORT_NAME-sort_fa_unnaf_l$LEVEL-$sorting_type.txt
+{ /bin/time -f "TIME\t%e\tMEM\t%M" unnaf  sort_fanalysis_$sorting_type-$IN_FILE.naf -o sort_fanalysis_$sorting_type-$IN_FILE_SHORT_NAME-naf.fa ; } 2>$IN_FILE_SHORT_NAME-sort_fa_unnaf_l$LEVEL-$sorting_type.txt
 
 { ls sort_fanalysis_$sorting_type-$IN_FILE_SHORT_NAME* -la -ltr | grep \naf.fa$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_unnaf_size_l$LEVEL-$sorting_type.txt
 
-rm *naf.fasta
+rm *naf.fa
 
 }
 #!/usr/bin/env bash
@@ -73,15 +77,20 @@ sorted_compression=$4
 rm *.naf
 m=0
 
+#echo "$sorted_compression"
+
 #while (($m < ${#INPUT_FILE[@]} )); do
+#if [[ $LEVEL -gt 17 ]]; then
 if [[ $sorted_compression -eq 1 ]]; then
+
  for ((i=0; i<${#levels_array[@]}; i++)); do
     INPUT_FILE_SHORT_NAME=$(ls -1 $input_file | sed 's/.fa//g')
     NAF_COMPRESSION_SORTED $input_file ${levels_array[i]} $sorting_type ;
 #INPUT_FILE_SHORT_NAME$(ls -1 synthetic.fasta | sed 's/.fasta//g')
 #NAF_COMPRESSION "synthetic.fasta" ${levels_array[i]} ;
     echo "level" ${levels_array[i]} "completed"
-done
+ done
+ 
 else
  for ((i=0; i<${#levels_array[@]}; i++)); do
     INPUT_FILE_SHORT_NAME=$(ls -1 $input_file | sed 's/.fa//g')
@@ -89,7 +98,7 @@ else
 #INPUT_FILE_SHORT_NAME$(ls -1 synthetic.fasta | sed 's/.fasta//g')
 #NAF_COMPRESSION "synthetic.fasta" ${levels_array[i]} ;
     echo "level" ${levels_array[i]} "completed"
-done
+ done
 fi
 
  # m=$((m+1))

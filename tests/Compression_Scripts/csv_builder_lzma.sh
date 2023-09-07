@@ -1,6 +1,4 @@
 
-  
-
 function CSV_BUILDER_LZMA(){
 
 IN_FILE="$1";
