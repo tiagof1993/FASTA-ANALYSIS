@@ -1,0 +1,10 @@
+"mbgc DATA",
+"PROGRAM","LEVEL","BYTES","C_BYTES","BPS_original","BPS_final","GAIN","C_TIME(s)","C_RAM(GB)","D_TIME(s)","D_MEM(GB)","DIFF","RUN"
+MBGC_Helostoma_temminckii.genome_raw,0,634649507,154779820,1.951,1.951,0,31.59,4038144,4.90,1861924,1,0
+MBGC_Helostoma_temminckii.genome_raw-fasta_analysis,0,634649507,172067113,1.951,2.168,-11.100,37.34,4913336,5.46,2309152,1,0
+MBGC_Helostoma_temminckii.genome_raw,1,634649507,154834463,1.951,1.951,0,40.93,4051524,5.35,1862420,1,0
+MBGC_Helostoma_temminckii.genome_raw-fasta_analysis,1,634649507,172173182,1.951,2.170,-11.100,40.94,4894700,5.71,2310276,1,0
+MBGC_Helostoma_temminckii.genome_raw,2,634649507,154781943,1.951,1.951,0,44.53,4048480,4.92,1861932,1,0
+MBGC_Helostoma_temminckii.genome_raw-fasta_analysis,2,634649507,172126370,1.951,2.169,-11.200,28.29,4876256,5.36,2309152,1,0
+MBGC_Helostoma_temminckii.genome_raw,3,634649507,154758133,1.950,1.950,0,29.75,4050568,6.46,1861572,1,0
+MBGC_Helostoma_temminckii.genome_raw-fasta_analysis,3,634649507,172175409,1.950,2.170,-11.200,41.64,4895160,5.38,2309952,1,0

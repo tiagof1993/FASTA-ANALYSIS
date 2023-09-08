@@ -1,0 +1,10 @@
+"mbgc DATA",
+"PROGRAM","LEVEL","BYTES","C_BYTES","BPS_original","BPS_final","GAIN","C_TIME(s)","C_RAM(GB)","D_TIME(s)","D_MEM(GB)","DIFF","RUN"
+MBGC_synthetic,0,644508900,,,,,,,,,1,0
+MBGC_synthetic-fasta_analysis,0,644508900,15507364,,.192,,6.75,3099448,2.58,1099668,1,0
+MBGC_synthetic,1,644508900,,,,,,,,,1,0
+MBGC_synthetic-fasta_analysis,1,644508900,15434976,,.191,,7.20,3145780,2.47,1119184,1,0
+MBGC_synthetic,2,644508900,,,,,,,,,1,0
+MBGC_synthetic-fasta_analysis,2,644508900,15377358,,.190,,6.42,3125756,3.71,1110236,1,0
+MBGC_synthetic,3,644508900,,,,,,,,,1,0
+MBGC_synthetic-fasta_analysis,3,644508900,15483545,,.192,,10.62,3116964,3.27,1109540,1,0
