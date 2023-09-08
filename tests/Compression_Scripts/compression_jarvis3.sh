@@ -43,14 +43,15 @@ function JARVIS3_COMPRESSION_SORTED(){
   # if [[ $PARTITION == "1GB" ]] then
   #   PARTITION_MB="1000"
   # fi
+  # sort_fanalysis_AT-synthetic.fa
+ # copy2-sort_fa_10-l2.txt
+  { /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -l $LEVEL --block $PARTITION --fasta -i sort_fanalysis_$sorting_type-$IN_FILE ; } 2>$IN_FILE_SHORT_NAME-sort_fa_$PARTITION_MB-l$LEVEL-$sorting_type.txt
 
-  { /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -l $LEVEL --block $PARTITION --fasta -i $IN_FILE ; } 2>$IN_FILE_SHORT_NAME-$PARTITION_MB-l$LEVEL.txt
+  { ls sort_fanalysis_$sorting_type-$IN_FILE* -la -ltr | grep \.tar$ | awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_size_$PARTITION_MB-l$LEVEL-$sorting_type.txt
 
-  { ls $IN_FILE* -la -ltr | grep \.tar$ | awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-size_$PARTITION_MB-l$LEVEL.txt
+  { /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -d -l $LEVEL --fasta -i sort_fanalysis_$sorting_type-$IN_FILE.tar ;  } 2>$IN_FILE_SHORT_NAME-sort_fa_d_$PARTITION_MB-l$LEVEL-$sorting_type.txt
 
-  { /bin/time -f "TIME\t%e\tMEM\t%M" ./JARVIS3.sh -d -l $LEVEL --fasta -i $IN_FILE.tar ;  } 2>$IN_FILE_SHORT_NAME-d_$PARTITION_MB-l$LEVEL.txt
-
-  { ls $IN_FILE* -la -ltr | grep \.tar.out$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-size_d_$PARTITION_MB-l$LEVEL.txt
+  { ls sort_fanalysis_$sorting_type-$IN_FILE* -la -ltr | grep \.tar.out$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_fa_size_d_$PARTITION_MB-l$LEVEL-$sorting_type.txt
 
   rm *tar.out
 
@@ -95,7 +96,6 @@ j=0
  done
 done
 else
-
 for ((i=0; i<${#levels_array[@]}; i++)); do
 j=0
  while (($j < ${#partitions_array[@]} )); do
@@ -104,7 +104,6 @@ j=0
   j=$((j+1))
  done
 done
-
 fi
    #  PLOT_JARVIS3 "data_jarvis3-$INPUT_FILE_SHORT_NAME" $partitions_array
 # #    m=$((m+1))

@@ -58,6 +58,7 @@ sorted_compression=$4
 # m=0
 # while (($m < ${#INPUT_FILE[@]} )); do
 # bzip2
+levels_array=("1" "4" "7")
 program=("" "fasta_analysis")
 # rm "data_bzip2.csv"
 rm *.bz2

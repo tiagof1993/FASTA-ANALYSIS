@@ -17,7 +17,7 @@ if [[ $SORTING_ALGORITHM == "fasta_analysis" ]]; then
 
 program="MBGC_$IN_FILE_SHORT_NAME-fasta_analysis"
 level=$LEVEL
-bytes=$(ls sort_fanalysis_$SORTING_TYPE-$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
+bytes=$(ls sort_fanalysis_$SORTING_TYPE-$IN_FILE* -la -ltr | grep \.fa$ |awk '{print $5;}')
 c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_fa_mbgc_size_l$LEVEL-$SORTING_TYPE.txt)
 original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-mbgc_size_l$LEVEL.txt)
 bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
@@ -70,7 +70,7 @@ elif [[ $SORTING_ALGORITHM == "sortmf" ]]; then
 
 program="MBGC_$IN_FILE_SHORT_NAME-sortmf"
 level=$LEVEL
-bytes=$(ls sort_$IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
+bytes=$(ls sort_$IN_FILE_SHORT_NAME* -la -ltr | grep \.fa$ |awk '{print $5;}')
 c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-sort_mbgc_size_l$LEVEL-$SORTING_TYPE.txt)
 original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-mbgc_size_l$LEVEL-$SORTING_TYPE.txt)
 bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)
@@ -122,7 +122,7 @@ else
 
 program="MBGC_$IN_FILE_SHORT_NAME"
 level=$LEVEL
-bytes=$(ls $IN_FILE* -la -ltr | grep \.fasta$ |awk '{print $5;}')
+bytes=$(ls $IN_FILE_SHORT_NAME* -la -ltr | grep \.fa$ |awk '{print $5;}')
 c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-mbgc_size_l$LEVEL.txt)
 original_c_bytes=$(awk 'FNR ==1 {print $1}' $IN_FILE_SHORT_NAME-mbgc_size_l$LEVEL.txt)
 bps_original=$(echo "scale=3; ($original_c_bytes * 8) / $bytes" | bc)

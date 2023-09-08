@@ -11,11 +11,11 @@ function MBGC_COMPRESSION_UNSORTED() {
 
 rm $IN_FILE_SHORT_NAME.mbgc
 
-{ /bin/time -f "TIME\t%e\tMEM\t%M" mbgc -c=$LEVEL -i $IN_FILE $IN_FILE_SHORT_NAME.mbgc ; } 2>$IN_FILE_SHORT_NAME-mbgc_l$LEVEL-$sorting_type.txt 
+{ /bin/time -f "TIME\t%e\tMEM\t%M" mbgc -c=$LEVEL -i $IN_FILE $IN_FILE_SHORT_NAME.mbgc ; } 2>$IN_FILE_SHORT_NAME-mbgc_l$LEVEL.txt 
 
-{ ls $IN_FILE_SHORT_NAME* -la -ltr | grep \.mbgc$ |awk '{print $5;}' ; } > $IN_FILE_SHORT_NAME-mbgc_size_l$LEVEL-$sorting_type.txt
+{ ls $IN_FILE_SHORT_NAME* -la -ltr | grep \.mbgc$ |awk '{print $5;}' ; } > $IN_FILE_SHORT_NAME-mbgc_size_l$LEVEL.txt
 
-{ /bin/time -f "TIME\t%e\tMEM\t%M" mbgc -d $IN_FILE_SHORT_NAME.mbgc mbgc_decompress_l$LEVEL ; } 2>$IN_FILE_SHORT_NAME-mbgc_d_l$LEVEL-$sorting_type.txt 
+{ /bin/time -f "TIME\t%e\tMEM\t%M" mbgc -d $IN_FILE_SHORT_NAME.mbgc mbgc_decompress_l$LEVEL ; } 2>$IN_FILE_SHORT_NAME-mbgc_d_l$LEVEL.txt 
 
 #  mbgc -d $IN_FILE_SHORT_NAME.mbgc mbgc_decompress
 #  mv mbgc_decompress/$IN_FILE_SHORT_NAME.fasta $IN_FILE_SHORT_NAME-mbgc.fasta 
@@ -23,15 +23,15 @@ rm $IN_FILE_SHORT_NAME.mbgc
 #  mv sort_fanalysis_mbgc_decompress/sort_fanalysis_$IN_FILE_SHORT_NAME.fasta sort_fanalysis_$IN_FILE_SHORT_NAME-mbgc.fasta 
 
 cd mbgc_decompress_l$LEVEL
-{ ls $IN_FILE_SHORT_NAME* -la -ltr | grep \.fa$ |awk '{print $5;}' ; } >  $IN_FILE_SHORT_NAME-mbgc_d_size_l$LEVEL-$sorting_type.txt
+{ ls $IN_FILE_SHORT_NAME* -la -ltr | grep \.fa$ |awk '{print $5;}' ; } >  $IN_FILE_SHORT_NAME-mbgc_d_size_l$LEVEL.txt
 cd ..
-mv mbgc_decompress_l$LEVEL/$IN_FILE_SHORT_NAME-mbgc_d_size_l$LEVEL-$sorting_type.txt $IN_FILE_SHORT_NAME-mbgc_d_size_l$LEVEL-$sorting_type.txt
+mv mbgc_decompress_l$LEVEL/$IN_FILE_SHORT_NAME-mbgc_d_size_l$LEVEL-$sorting_type.txt $IN_FILE_SHORT_NAME-mbgc_d_size_l$LEVEL.txt
 #cd sort_mbgc_decompress_l$LEVEL
 #{ ls sort_$IN_FILE_SHORT_NAME* -la -ltr | grep \fasta$ |awk '{print $5;}'; } > $IN_FILE_SHORT_NAME-sort_mbgc_d_size_l$LEVEL.txt
 #cd ..
 #mv sort_mbgc_decompress_l$LEVEL/$IN_FILE_SHORT_NAME-sort_mbgc_d_size_l$LEVEL.txt $IN_FILE_SHORT_NAME-sort_mbgc_d_size_l$LEVEL.txt
 
-rm -d mbgc_decompress_*
+rm -r mbgc_decompress_*
   
 }
 
@@ -66,7 +66,7 @@ cd sort_fanalysis_mbgc_decompress_l$LEVEL
 cd ..
 mv sort_fanalysis_mbgc_decompress_l$LEVEL/$IN_FILE_SHORT_NAME-sort_fa_mbgc_d_size_l$LEVEL-$sorting_type.txt $IN_FILE_SHORT_NAME-sort_fa_mbgc_d_size_l$LEVEL-$sorting_type.txt
 
-rm -d sort_fanalysis_mbgc_decompress_*
+rm -r sort_fanalysis_mbgc_decompress_*
 
 }
 
