@@ -11,12 +11,18 @@ function GENERATE_ALCOR_FILE(){
   # LOWEST_SIZE=$3
   # OUT_FILE=$4
 #local OUT_FILE=""
-read -p "Define the seed range: " SEED_RANGE
-read -p "Define the number of auxiliary sequences used: " AUX_SEQ
-#read -p "Define the increment factor to be used on sequence sizes " INCREMENT_FACTOR
-#echo "The first $SEED_RANGE prime numbers  are: "
-read -p "Define the lowest sequence size to be considered: " LOWEST_SIZE
-read -p "Output file name: " OUT_FILE
+# read -p "Define the seed range: " SEED_RANGE
+# read -p "Define the number of auxiliary sequences used: " AUX_SEQ
+# #read -p "Define the increment factor to be used on sequence sizes " INCREMENT_FACTOR
+# #echo "The first $SEED_RANGE prime numbers  are: "
+# read -p "Define the lowest sequence size to be considered: " LOWEST_SIZE
+# read -p "Output file name: " OUT_FILE
+
+
+SEED_RANGE=570
+AUX_SEQ=100
+LOWEST_SIZE=1000
+OUT_FILE=synthetic.fa
 
 declare -a seed_arr=()
 
@@ -106,7 +112,7 @@ echo $OUT_FILE
 # ./Install_Tools.sh $Install_Mode
 # chmod +x *.sh
 
-# INPUT_FILE=($(GENERATE_ALCOR_FILE))
+ #INPUT_FILE=($(GENERATE_ALCOR_FILE))
 # read -p "File to be read : " File_1
 # ./Genomes_download.sh
 # eval($genomes)
@@ -115,7 +121,7 @@ echo $OUT_FILE
 
 #   echo ${genomes[n]}
 # done
-INPUT_FILE=("synthetic.fa" "Helostoma_temminckii.genome_raw.fa")
+INPUT_FILE=("synthetic.fa" "virus_dataset.fa")
 #./Genomes_download.sh
 #INPUT_FILE=("copy.fasta" "copy2.fasta")
 
@@ -176,11 +182,11 @@ unsorted=0
 test=0
 
 
-#  gnome-terminal -- bash -c " ./compression_naf.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test $unsorted ; ./compression_naf.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test $unsorted ;  ./compression_naf.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test $sorted ; ./compression_naf.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test $sorted  ; ./csv_builder_naf.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test ; ./csv_builder_naf.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test ; ./plot_naf.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[0]} ; \
-#   ./compression_naf.sh ${sorting_types[1]} ${INPUT_FILE[0]} $test $sorted ; ./compression_naf.sh ${sorting_types[1]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_naf.sh ${sorting_types[1]} ${INPUT_FILE[0]} $test ; ./csv_builder_naf.sh ${sorting_types[1]} ${INPUT_FILE[1]} $test; ./plot_naf.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[1]} ; \
-#   ./compression_naf.sh ${sorting_types[2]} ${INPUT_FILE[0]} $test $sorted ; ./compression_naf.sh ${sorting_types[2]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_naf.sh ${sorting_types[2]} ${INPUT_FILE[0]} $test ; ./csv_builder_naf.sh ${sorting_types[2]} ${INPUT_FILE[1]} $test; ./plot_naf.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[2]} ; \
-#   ./compression_naf.sh ${sorting_types[3]} ${INPUT_FILE[0]} $test $sorted ; ./compression_naf.sh ${sorting_types[3]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_naf.sh ${sorting_types[3]} ${INPUT_FILE[0]} $test ; ./csv_builder_naf.sh ${sorting_types[3]} ${INPUT_FILE[1]} $test; ./plot_naf.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[3]} ; \
-#   ./compression_naf.sh ${sorting_types[4]} ${INPUT_FILE[0]} $test $sorted ; ./compression_naf.sh ${sorting_types[4]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_naf.sh ${sorting_types[4]} ${INPUT_FILE[0]} $test ; ./csv_builder_naf.sh ${sorting_types[4]} ${INPUT_FILE[1]} $test; ./plot_naf.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[4]} ; exec bash"
+ gnome-terminal -- bash -c " ./compression_naf.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test $unsorted ; ./compression_naf.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test $unsorted ;  ./compression_naf.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test $sorted ; ./compression_naf.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test $sorted  ; ./csv_builder_naf.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test ; ./csv_builder_naf.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test ; ./plot_naf.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[0]} ; \
+  ./compression_naf.sh ${sorting_types[1]} ${INPUT_FILE[0]} $test $sorted ; ./compression_naf.sh ${sorting_types[1]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_naf.sh ${sorting_types[1]} ${INPUT_FILE[0]} $test ; ./csv_builder_naf.sh ${sorting_types[1]} ${INPUT_FILE[1]} $test; ./plot_naf.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[1]} ; \
+  ./compression_naf.sh ${sorting_types[2]} ${INPUT_FILE[0]} $test $sorted ; ./compression_naf.sh ${sorting_types[2]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_naf.sh ${sorting_types[2]} ${INPUT_FILE[0]} $test ; ./csv_builder_naf.sh ${sorting_types[2]} ${INPUT_FILE[1]} $test; ./plot_naf.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[2]} ; \
+  ./compression_naf.sh ${sorting_types[3]} ${INPUT_FILE[0]} $test $sorted ; ./compression_naf.sh ${sorting_types[3]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_naf.sh ${sorting_types[3]} ${INPUT_FILE[0]} $test ; ./csv_builder_naf.sh ${sorting_types[3]} ${INPUT_FILE[1]} $test; ./plot_naf.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[3]} ; \
+  ./compression_naf.sh ${sorting_types[4]} ${INPUT_FILE[0]} $test $sorted ; ./compression_naf.sh ${sorting_types[4]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_naf.sh ${sorting_types[4]} ${INPUT_FILE[0]} $test ; ./csv_builder_naf.sh ${sorting_types[4]} ${INPUT_FILE[1]} $test; ./plot_naf.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[4]} ; exec bash"
 
 
 
@@ -192,11 +198,11 @@ test=0
 
 
 
-#  gnome-terminal -- bash -c " ./compression_mfcompress.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test $unsorted ; ./compression_mfcompress.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test $unsorted  ; ./compression_mfcompress.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test $sorted ; ./compression_mfcompress.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test $sorted  ; ./csv_builder_mfcompress.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test ; ./csv_builder_mfcompress.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test ; ./plot_mfcompress.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[0]} ; \
-#   ./compression_mfcompress.sh ${sorting_types[1]} ${INPUT_FILE[0]} $test  $sorted ; ./compression_mfcompress.sh ${sorting_types[1]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_mfcompress.sh ${sorting_types[1]} ${INPUT_FILE[0]} $test ; ./csv_builder_mfcompress.sh ${sorting_types[1]} ${INPUT_FILE[1]} $test; ./plot_mfcompress.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[1]} ; \
-#   ./compression_mfcompress.sh ${sorting_types[2]} ${INPUT_FILE[0]} $test  $sorted ; ./compression_mfcompress.sh ${sorting_types[2]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_mfcompress.sh ${sorting_types[2]} ${INPUT_FILE[0]} $test ; ./csv_builder_mfcompress.sh ${sorting_types[2]} ${INPUT_FILE[1]} $test; ./plot_mfcompress.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[2]} ; \
-#   ./compression_mfcompress.sh ${sorting_types[3]} ${INPUT_FILE[0]} $test  $sorted ; ./compression_mfcompress.sh ${sorting_types[3]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_mfcompress.sh ${sorting_types[3]} ${INPUT_FILE[0]} $test ; ./csv_builder_mfcompress.sh ${sorting_types[3]} ${INPUT_FILE[1]} $test; ./plot_mfcompress.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[3]} ; \
-#   ./compression_mfcompress.sh ${sorting_types[4]} ${INPUT_FILE[0]} $test  $sorted ; ./compression_mfcompress.sh ${sorting_types[4]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_mfcompress.sh ${sorting_types[4]} ${INPUT_FILE[0]} $test ; ./csv_builder_mfcompress.sh ${sorting_types[4]} ${INPUT_FILE[1]} $test; ./plot_mfcompress.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[4]} ; exec bash"
+ gnome-terminal -- bash -c " ./compression_mfcompress.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test $unsorted ; ./compression_mfcompress.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test $unsorted  ; ./compression_mfcompress.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test $sorted ; ./compression_mfcompress.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test $sorted  ; ./csv_builder_mfcompress.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test ; ./csv_builder_mfcompress.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test ; ./plot_mfcompress.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[0]} ; \
+  ./compression_mfcompress.sh ${sorting_types[1]} ${INPUT_FILE[0]} $test  $sorted ; ./compression_mfcompress.sh ${sorting_types[1]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_mfcompress.sh ${sorting_types[1]} ${INPUT_FILE[0]} $test ; ./csv_builder_mfcompress.sh ${sorting_types[1]} ${INPUT_FILE[1]} $test; ./plot_mfcompress.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[1]} ; \
+  ./compression_mfcompress.sh ${sorting_types[2]} ${INPUT_FILE[0]} $test  $sorted ; ./compression_mfcompress.sh ${sorting_types[2]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_mfcompress.sh ${sorting_types[2]} ${INPUT_FILE[0]} $test ; ./csv_builder_mfcompress.sh ${sorting_types[2]} ${INPUT_FILE[1]} $test; ./plot_mfcompress.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[2]} ; \
+  ./compression_mfcompress.sh ${sorting_types[3]} ${INPUT_FILE[0]} $test  $sorted ; ./compression_mfcompress.sh ${sorting_types[3]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_mfcompress.sh ${sorting_types[3]} ${INPUT_FILE[0]} $test ; ./csv_builder_mfcompress.sh ${sorting_types[3]} ${INPUT_FILE[1]} $test; ./plot_mfcompress.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[3]} ; \
+  ./compression_mfcompress.sh ${sorting_types[4]} ${INPUT_FILE[0]} $test  $sorted ; ./compression_mfcompress.sh ${sorting_types[4]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_mfcompress.sh ${sorting_types[4]} ${INPUT_FILE[0]} $test ; ./csv_builder_mfcompress.sh ${sorting_types[4]} ${INPUT_FILE[1]} $test; ./plot_mfcompress.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[4]} ; exec bash"
 
 #.
  gnome-terminal -- bash -c "./compression_jarvis3.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test $unsorted ; ./compression_jarvis3.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test $unsorted  ; ./compression_jarvis3.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test $sorted ; ./compression_jarvis3.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test $sorted  ; ./csv_builder_jarvis3.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test ; ./csv_builder_jarvis3.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test ; ./plot_jarvis3.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[0]} ; \
@@ -212,11 +218,11 @@ test=0
 #   ./compression_bzip2.sh ${sorting_types[3]} ${INPUT_FILE[0]} $test  $sorted ; ./compression_bzip2.sh ${sorting_types[3]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_bzip2.sh ${sorting_types[3]} ${INPUT_FILE[0]} $test ; ./csv_builder_bzip2.sh ${sorting_types[3]} ${INPUT_FILE[1]} $test; ./plot_bzip2.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[3]} ; \
 #   ./compression_bzip2.sh ${sorting_types[4]} ${INPUT_FILE[0]} $test  $sorted ; ./compression_bzip2.sh ${sorting_types[4]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_bzip2.sh ${sorting_types[4]} ${INPUT_FILE[0]} $test ; ./csv_builder_bzip2.sh ${sorting_types[4]} ${INPUT_FILE[1]} $test; ./plot_bzip2.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[4]} ;  exec bash"
 
-# gnome-terminal -- bash -c " ./compression_gzip.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test $unsorted ; ./compression_gzip.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test $unsorted  ; ./compression_gzip.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test $sorted ; ./compression_gzip.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test $sorted  ; ./csv_builder_gzip.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test ; ./csv_builder_gzip.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test ; ./plot_gzip.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[0]} ; \
-#   ./compression_gzip.sh ${sorting_types[1]} ${INPUT_FILE[0]} $test  $sorted ; ./compression_gzip.sh ${sorting_types[1]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_gzip.sh ${sorting_types[1]} ${INPUT_FILE[0]} $test ; ./csv_builder_gzip.sh ${sorting_types[1]} ${INPUT_FILE[1]} $test; ./plot_gzip.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[1]} ; \
-#   ./compression_gzip.sh ${sorting_types[2]} ${INPUT_FILE[0]} $test  $sorted ; ./compression_gzip.sh ${sorting_types[2]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_gzip.sh ${sorting_types[2]} ${INPUT_FILE[0]} $test ; ./csv_builder_gzip.sh ${sorting_types[2]} ${INPUT_FILE[1]} $test; ./plot_gzip.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[2]} ; \
-#   ./compression_gzip.sh ${sorting_types[3]} ${INPUT_FILE[0]} $test  $sorted ; ./compression_gzip.sh ${sorting_types[3]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_gzip.sh ${sorting_types[3]} ${INPUT_FILE[0]} $test ; ./csv_builder_gzip.sh ${sorting_types[3]} ${INPUT_FILE[1]} $test; ./plot_gzip.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[3]} ; \
-#   ./compression_gzip.sh ${sorting_types[4]} ${INPUT_FILE[0]} $test  $sorted ; ./compression_gzip.sh ${sorting_types[4]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_gzip.sh ${sorting_types[4]} ${INPUT_FILE[0]} $test ; ./csv_builder_gzip.sh ${sorting_types[4]} ${INPUT_FILE[1]} $test; ./plot_gzip.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[4]} ; exec bash"
+gnome-terminal -- bash -c " ./compression_gzip.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test $unsorted ; ./compression_gzip.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test $unsorted  ; ./compression_gzip.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test $sorted ; ./compression_gzip.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test $sorted  ; ./csv_builder_gzip.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test ; ./csv_builder_gzip.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test ; ./plot_gzip.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[0]} ; \
+  ./compression_gzip.sh ${sorting_types[1]} ${INPUT_FILE[0]} $test  $sorted ; ./compression_gzip.sh ${sorting_types[1]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_gzip.sh ${sorting_types[1]} ${INPUT_FILE[0]} $test ; ./csv_builder_gzip.sh ${sorting_types[1]} ${INPUT_FILE[1]} $test; ./plot_gzip.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[1]} ; \
+  ./compression_gzip.sh ${sorting_types[2]} ${INPUT_FILE[0]} $test  $sorted ; ./compression_gzip.sh ${sorting_types[2]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_gzip.sh ${sorting_types[2]} ${INPUT_FILE[0]} $test ; ./csv_builder_gzip.sh ${sorting_types[2]} ${INPUT_FILE[1]} $test; ./plot_gzip.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[2]} ; \
+  ./compression_gzip.sh ${sorting_types[3]} ${INPUT_FILE[0]} $test  $sorted ; ./compression_gzip.sh ${sorting_types[3]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_gzip.sh ${sorting_types[3]} ${INPUT_FILE[0]} $test ; ./csv_builder_gzip.sh ${sorting_types[3]} ${INPUT_FILE[1]} $test; ./plot_gzip.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[3]} ; \
+  ./compression_gzip.sh ${sorting_types[4]} ${INPUT_FILE[0]} $test  $sorted ; ./compression_gzip.sh ${sorting_types[4]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_gzip.sh ${sorting_types[4]} ${INPUT_FILE[0]} $test ; ./csv_builder_gzip.sh ${sorting_types[4]} ${INPUT_FILE[1]} $test; ./plot_gzip.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[4]} ; exec bash"
 
 gnome-terminal -- bash -c " ./compression_lzma.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test $unsorted ; ./compression_lzma.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test $unsorted  ; ./compression_lzma.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test $sorted ; ./compression_lzma.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test $sorted  ; ./csv_builder_lzma.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test ; ./csv_builder_lzma.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test ; ./plot_lzma.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[0]} ; \
   ./compression_lzma.sh ${sorting_types[1]} ${INPUT_FILE[0]} $test  $sorted ; ./compression_lzma.sh ${sorting_types[1]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_lzma.sh ${sorting_types[1]} ${INPUT_FILE[0]} $test ; ./csv_builder_lzma.sh ${sorting_types[1]} ${INPUT_FILE[1]} $test; ./plot_lzma.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[1]} ; \
@@ -225,11 +231,11 @@ gnome-terminal -- bash -c " ./compression_lzma.sh ${sorting_types[0]} ${INPUT_FI
   ./compression_lzma.sh ${sorting_types[4]} ${INPUT_FILE[0]} $test  $sorted ; ./compression_lzma.sh ${sorting_types[4]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_lzma.sh ${sorting_types[4]} ${INPUT_FILE[0]} $test ; ./csv_builder_lzma.sh ${sorting_types[4]} ${INPUT_FILE[1]} $test; ./plot_lzma.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[4]} ; exec bash"
 
 
-# gnome-terminal -- bash -c " ./compression_bzip2.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test $unsorted ; ./compression_bzip2.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test $unsorted  ; ./compression_bzip2.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test $sorted ; ./compression_bzip2.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test $sorted  ; ./csv_builder_bzip2.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test ; ./csv_builder_bzip2.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test ; ./plot_bzip2.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[0]} ; \
-#   ./compression_bzip2.sh ${sorting_types[1]} ${INPUT_FILE[0]} $test  $sorted ; ./compression_bzip2.sh ${sorting_types[1]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_bzip2.sh ${sorting_types[1]} ${INPUT_FILE[0]} $test ; ./csv_builder_bzip2.sh ${sorting_types[1]} ${INPUT_FILE[1]} $test; ./plot_bzip2.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[1]} ; \
-#   ./compression_bzip2.sh ${sorting_types[2]} ${INPUT_FILE[0]} $test  $sorted ; ./compression_bzip2.sh ${sorting_types[2]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_bzip2.sh ${sorting_types[2]} ${INPUT_FILE[0]} $test ; ./csv_builder_bzip2.sh ${sorting_types[2]} ${INPUT_FILE[1]} $test; ./plot_bzip2.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[2]} ; \
-#   ./compression_bzip2.sh ${sorting_types[3]} ${INPUT_FILE[0]} $test  $sorted ; ./compression_bzip2.sh ${sorting_types[3]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_bzip2.sh ${sorting_types[3]} ${INPUT_FILE[0]} $test ; ./csv_builder_bzip2.sh ${sorting_types[3]} ${INPUT_FILE[1]} $test; ./plot_bzip2.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[3]} ; \
-#   ./compression_bzip2.sh ${sorting_types[4]} ${INPUT_FILE[0]} $test  $sorted ; ./compression_bzip2.sh ${sorting_types[4]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_bzip2.sh ${sorting_types[4]} ${INPUT_FILE[0]} $test ; ./csv_builder_bzip2.sh ${sorting_types[4]} ${INPUT_FILE[1]} $test; ./plot_bzip2.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[4]} ; exec bash"
+gnome-terminal -- bash -c " ./compression_bzip2.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test $unsorted ; ./compression_bzip2.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test $unsorted  ; ./compression_bzip2.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test $sorted ; ./compression_bzip2.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test $sorted  ; ./csv_builder_bzip2.sh ${sorting_types[0]} ${INPUT_FILE[0]} $test ; ./csv_builder_bzip2.sh ${sorting_types[0]} ${INPUT_FILE[1]} $test ; ./plot_bzip2.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[0]} ; \
+  ./compression_bzip2.sh ${sorting_types[1]} ${INPUT_FILE[0]} $test  $sorted ; ./compression_bzip2.sh ${sorting_types[1]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_bzip2.sh ${sorting_types[1]} ${INPUT_FILE[0]} $test ; ./csv_builder_bzip2.sh ${sorting_types[1]} ${INPUT_FILE[1]} $test; ./plot_bzip2.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[1]} ; \
+  ./compression_bzip2.sh ${sorting_types[2]} ${INPUT_FILE[0]} $test  $sorted ; ./compression_bzip2.sh ${sorting_types[2]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_bzip2.sh ${sorting_types[2]} ${INPUT_FILE[0]} $test ; ./csv_builder_bzip2.sh ${sorting_types[2]} ${INPUT_FILE[1]} $test; ./plot_bzip2.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[2]} ; \
+  ./compression_bzip2.sh ${sorting_types[3]} ${INPUT_FILE[0]} $test  $sorted ; ./compression_bzip2.sh ${sorting_types[3]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_bzip2.sh ${sorting_types[3]} ${INPUT_FILE[0]} $test ; ./csv_builder_bzip2.sh ${sorting_types[3]} ${INPUT_FILE[1]} $test; ./plot_bzip2.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[3]} ; \
+  ./compression_bzip2.sh ${sorting_types[4]} ${INPUT_FILE[0]} $test  $sorted ; ./compression_bzip2.sh ${sorting_types[4]} ${INPUT_FILE[1]} $test  $sorted ; ./csv_builder_bzip2.sh ${sorting_types[4]} ${INPUT_FILE[0]} $test ; ./csv_builder_bzip2.sh ${sorting_types[4]} ${INPUT_FILE[1]} $test; ./plot_bzip2.sh ${INPUT_FILE[0]} ${INPUT_FILE[1]} ${sorting_types[4]} ; exec bash"
 
 
 
