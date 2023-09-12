@@ -13,18 +13,18 @@ SORTING_TYPE=$3
 #for ((i=0; i<${#MBGC_CSV[@]}; i++)); do
 #Build CSV for each sorting algorithm
 cat data_mbgc-$MBGC_synthetic_CSV-$SORTING_TYPE.csv | grep -e "fasta_analysis" > data_mbgc-$MBGC_synthetic_CSV-$SORTING_TYPE-fasta_analysis.csv
-echo "$(sort -t$',' -k 8 data_mbgc-$MBGC_synthetic_CSV-$SORTING_TYPE-fasta_analysis.csv)" > "data_mbgc-$MBGC_synthetic_CSV-$SORTING_TYPE-fasta_analysis.csv"
+echo "$(sort -t$',' -n -k 8  data_mbgc-$MBGC_synthetic_CSV-$SORTING_TYPE-fasta_analysis.csv)" > "data_mbgc-$MBGC_synthetic_CSV-$SORTING_TYPE-fasta_analysis.csv"
 cat data_mbgc-$MBGC_synthetic_CSV-$SORTING_TYPE.csv| grep -e "sortmf" > data_mbgc-$MBGC_synthetic_CSV-$SORTING_TYPE-sortmf.csv
-echo "$(sort -t$',' -k 8 data_mbgc-$MBGC_synthetic_CSV-$SORTING_TYPE-sortmf.csv)" > "data_mbgc-$MBGC_synthetic_CSV-$SORTING_TYPE-sortmf.csv"
+echo "$(sort -t$',' -n -k 8  data_mbgc-$MBGC_synthetic_CSV-$SORTING_TYPE-sortmf.csv)" > "data_mbgc-$MBGC_synthetic_CSV-$SORTING_TYPE-sortmf.csv"
 cat data_mbgc-$MBGC_synthetic_CSV-$SORTING_TYPE.csv | grep -v -e "fasta_analysis" | grep -v -e "sortmf" > data_mbgc-$MBGC_synthetic_CSV-$SORTING_TYPE-not_sorted.csv
-echo "$(sort -t$',' -k 8 data_mbgc-$MBGC_synthetic_CSV-$SORTING_TYPE-not_sorted.csv)" > "data_mbgc-$MBGC_synthetic_CSV-$SORTING_TYPE-not_sorted.csv"
+echo "$(sort -t$',' -n -k 8  data_mbgc-$MBGC_synthetic_CSV-$SORTING_TYPE-not_sorted.csv)" > "data_mbgc-$MBGC_synthetic_CSV-$SORTING_TYPE-not_sorted.csv"
 
 cat data_mbgc-$MBGC_real_CSV-$SORTING_TYPE.csv | grep -e "fasta_analysis" > data_mbgc-$MBGC_real_CSV-$SORTING_TYPE-fasta_analysis.csv
-echo "$(sort -t$',' -k 8 data_mbgc-$MBGC_real_CSV-$SORTING_TYPE-fasta_analysis.csv)" > "data_mbgc-$MBGC_real_CSV-$SORTING_TYPE-fasta_analysis.csv"
+echo "$(sort -t$',' -n -k 8  data_mbgc-$MBGC_real_CSV-$SORTING_TYPE-fasta_analysis.csv)" > "data_mbgc-$MBGC_real_CSV-$SORTING_TYPE-fasta_analysis.csv"
 cat data_mbgc-$MBGC_real_CSV-$SORTING_TYPE.csv| grep -e "sortmf" > data_mbgc-$MBGC_real_CSV-$SORTING_TYPE-sortmf.csv
-echo "$(sort -t$',' -k 8 data_mbgc-$MBGC_real_CSV-$SORTING_TYPE-sortmf.csv)" > "data_mbgc-$MBGC_real_CSV-$SORTING_TYPE-sortmf.csv"
+echo "$(sort -t$',' -n -k 8  data_mbgc-$MBGC_real_CSV-$SORTING_TYPE-sortmf.csv)" > "data_mbgc-$MBGC_real_CSV-$SORTING_TYPE-sortmf.csv"
 cat data_mbgc-$MBGC_real_CSV-$SORTING_TYPE.csv | grep -v -e "fasta_analysis" | grep -v -e "sortmf" > data_mbgc-$MBGC_real_CSV-$SORTING_TYPE-not_sorted.csv
-echo "$(sort -t$',' -k 8 data_mbgc-$MBGC_real_CSV-$SORTING_TYPE-not_sorted.csv)" > "data_mbgc-$MBGC_real_CSV-$SORTING_TYPE-not_sorted.csv"
+echo "$(sort -t$',' -n -k 8  data_mbgc-$MBGC_real_CSV-$SORTING_TYPE-not_sorted.csv)" > "data_mbgc-$MBGC_real_CSV-$SORTING_TYPE-not_sorted.csv"
 
 
 #done
@@ -34,7 +34,7 @@ echo "$(sort -t$',' -k 8 data_mbgc-$MBGC_real_CSV-$SORTING_TYPE-not_sorted.csv)"
  # partition=${partitions_array[j]}
   plot_file="data-plot_mbgc-$SORTING_TYPE.pdf"
   #echo $plot_file
-  title="Compression Gains using MBGC sorting by $SORTING_TYPE"
+  title="MBGC sorting by $SORTING_TYPE"
   #gain_x=$(awk -F "\"*,\"*" '{print $8}' data_level_${levels_array[j]}.csv) 
   #cat ${level_input_file[j]}
   #point=0
@@ -52,8 +52,8 @@ echo "$(sort -t$',' -k 8 data_mbgc-$MBGC_real_CSV-$SORTING_TYPE-not_sorted.csv)"
         set key fixed right top vertical Right noreverse noenhanced autotitle nobox
         set style histogram clustered gap 1 title textcolor lt -1
         set xtics border in scale 0,0 nomirror #rotate by -60  autojustify
-        set yrange [12:14]
-        set xrange [4.9:6.60]
+        set yrange [9:12]
+        set xrange [0:600]
         set xtics auto
         set ytics auto # set ytics auto
         set key top right

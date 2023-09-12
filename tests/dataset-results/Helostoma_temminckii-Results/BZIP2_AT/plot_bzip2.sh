@@ -34,7 +34,7 @@ echo "$(sort -t$',' -n -k 8 data_bzip2-$BZIP2_real_CSV-$SORTING_TYPE-not_sorted.
  # partition=${partitions_array[j]}
   plot_file="data-plot_bzip2-$SORTING_TYPE.pdf"
   #echo $plot_file
-  title="Compression Gains using BZIP2 sorting by $SORTING_TYPE"
+  title="BZIP2 sorting by $SORTING_TYPE"
   #gain_x=$(awk -F "\"*,\"*" '{print $8}' data_level_${levels_array[j]}.csv) 
   #cat ${level_input_file[j]}
   #point=0
@@ -52,8 +52,8 @@ echo "$(sort -t$',' -n -k 8 data_bzip2-$BZIP2_real_CSV-$SORTING_TYPE-not_sorted.
         set key fixed right top vertical Right noreverse noenhanced autotitle nobox
         set style histogram clustered gap 1 title textcolor lt -1
         set xtics border in scale 0,0 nomirror #rotate by -60  autojustify
-        set yrange [10:80]
-        set xrange [0:100]
+        set yrange [-1:80]
+        set xrange [40:100]
         set xtics auto
         set ytics auto # set ytics auto
         set key top right

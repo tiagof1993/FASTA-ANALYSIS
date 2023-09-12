@@ -32,7 +32,7 @@ echo "$(sort -t$',' -n -k 8 data_gzip-$GZIP_real_CSV-$SORTING_TYPE-not_sorted.cs
  # partition=${partitions_array[j]}
   plot_file="data-plot_gzip-$SORTING_TYPE.pdf"
   #echo $plot_file
-  title="Compression Gains using GZIP using sorting by $SORTING_TYPE"
+  title="GZIP using sorting by $SORTING_TYPE"
   #gain_x=$(awk -F "\"*,\"*" '{print $8}' data_level_${levels_array[j]}.csv) 
   #cat ${level_input_file[j]}
   #point=0
@@ -50,8 +50,8 @@ echo "$(sort -t$',' -n -k 8 data_gzip-$GZIP_real_CSV-$SORTING_TYPE-not_sorted.cs
         set key fixed right top vertical Right noreverse noenhanced autotitle nobox
         set style histogram clustered gap 1 title textcolor lt -1
         set xtics border in scale 0,0 nomirror #rotate by -60  autojustify
-        set yrange [0:10]
-        set xrange [0:10000]
+        set yrange [-10:10]
+        set xrange [0:500]
         set xtics auto
         set ytics auto # set ytics auto
         set key top right
