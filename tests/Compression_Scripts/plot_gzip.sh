@@ -47,11 +47,12 @@ echo "$(sort -t$',' -n -k 8 data_gzip-$GZIP_real_CSV-$SORTING_TYPE-not_sorted.cs
         set style line 101 lc rgb '#000000' lt 1 lw 2 
         set border 3 front ls 101
         set tics nomirror out scale 0.01
+        #set logscale x 10
         set key fixed right top vertical Right noreverse noenhanced autotitle nobox
         set style histogram clustered gap 1 title textcolor lt -1
         set xtics border in scale 0,0 nomirror #rotate by -60  autojustify
-        set yrange [-10:10]
-        set xrange [0:500]
+        set yrange [-2:10]
+        set xrange [0:3100]
         set xtics auto
         set ytics auto # set ytics auto
         set key top right

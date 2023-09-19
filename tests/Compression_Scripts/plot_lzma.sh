@@ -51,8 +51,8 @@ echo "$(sort -t$',' -n -k 8 data_lzma-$LZMA_real_CSV-$SORTING_TYPE-not_sorted.cs
         set key fixed right top vertical Right noreverse noenhanced autotitle nobox
         set style histogram clustered gap 1 title textcolor lt -1
         set xtics border in scale 0,0 nomirror #rotate by -60  autojustify
-        set yrange [-10:10]
-        set xrange [0:1000]
+        set yrange [-90:100]
+        set xrange [0:10000]
         set xtics auto
         set ytics auto # set ytics auto
         set key top right

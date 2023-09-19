@@ -218,7 +218,7 @@ test=$3
 # m=0
 # while (($m < ${#INPUT_FILE[@]} )); do
 # bzip2
- levels_array=("1" "4" "7")
+ levels_array=("1" "4" "7" "9")
 program=("" "fasta_analysis")
 
 #CSV_BUILDER_BZIP2

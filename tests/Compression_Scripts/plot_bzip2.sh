@@ -49,11 +49,12 @@ echo "$(sort -t$',' -n -k 8 data_bzip2-$BZIP2_real_CSV-$SORTING_TYPE-not_sorted.
         set style line 101 lc rgb '#000000' lt 1 lw 2 
         set border 3 front ls 101
         set tics nomirror out scale 0.01
+        set logscale x 10
         set key fixed right top vertical Right noreverse noenhanced autotitle nobox
         set style histogram clustered gap 1 title textcolor lt -1
         set xtics border in scale 0,0 nomirror #rotate by -60  autojustify
-        set yrange [-1:80]
-        set xrange [40:100]
+        set yrange [-5:70]
+        set xrange [600:1400]
         set xtics auto
         set ytics auto # set ytics auto
         set key top right

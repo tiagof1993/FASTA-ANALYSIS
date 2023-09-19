@@ -73,7 +73,7 @@ sorted_compression=$4
 # while (($m < ${#INPUT_FILE[@]} )); do
 #JARVIS3
 
-levels_array=("1" "2" "5")
+levels_array=("1" "2" "5" "8")
 #levels_array=("15" "20" "25" "30")
 # partitions_array=("10MB" "100MB" "1GB")
 # partitions_in_mb=("10" "100" "1000")

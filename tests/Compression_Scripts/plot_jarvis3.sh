@@ -72,7 +72,7 @@ cat data_jarvis3-$JARVIS3_real_CSV-$SORTING_TYPE.csv | grep -v -e "fasta_analysi
   partition=${partitions_array[j]}
   plot_file="jarvis3-plot_${partitions_array[j]}-$SORTING_TYPE.pdf"
   #echo $plot_file
-  title="JARVIS3.sh, partition ${partitions_array[j]} sorted by $SORTING_TYPE"
+  title="JARVIS3,partition ${partitions_array[j]},sorted by $SORTING_TYPE"
   #gain_x=$(awk -F "\"*,\"*" '{print $8}' data_level_${levels_array[j]}.csv) 
   #cat ${level_input_file[j]}
   #point=0
@@ -90,8 +90,8 @@ cat data_jarvis3-$JARVIS3_real_CSV-$SORTING_TYPE.csv | grep -v -e "fasta_analysi
         set key fixed right top vertical Right noreverse noenhanced autotitle nobox
         set style histogram clustered gap 1 title textcolor lt -1
         set xtics border in scale 0,0 nomirror #rotate by -60  autojustify
-        set yrange [-2:10]
-        set xrange [30:100]
+        set yrange [-10:40]
+        set xrange [0:2000]
         set xtics auto
         set ytics auto # set ytics auto
         set key top right

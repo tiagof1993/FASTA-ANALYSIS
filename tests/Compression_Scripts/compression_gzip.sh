@@ -59,7 +59,7 @@ sorted_compression=$4
 # m=0
 # while (($m < ${#INPUT_FILE[@]} )); do
 #General Use Compressors
-levels_array=("1" "4" "7")
+levels_array=("1" "4" "7" "9")
 program=("" "fasta_analysis")
 #levels_array=("1")
 #gzip
