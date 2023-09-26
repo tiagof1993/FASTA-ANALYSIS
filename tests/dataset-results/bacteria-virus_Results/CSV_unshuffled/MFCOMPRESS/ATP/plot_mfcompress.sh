@@ -83,7 +83,7 @@ cat data_mfcompress-$NAF_real_CSV-$SORTING_TYPE.csv | grep -v -e "fasta_analysis
         set key fixed right top vertical Right noreverse noenhanced autotitle nobox
         set style histogram clustered gap 1 title textcolor lt -1
         set xtics border in scale 0,0 nomirror #rotate by -60  autojustify
-        set yrange [0:20]
+        set yrange [-10:20]
         set xrange [0:10000]
         set xtics auto
         set ytics auto # set ytics auto
