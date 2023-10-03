@@ -52,7 +52,7 @@ echo "$(sort -t$',' -n -k 8 data_lzma-$LZMA_real_CSV-$SORTING_TYPE-not_sorted.cs
         set style histogram clustered gap 1 title textcolor lt -1
         set xtics border in scale 0,0 nomirror #rotate by -60  autojustify
         set yrange [-90:100]
-        set xrange [0:50000]
+        set xrange [0:20000]
         set xtics auto
         set ytics auto # set ytics auto
         set key top right
