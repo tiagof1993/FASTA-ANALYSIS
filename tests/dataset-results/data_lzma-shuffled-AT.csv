@@ -1,0 +1,10 @@
+"lzma DATA",
+"PROGRAM","LEVEL","BYTES","C_BYTES","BPS_original","BPS_final","GAIN","C_TIME(s)","C_RAM(GB)","D_TIME(s)","D_MEM(GB)","DIFF","RUN"
+lzma_shuffled,1,3746658290,1139288649,2.432,2.432,0,521.09,10496,152.97,3200,0,0
+lzma_shuffled-fasta_analysis,1,,,,,,sort_fanalysis_AT-shuffled.fa:,such,sort_fanalysis_AT-shuffled-c_l.fa.lzma:,such,0,0
+lzma_shuffled,4,3746658290,984049263,2.101,2.101,0,6207.05,49792,163.48,6400,0,0
+lzma_shuffled-fasta_analysis,4,,,,,,sort_fanalysis_AT-shuffled.fa:,such,sort_fanalysis_AT-shuffled-c_l.fa.lzma:,such,0,0
+lzma_shuffled,7,3746658290,968442999,2.067,2.067,0,6524.37,177536,108.40,18432,0,0
+lzma_shuffled-fasta_analysis,7,,,,,,sort_fanalysis_AT-shuffled.fa:,such,sort_fanalysis_AT-shuffled-c_l.fa.lzma:,such,0,0
+lzma_shuffled,9,3746658290,958485755,2.046,2.046,0,6182.81,648704,59.39,67712,0,0
+lzma_shuffled-fasta_analysis,9,,,,,,sort_fanalysis_AT-shuffled.fa:,such,sort_fanalysis_AT-shuffled-c_l.fa.lzma:,such,0,0
