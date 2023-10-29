@@ -53,7 +53,7 @@ echo "$(sort -t$',' -n -k 8 data_bzip2-$BZIP2_real_CSV-$SORTING_TYPE-not_sorted.
         set key fixed right top vertical Right noreverse noenhanced autotitle nobox
         set style histogram clustered gap 1 title textcolor lt -1
         set xtics border in scale 0,0 nomirror #rotate by -60  autojustify
-        set yrange [-5:70]
+        set yrange [-5:85]
         set xrange [0:2000]
         set xtics auto
         set ytics auto # set ytics auto
@@ -73,13 +73,10 @@ echo "$(sort -t$',' -n -k 8 data_bzip2-$BZIP2_real_CSV-$SORTING_TYPE-not_sorted.
         set grid
         set ylabel "Gain"
         set xlabel "Compression Time(s)"
-        set multiplot layout 1,2
+      #  set multiplot layout 1,2
         count=12
       #  plot sorting_points u 7:8 w points ls count notitle
-        plot "data_bzip2-$BZIP2_synthetic_CSV-$SORTING_TYPE-fasta_analysis.csv" u 8:7 title "Synthetic Data" with linespoints linestyle count
-        count=count + 1
-        plot "data_bzip2-$BZIP2_real_CSV-$SORTING_TYPE-fasta_analysis.csv" u 8:7 title "Real Data" with linespoints linestyle count
-        count=count + 1
+        plot "data_bzip2-$BZIP2_synthetic_CSV-$SORTING_TYPE-fasta_analysis.csv" u 8:7 title "Synthetic Data" with linespoints linestyle count , "data_bzip2-$BZIP2_real_CSV-$SORTING_TYPE-fasta_analysis.csv" u 8:7 title "Real Data" with linespoints linestyle count+1
          
 EOF
    #point=$((point+1))

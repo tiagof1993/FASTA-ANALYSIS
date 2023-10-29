@@ -1,0 +1,10 @@
+"gzip DATA",
+"PROGRAM","LEVEL","BYTES","C_BYTES","BPS_original","BPS_final","GAIN","C_TIME(s)","C_RAM(GB)","D_TIME(s)","D_MEM(GB)","DIFF","RUN"
+gzip_synthetic_chordata,1,4092120000,1424732191,2.785,2.785,0,107.08,2176,77.99,1792,0,0
+gzip_synthetic_chordata-fasta_analysis,1,4092120000,1417267755,2.785,2.770,.600,295.85,2176,95.67,1792,0,0
+gzip_synthetic_chordata,4,4092120000,1321498159,2.583,2.583,0,195.34,2176,32.27,1792,0,0
+gzip_synthetic_chordata-fasta_analysis,4,4092120000,1277805115,2.583,2.498,3.400,387.27,2176,48.95,1792,0,0
+gzip_synthetic_chordata,7,4092120000,1227909454,2.400,2.400,0,2009.76,2176,33.12,1792,0,0
+gzip_synthetic_chordata-fasta_analysis,7,4092120000,1151310395,2.400,2.250,6.300,2161.11,2176,44.89,1792,0,0
+gzip_synthetic_chordata,9,4092120000,1191853231,2.330,2.330,0,4822.50,2048,52.66,1792,0,0
+gzip_synthetic_chordata-fasta_analysis,9,4092120000,1098937148,2.330,2.148,7.800,4630.54,2176,35.00,1792,0,0

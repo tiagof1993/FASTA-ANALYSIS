@@ -1,0 +1,10 @@
+"bzip2 DATA",
+"PROGRAM","LEVEL","BYTES","C_BYTES","BPS_original","BPS_final","GAIN","C_TIME(s)","C_RAM(GB)","D_TIME(s)","D_MEM(GB)","DIFF","RUN"
+bzip2_synthetic_chordata,1,4092120000,1145576770,2.239,2.239,0,450.04,2304,196.68,1792,0,0
+bzip2_synthetic_chordata-fasta_analysis,1,4092120000,1149382611,2.239,2.247,-.300,659.46,2304,172.56,1792,0,0
+bzip2_synthetic_chordata,4,4092120000,1030179985,2.013,2.013,0,495.96,4352,222.77,2944,0,0
+bzip2_synthetic_chordata-fasta_analysis,4,4092120000,1027625358,2.013,2.008,.300,499.85,4352,196.72,2944,0,0
+bzip2_synthetic_chordata,7,4092120000,901587064,1.762,1.762,0,513.18,6400,299.74,4096,0,0
+bzip2_synthetic_chordata-fasta_analysis,7,4092120000,898584138,1.762,1.756,.400,531.58,6400,267.37,4096,0,0
+bzip2_synthetic_chordata,9,4092120000,829263060,1.621,1.621,0,541.00,7808,393.84,4864,0,0
+bzip2_synthetic_chordata-fasta_analysis,9,4092120000,827252963,1.621,1.617,.300,541.67,7808,375.59,4864,0,0

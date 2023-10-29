@@ -38,7 +38,7 @@ echo "$(sort -t$',' -n -k 8 data_naf-$NAF_real_CSV-$SORTING_TYPE-not_sorted.csv)
   #partition=${partitions_array[j]}
   plot_file="data_naf-plot-$SORTING_TYPE.pdf"
   #echo $plot_file
-  title="naf sorting by $SORTING_TYPE"
+  title="NAF sorting by $SORTING_TYPE"
   #gain_x=$(awk -F "\"*,\"*" '{print $8}' data_level_${levels_array[j]}.csv) 
   #cat ${level_input_file[j]}
   #point=0
@@ -57,7 +57,7 @@ echo "$(sort -t$',' -n -k 8 data_naf-$NAF_real_CSV-$SORTING_TYPE-not_sorted.csv)
         set style histogram clustered gap 1 title textcolor lt -1
         set xtics border in scale 0,0 nomirror #rotate by -60  autojustify
         set yrange [-80:100]
-        set xrange [0:20000]
+        set xrange [0:15000]
         set xtics auto
         set ytics auto # set ytics auto
         set key top right
@@ -76,13 +76,10 @@ echo "$(sort -t$',' -n -k 8 data_naf-$NAF_real_CSV-$SORTING_TYPE-not_sorted.csv)
         set grid
         set ylabel "Gain"
         set xlabel "Compression Time(s)"
-        set multiplot layout 1,2
+       # set multiplot layout 1,2
         count=12
       #  plot sorting_points u 7:8 w points ls count notitle
-        plot "data_naf-$NAF_synthetic_CSV-$SORTING_TYPE-fasta_analysis.csv" u 8:7 title "Synthetic Data" with linespoints linestyle count
-        count=count + 1
-        plot "data_naf-$NAF_real_CSV-$SORTING_TYPE-fasta_analysis.csv" u 8:7 title "Real Data" with linespoints linestyle count
-        count=count + 1
+        plot "data_naf-$NAF_synthetic_CSV-$SORTING_TYPE-fasta_analysis.csv" u 8:7 title "Synthetic Data" with linespoints linestyle count , "data_naf-$NAF_real_CSV-$SORTING_TYPE-fasta_analysis.csv" u 8:7 title "Real Data" with linespoints linestyle count+1
          
 EOF
    #point=$((point+1))
