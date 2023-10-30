@@ -65,7 +65,7 @@ cat data_mfcompress-$NAF_real_CSV-$SORTING_TYPE.csv | grep -v -e "fasta_analysis
   partition=${partitions_array[j]}
   plot_file="data-plot_mfcompress_${partitions_array[j]}.pdf"
   #echo $plot_file
-  title="Compression Gains using MFCOMPRESS with partition ${partitions_array[j]}"
+  title="Compression Gains using MFcompress with partition ${partitions_array[j]}"
   #gain_x=$(awk -F "\"*,\"*" '{print $8}' data_level_${levels_array[j]}.csv) 
   #cat ${level_input_file[j]}
   #point=0
@@ -84,7 +84,7 @@ cat data_mfcompress-$NAF_real_CSV-$SORTING_TYPE.csv | grep -v -e "fasta_analysis
         set style histogram clustered gap 1 title textcolor lt -1
         set xtics border in scale 0,0 nomirror #rotate by -60  autojustify
         set yrange [-10:5]
-        set xrange [0:200]
+        set xrange [0:150]
         set xtics auto
         set ytics auto # set ytics auto
         set key top right
@@ -103,13 +103,13 @@ cat data_mfcompress-$NAF_real_CSV-$SORTING_TYPE.csv | grep -v -e "fasta_analysis
         set grid
         set ylabel "Gain"
         set xlabel "Compression Time(s)"
-        set multiplot layout 1,2
+      #  set multiplot layout 1,2
         count=12
       #  plot sorting_points u 7:8 w points ls count notitle
-        plot "data_mfcompress-$NAF_synthetic_CSV-$SORTING_TYPE-${partitions_array[j]}_fasta_analysis.csv" u 9:8 title "Synthetic Data" with linespoints linestyle count
-        count=count + 1
-        plot "data_mfcompress-$NAF_real_CSV-$SORTING_TYPE-${partitions_array[j]}_fasta_analysis.csv" u 9:8 title "Real Data"  with linespoints linestyle count
-        count=count + 1
+        plot "data_mfcompress-$NAF_synthetic_CSV-$SORTING_TYPE-${partitions_array[j]}_fasta_analysis.csv" u 9:8 title "Synthetic Data" with linespoints linestyle count , "data_mfcompress-$NAF_real_CSV-$SORTING_TYPE-${partitions_array[j]}_fasta_analysis.csv" u 9:8 title "Real Data"  with linespoints linestyle count+1
+     #   count=count + 1
+     #   plot 
+     #   count=count + 1
          
 EOF
    #point=$((point+1))

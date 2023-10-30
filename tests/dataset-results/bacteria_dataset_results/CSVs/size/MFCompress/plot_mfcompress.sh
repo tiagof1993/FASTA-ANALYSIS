@@ -65,7 +65,7 @@ cat data_mfcompress-$NAF_real_CSV-$SORTING_TYPE.csv | grep -v -e "fasta_analysis
   partition=${partitions_array[j]}
   plot_file="data-plot_mfcompress_${partitions_array[j]}.pdf"
   #echo $plot_file
-  title="MFCOMPRESS with partition ${partitions_array[j]}"
+  title="MFCompress with partition ${partitions_array[j]}"
   #gain_x=$(awk -F "\"*,\"*" '{print $8}' data_level_${levels_array[j]}.csv) 
   #cat ${level_input_file[j]}
   #point=0

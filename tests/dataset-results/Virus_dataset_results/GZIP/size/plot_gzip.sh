@@ -32,7 +32,7 @@ echo "$(sort -t$',' -n -k 8 data_gzip-$GZIP_real_CSV-$SORTING_TYPE-not_sorted.cs
  # partition=${partitions_array[j]}
   plot_file="data-plot_gzip-$SORTING_TYPE.pdf"
   #echo $plot_file
-  title="GZIP using sorting by $SORTING_TYPE"
+  title="Gzip using sorting by $SORTING_TYPE"
   #gain_x=$(awk -F "\"*,\"*" '{print $8}' data_level_${levels_array[j]}.csv) 
   #cat ${level_input_file[j]}
   #point=0
@@ -70,14 +70,14 @@ echo "$(sort -t$',' -n -k 8 data_gzip-$GZIP_real_CSV-$SORTING_TYPE-not_sorted.cs
         set style line 11 lc rgb '#425152' pt 11 ps 0.6  # circle    
         set grid
         set ylabel "Gain"
-        set xlabel "Compression Time(s)"
-        set multiplot layout 1,2
+        set xlabel "Compression Time(s)"   
+#    set multiplot layout 1,2
         count=12
       #  plot sorting_points u 7:8 w points ls count notitle
-        plot "data_gzip-$GZIP_synthetic_CSV-$SORTING_TYPE-fasta_analysis.csv" u 8:7 title "Synthetic Data"  with linespoints linestyle count
-        count=count + 1
-        plot "data_gzip-$GZIP_real_CSV-$SORTING_TYPE-fasta_analysis.csv" u 8:7 title "Real Data" with linespoints linestyle count
-        count=count + 1
+        plot "data_gzip-$GZIP_synthetic_CSV-$SORTING_TYPE-fasta_analysis.csv" u 8:7 title "Synthetic Data"  with linespoints linestyle count , "data_gzip-$GZIP_real_CSV-$SORTING_TYPE-fasta_analysis.csv" u 8:7 title "Real Data" with linespoints linestyle count+1
+       # count=count + 1
+       # plot 
+       # count=count + 1
          
 EOF
    #point=$((point+1))

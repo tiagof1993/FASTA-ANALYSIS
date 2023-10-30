@@ -34,7 +34,7 @@ echo "$(sort -t$',' -n -k 8 data_bzip2-$BZIP2_real_CSV-$SORTING_TYPE-not_sorted.
  # partition=${partitions_array[j]}
   plot_file="data-plot_bzip2-$SORTING_TYPE.pdf"
   #echo $plot_file
-  title="BZIP2 sorting by $SORTING_TYPE"
+  title="bzip2 sorting by $SORTING_TYPE"
   #gain_x=$(awk -F "\"*,\"*" '{print $8}' data_level_${levels_array[j]}.csv) 
   #cat ${level_input_file[j]}
   #point=0

@@ -71,13 +71,11 @@ echo "$(sort -t$',' -n -k 8 data_lzma-$LZMA_real_CSV-$SORTING_TYPE-not_sorted.cs
         set grid
         set ylabel "Gain"
         set xlabel "Compression Time(s)"
-        set multiplot layout 1,2
+       # set multiplot layout 1,2
         count=12
       #  plot sorting_points u 7:8 w points ls count notitle
-        plot "data_lzma-$LZMA_synthetic_CSV-$SORTING_TYPE-fasta_analysis.csv" u 8:7 title "Synthetic Data" with linespoints linestyle count
-        count=count + 1
-        plot "data_lzma-$LZMA_real_CSV-$SORTING_TYPE-fasta_analysis.csv" u 8:7 title "Real Data" with linespoints linestyle count
-        count=count + 1
+        plot "data_lzma-$LZMA_synthetic_CSV-$SORTING_TYPE-fasta_analysis.csv" u 8:7 title "Synthetic Data" with linespoints linestyle count , "data_lzma-$LZMA_real_CSV-$SORTING_TYPE-fasta_analysis.csv" u 8:7 title "Real Data" with linespoints linestyle count+1
+       
          
 EOF
    #point=$((point+1))

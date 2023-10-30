@@ -38,7 +38,7 @@ echo "$(sort -t$',' -n -k 8 data_naf-$NAF_real_CSV-$SORTING_TYPE-not_sorted.csv)
   #partition=${partitions_array[j]}
   plot_file="data_naf-plot-$SORTING_TYPE.pdf"
   #echo $plot_file
-  title="naf sorting by $SORTING_TYPE"
+  title="NAF sorting by $SORTING_TYPE"
   #gain_x=$(awk -F "\"*,\"*" '{print $8}' data_level_${levels_array[j]}.csv) 
   #cat ${level_input_file[j]}
   #point=0
