@@ -1,15 +1,15 @@
 # FASTA_ANALYSIS
 
-The objective of this project is to find a way to improve compression of genomic sequences (fasta,fa,etc). For that we already have a plentitude of compressing tools available in the market, such as NAF,MBGC,GZIP, among others.
+The objective of this work is to find a strategy who improves compression of genomic sequences (fasta,fa,etc). For that we already have a plentitude of compressing tools available in the market, such as NAF,MBGC,GZIP, among others.
 
 But, if we can work on a previous ordered file, where the most similar sequences are grouped, it's reasonable to think that the compression ratio would decrease. So, to achieve that, an executable file will be created (generated with C++ code) dedicated to sort that type of file. The criteria used to do that can be decided by the user when he is running ./FASTA_ANALY. It can go from absolute number or percentage of nucleotide pairs (AT or CG) to size or percentage.
 
-On the other hand, there's also a compression script where it's possible to use the 5 sorting compression scenarios together with 7 different compressors, 3 general-purpose and 4 DNA-specific. This script will give not only the sizes of the compressed files and the times of the compression but also a comparison between compression with or without sorting, through the creation of CSV viles and plots.
+On the other hand, there's also a compression script where it's possible to use the 5 sorting compression scenarios together with 7 different compressors, 3 are general-purpose and 4 are DNA-specific. This script will give not only the sizes of the compressed files and the times of the compression but also a comparison between compression with or without sorting, through the creation of CSV viles and plots.
 
 ## Usage Example
 ` ./FASTA_ANALY -sort=AT unsorted_file.fasta sorted_file.fasta 1 `
 
-A description of the options available can be obtained by invoking:
+A description of the options available can be obtained, invoking:
 
 ` ./FASTA_ANALY -h `
 
@@ -33,9 +33,9 @@ A description of the options available can be obtained by invoking:
 </div>
 <br>
 
-### Compression Tests Reproducibility: ###
+### Compression Benchmark Reproducibility: ###
 
-Change directory and give permitions:
+Change directory and give execute permissions:
 <pre>
 cd src/Compression_Scripts
 chmod +x *.sh
@@ -43,14 +43,14 @@ chmod +x *.sh
 
 
 
-### Compression Tests Usage: ###
+### Compression Benchmark Usage: ###
 
-Run alll compression commands:
+Run all compression commands:
 <pre>
 ./compression_test_script.sh
 </pre>
 
-Run compressor isolated:
+Run isolated compression commands:
 <pre>
 ./compression_COMPRESSORNAME.sh SORTING_TYPE INPUT_FILE 0
 </pre>
