@@ -25,9 +25,9 @@ A description of the options available can be obtained, invoking:
 | NAF             |<a href="https://github.com/KirillKryukov/naf">code</a>  | <a href="https://doi.org/10.1093/bioinformatics/btz144">article</a>|
 | MFCompress      |<a href="http://sweet.ua.pt/ap/software/mfcompress/MFCompress-linux64-1.01.tgz">code</a>  | <a href="https://doi.org/10.1093/bioinformatics/btt594">article</a>|
 | JARVIS3         |<a href="https://github.com/cobilab/jarvis3">code</a>  | |
-| gzip           |<a href="https://ftp.eq.uc.pt/software/unix/gnu/gzip/">code</a>  | <a href="https://www.gnu.org/software/gzip/manual/">article</a>|
-| lzma            |<a href="https://tukaani.org/xz/">code</a>  | <a href="https://tukaani.org/xz/">article</a>|
-| bzip2           |<a href="https://sourceware.org/bzip2/">code</a>  | <a href="https://sourceware.org/bzip2/">article</a>|
+| gzip           |<a href="https://ftp.eq.uc.pt/software/unix/gnu/gzip/">code</a>  | <a href="https://www.gnu.org/software/gzip/manual/gzip.pdf">article</a>|
+| lzma            |<a href="https://tukaani.org/xz/">code</a>  | |
+| bzip2           |<a href="https://sourceware.org/bzip2/">code</a>  | <a href="https://pi.kwarc.info/historic/systems/texlive/2000/texmf/doc/bzip2/manual.pdf">article</a>|
 | MBGC         |<a href="https://github.com/kowallus/mbgc">code</a>  | <a href="https://doi.org/10.1093/gigascience/giab099">article</a> |
 
 </div>
